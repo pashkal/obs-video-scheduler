@@ -1,5 +1,5 @@
 import sys
-sys.path.append("D:\\git\\thrift\\lib\\py\\build\\lib.win-amd64-3.8\\")
+sys.path.append("..\\thrift\\lib\\py\\build\\lib.win-amd64-3.8\\")
 
 from thrift import Thrift
 from thrift.transport import TSocket
