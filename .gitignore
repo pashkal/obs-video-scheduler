@@ -12,3 +12,5 @@
 obs-thrift-api/bin
 obs-thrift-api/build
 .vs
+
+tests/obsthriftserver/__pycache__
