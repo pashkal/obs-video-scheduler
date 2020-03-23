@@ -19,26 +19,9 @@
   #pragma warning (disable : 4250 ) //inheriting methods via dominance 
 #endif
 
-/**
- * Ahh, now onto the cool part, defining a service. Services just need a name
- * and can optionally inherit from another service using the extends keyword.
- */
 class ObsThriftServerIf {
  public:
   virtual ~ObsThriftServerIf() {}
-
-  /**
-   * A method definition looks like C code. It has a return type, arguments,
-   * and optionally a list of exceptions that it may throw. Note that argument
-   * lists and exception lists are specified using the exact same syntax as
-   * field lists in struct or exception definitions.
-   * 
-   * @param path
-   * @param layer
-   * @param sceneName
-   * @param sourceName
-   * @param dimensions
-   */
   virtual void launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions) = 0;
   virtual void removeSource(const std::string& sceneName, const std::string& sourceName) = 0;
   virtual void muteSource(const std::string& sourceName) = 0;
@@ -490,18 +473,6 @@ class ObsThriftServerClient : virtual public ObsThriftServerIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  /**
-   * A method definition looks like C code. It has a return type, arguments,
-   * and optionally a list of exceptions that it may throw. Note that argument
-   * lists and exception lists are specified using the exact same syntax as
-   * field lists in struct or exception definitions.
-   * 
-   * @param path
-   * @param layer
-   * @param sceneName
-   * @param sourceName
-   * @param dimensions
-   */
   void launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions);
   void send_launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions);
   void recv_launchVideo();
@@ -568,18 +539,6 @@ class ObsThriftServerMultiface : virtual public ObsThriftServerIf {
     ifaces_.push_back(iface);
   }
  public:
-  /**
-   * A method definition looks like C code. It has a return type, arguments,
-   * and optionally a list of exceptions that it may throw. Note that argument
-   * lists and exception lists are specified using the exact same syntax as
-   * field lists in struct or exception definitions.
-   * 
-   * @param path
-   * @param layer
-   * @param sceneName
-   * @param sourceName
-   * @param dimensions
-   */
   void launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -648,18 +607,6 @@ class ObsThriftServerConcurrentClient : virtual public ObsThriftServerIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  /**
-   * A method definition looks like C code. It has a return type, arguments,
-   * and optionally a list of exceptions that it may throw. Note that argument
-   * lists and exception lists are specified using the exact same syntax as
-   * field lists in struct or exception definitions.
-   * 
-   * @param path
-   * @param layer
-   * @param sceneName
-   * @param sourceName
-   * @param dimensions
-   */
   void launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions);
   int32_t send_launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions);
   void recv_launchVideo(const int32_t seqid);
