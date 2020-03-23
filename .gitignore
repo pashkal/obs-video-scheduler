@@ -9,8 +9,8 @@
 *.exe
 
 # Build results
-obs-thrift-api/bin
-obs-thrift-api/build
+obs-thrift-api/obs-thrift-api/bin
+obs-thrift-api/obs-thrift-api/build
 .vs
 
-tests/obsthriftserver/__pycache__
+obs-thrift-api/tests/obsthriftserver/__pycache__
