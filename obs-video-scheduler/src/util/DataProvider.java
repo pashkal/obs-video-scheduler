@@ -22,6 +22,8 @@ import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 
 public class DataProvider {
+	
+	static String SCHEDULE_FILE = "../../schedule.json";
 
 	public static long getContestStart() throws IOException {
 		Scanner s = new Scanner(new File(Config.getContestTimestampFile()));
@@ -54,17 +56,15 @@ public class DataProvider {
 		HashMap<String, Item> res = new HashMap<>();
 		for (Item v : videoList) {
 			res.put(v.name, v);
-//			System.err.println(v.name + " " + v.isVideo);
 		}
 		for (Item v : activityList) {
 			res.put(v.name, v);
-//			System.err.println(v.name + " " + v.isVideo);
 		}
 		return res;
 	}
 
 	public static List<ScheduleEntry> getSchedule() throws FileNotFoundException, IOException {
-		JsonReader jr = Json.createReader(new FileInputStream(Config.getScheduleFile()));
+		JsonReader jr = Json.createReader(new FileInputStream(SCHEDULE_FILE));
 		JsonArray ja = jr.readArray();
 		ArrayList<ScheduleEntry> schedule = new ArrayList<>();
 		for (int i = 0; i < ja.size(); i++) {
@@ -102,7 +102,7 @@ public class DataProvider {
 			a.add(job);
 		}
 		String s = a.build().toString();
-		PrintWriter pw = new PrintWriter(Config.getScheduleFile());
+		PrintWriter pw = new PrintWriter(SCHEDULE_FILE);
 		pw.println(s);
 		pw.close();
 	}
@@ -122,7 +122,7 @@ public class DataProvider {
 		long contestStart = getContestStart();
 		pw.println(contestStart);
 
-		String schedule = new Scanner(new File(Config.getScheduleFile())).nextLine();
+		String schedule = new Scanner(new File(SCHEDULE_FILE)).nextLine();
 		pw.println(schedule);
 		pw.close();
 
@@ -200,9 +200,10 @@ public class DataProvider {
 	}
 
 	public static void updateSchedule(String newSchedule) throws IOException {
-		PrintWriter pw = new PrintWriter(Config.getScheduleFile());
+		PrintWriter pw = new PrintWriter(SCHEDULE_FILE);
 		pw.println(newSchedule);
 		pw.close();
+		
 	}
 
 	public static void writeList(List<Item> list, boolean video) throws FileNotFoundException, IOException {
