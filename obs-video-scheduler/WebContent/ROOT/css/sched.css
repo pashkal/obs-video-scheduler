@@ -1,0 +1,22 @@
+﻿html, body, .comm-box {
+    height: 100%;
+}
+
+.comm-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.yellow-text {
+	color: yellow;
+}
+
+.green-text {
+	color: green;
+}
+
+.red-text {
+	color: red;
+}
+

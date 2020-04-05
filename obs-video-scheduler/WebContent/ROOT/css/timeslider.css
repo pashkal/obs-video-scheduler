@@ -1,0 +1,244 @@
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.time-slider {
+    height: 120px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.time-slider .ruler {
+    height: 100%;
+    position: relative;
+    overflow: visible;
+
+    z-index: 1;
+}
+
+.time-slider .ruler .bg {
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background-color: #fff;
+    border: 1px #cccccc solid;
+    position: absolute;
+    z-index: 2;
+}
+
+.time-slider .ruler .bg-event {
+    left: 0;
+    width: 100%;
+    height: 100px;
+    cursor: move;
+    background-color: transparent;
+    position: absolute;
+    z-index: 6;
+}
+
+.time-slider .ruler .bg-event.disable-move {
+    cursor: default;
+}
+
+.time-slider .ruler .current-time-caret {
+    width: 2px;
+    height: 100px;
+    background-color: #ff0000;
+    position: absolute;
+    z-index: 5;
+}
+
+.time-slider .ruler .contest-start-caret {
+    width: 5px;
+    height: 100px;
+    background-color: #00ff00;
+    position: absolute;
+    z-index: 5;
+}
+
+/* ----- graduations ----- */
+
+.time-slider .ruler .graduation {
+    top: 88px;
+    width: 2px;
+    height: 12px;
+    background-color: #cccccc;
+    position: absolute;
+    z-index: 3;
+}
+
+.time-slider .ruler .graduation-title {
+    top: 102px;
+    width: 80px;
+    cursor: default;
+    color: #555555;
+    text-align: center;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    position: absolute;
+    z-index: 3;
+}
+
+.time-slider .ruler .graduation-title-top {
+    top: -15px;
+    width: 80px;
+    cursor: default;
+    color: #555555;
+    text-align: center;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    position: absolute;
+    z-index: 3;
+}
+
+.time-slider .ruler .graduation.top {
+    top: 0px;
+    width: 2px;
+}
+
+.time-slider .ruler .graduation.topmiddle {
+    top: -0px;
+    width: 2px;
+    height: 25px;
+}
+
+.time-slider .ruler .graduation.middle {
+    top: 75px;
+    width: 2px;
+    height: 25px;
+}
+
+.time-slider .ruler .graduation.big {
+    top: 0;
+    width: 2px;
+    height: 50px;
+}
+
+/* ----- timecells  ----- */
+
+.time-slider .ruler .timecell {
+    top: 7px;
+    height: 72px;
+    padding: 1px;
+    position: absolute;
+    text-align: center;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    overflow: visible;
+    background-color: #ffab7d;
+    opacity: 0.9;
+    filter: alpha(Opacity=90);
+    z-index: 4;
+    border-radius: 4px;
+}
+
+.time-slider .ruler .timecell.current {
+    background-color: #ff6d29;
+    border-radius: 4px 0 0 4px;
+}
+
+.time-slider .ruler .timecell-event {
+    top: 7px;
+    height: 72px;
+    background-color: transparent;
+    position: absolute;
+    cursor: default;
+    z-index: 7;
+    border-radius: 4px;
+}
+
+.time-slider .ruler .timecell-event.hover{
+    border: 1px dashed #204d74;
+}
+
+.time-slider .ruler .timecell-event.moving {
+    border-color: #ff0716;
+}
+
+.time-slider .ruler .timecell-event.current {
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+    cursor: default;
+}
+
+
+/* ----- prompts ----- */
+
+.time-slider .prompts {
+    top: 0;
+    left: 0;
+    position: relative;
+    overflow: hidden;
+    height: 150px;
+    width: 100%;
+}
+
+.time-slider .prompts .prompt {
+    width: 286px;
+    height: 80px;
+    position: absolute;
+    z-index: 1070;
+    display: none;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: left;
+    text-align: start;
+    text-decoration: none;
+    text-shadow: none;
+    text-transform: none;
+    letter-spacing: normal;
+    word-break: normal;
+    word-spacing: normal;
+    word-wrap: normal;
+    white-space: normal;
+    line-break: auto;
+}
+
+.time-slider .prompts .prompt .body {
+    padding: 3px 8px;
+    color: #fff;
+    text-align: center;
+    background-color: #000;
+    border-radius: 4px;
+}
+
+.time-slider .prompts .prompt .triangle-up {
+    top: -5px;
+    left: 39px;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid #000;
+}
+
+.time-slider .prompts .prompt .triangle-down {
+    top: 80px;
+    left: 39px;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #000;
+}
+
+.hidden {
+    display: none;
+}

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>ICPC Live Wirecast Scheduler</title>
+	<meta name="description" content="TimeSlider Plugin for jQuery">
+	<meta name="keywords" content="timeslider, time-slider, time slider, rangeslider, range-slider, range slider, jquery, javascript">
+	<link rel="stylesheet" href="css/jquery-ui.css">
+	<link href="css/timeslider.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<table style="width:100%;">
+<tr>
+<td>
+<span id = "current-state"/>
+</td>
+<td>
+<span id = "contest-state"/>
+</td>
+<td>
+<span id = "reschedule"/>
+</td>
+<td>
+<form>New start time (in hh-mm format):<input type="text" id="reschedule-time"/><input type = "submit" value = "Reschedule" onclick="reschedule();"/></form><br/>
+<form><input type = "submit" value = "Start now!" onclick="start();"/></form>
+</td>
+<td>
+<form>Save schedule as <input type = "text" id = "save-file-name"/><input type = "submit" value = "Save" onclick="save();"/></form></br>
+<form><span id = "load-select"/> <input type = "submit" value = "Load" onclick = "load();"/></form>
+</td>
+</tr>
+</table>
+<div style="overflow:hidden;width:100%;height:250px;">
+	<h3> Timeline </h3>
+		<div id="zoom-slider123" style="width:300px;"></div>
+	<div style="margin: 50px 0px;">
+		<div id="slider123" class="time-slider"></div>
+	</div>
+</div>
+<table>
+<tr>
+<td valign = "top">
+	<span id = "videoList"></span>
+</td>
+<td valign = "top">
+	<span id = "activityList"></span>
+<!--<tr><td><input type = "submit\" value="Create" onclick='add_activity();'/></td>
+					<td><input type = "text\" id = "activity-name"/></td>
+					<td><input type = "text\" id = "activity-duration"/></td><td></td><td></td>
+					</tr>
+</table>-->
+</td>
+</tr>
+</table>
+
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery-ui.js"></script>
+	<script src="js/timeslider.js"></script>
+	<script type="text/javascript">
+
+	function httpGetAsync(theUrl, callback)
+	{
+	    var xmlHttp = new XMLHttpRequest();
+	    xmlHttp.onreadystatechange = function() { 
+	        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+	            callback(xmlHttp.responseText);
+	    }
+	    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+	    xmlHttp.send(null);
+	}	
+	
+	var add_event = function(name, duration) {
+    var current_t = (new Date()).getTime() + ((new Date()).getTimezoneOffset() * 60 * 1000 * -1);
+		var id = current_t;
+		current_t = current_t - current_t % 60000 + contest_timestamp_ % 60000;
+   	var tc = {'_id': id, 'start': current_t + 60 * 5 * 1000, 'stop': current_t + 60 * 5 * 1000 + duration, 'name': name};
+		ts.TimeSlider('add', tc);
+	};
+
+	var start = function() {
+		console.log("starting");
+		var url = '/sched/StartContest';
+		console.log(url);
+		httpGetAsync(url, null);
+	};
+
+	var reschedule = function() {
+		console.log("rescheduling");
+		var url = '/sched/StartContest?time=' + document.getElementById('reschedule-time').value;
+		console.log(url);
+		httpGetAsync(url, null);
+	};
+
+	var save = function() {
+		console.log("saving");
+		var url = '/sched/SaveSchedule?file=' + document.getElementById('save-file-name').value;
+		console.log(url);
+		httpGetAsync(url, null);
+	};
+
+	var load = function() {
+		console.log("loading");
+		var url = '/sched/LoadSchedule?file=' + document.getElementById('load_file').value;
+		console.log(url);
+		httpGetAsync(url, null);
+	};
+
+	var add_activity = function() {
+		console.log("loading");
+		var url = '/sched/AddActivity?name=' + document.getElementById('activity-name').value + "&duration="+ document.getElementById('activity-duration').value;
+		console.log(url);
+		httpGetAsync(url, null);
+	};
+
+	var change_connection = function() {
+		console.log("changing connection");
+		var url = '/sched/ChangeConnection';
+		console.log(url);
+		httpGetAsync(url, null);
+	};
+
+	var empty_function = function() {
+	}
+
+	var print_all_timestamps = function(all_timecells) {
+	    if (all_timecells == current_timecells)
+				return;
+	    console.log(all_timecells);
+	    current_timecells = all_timecells;
+	    httpGetAsync('/sched/ScheduleUpdate?schedule=' + all_timecells, empty_function);
+	};
+
+	var update_contest_timestamp = function() {
+		httpGetAsync('/sched/ContestTimestamp', initialize_contest_timestamp);
+	}
+	var ready = false;
+	var contest_timestamp_ = 0;
+	var initialize_contest_timestamp = function(text) {
+		var o = JSON.parse(text);
+		contest_timestamp_ = o.contest_timestamp;
+		if (!ready) {
+			httpGetAsync("/sched/ScheduleGet", init_slider);
+			ready = true;
+		}
+	}
+
+	var update_activity_list = function() {
+		httpGetAsync('/sched/VideoList?type=activity', initialize_activity_list);
+	}
+
+	var initialize_activity_list = function(text) {
+	    document.getElementById("activityList").innerHTML=text;
+	};
+
+	var update_video_list = function() {
+		httpGetAsync('/sched/VideoList?type=video', initialize_video_list);
+	}
+
+	var initialize_video_list = function(text) {
+	    document.getElementById("videoList").innerHTML=text;
+	};
+
+	var initialize_load_select = function(text) {
+	    document.getElementById("load-select").innerHTML=text;
+	};
+
+	var update_current_status = function() {
+		httpGetAsync('/sched/CurrentState', initialize_current_state);
+	}
+
+	var initialize_current_state= function(text) {
+	    document.getElementById("current-state").innerHTML=text;
+	};
+
+	var update_contest_status = function() {
+		httpGetAsync('/sched/ContestState', initialize_contest_state);
+	}
+
+	var initialize_contest_state = function(text) {
+	    document.getElementById("contest-state").innerHTML=text;
+	};
+
+  var current_time = (new Date()).getTime() + ((new Date()).getTimezoneOffset() * 60 * 1000 * -1);
+	var current_timecells = "";
+
+	httpGetAsync("/sched/ContestTimestamp", initialize_contest_timestamp);
+	httpGetAsync("/sched/VideoList?type=video", initialize_video_list);
+	httpGetAsync("/sched/VideoList?type=activity", initialize_activity_list);
+	httpGetAsync("/sched/CurrentState", initialize_current_state);
+	httpGetAsync("/sched/ContestState", initialize_contest_state);
+	httpGetAsync("/sched/ScheduleList", initialize_load_select);
+//	httpGetAsync("/sched/ScheduleGet", init_slider);
+
+	setInterval(update_contest_timestamp, 1000);
+	setInterval(update_contest_status, 1000);
+	setInterval(update_current_status, 1000);
+	setInterval(update_video_list, 1000);
+
+	var ts = null;
+
+	function init_slider(initial_cells, t) {
+		console.log(initial_cells);
+		ts = $('#slider123').TimeSlider({
+			start_timestamp: current_time - 600 * 1000,
+			contest_timestamp: contest_timestamp_,
+			on_dblclick_timecell_callback: function(p_id, start, stop) {
+			  ts.TimeSlider('remove', p_id);
+			},
+			timecell_enable_resize: false,
+			on_change_timecell_callback: function() {ts.TimeSlider('report', print_all_timestamps)},
+			on_add_timecell_callback: function() {ts.TimeSlider('report', print_all_timestamps)},
+			on_remove_timecell_callback: function() {ts.TimeSlider('report', print_all_timestamps)},
+			init_cells: JSON.parse(initial_cells)
+		});
+		$('#zoom-slider123').slider({
+			min: 0.33,
+			max: 8,
+			value: 1,
+			step: 0.2,
+			slide: function(event, ui) {
+				$('#slider123').TimeSlider({hours_per_ruler: ui.value});
+			}
+		});
+
+
+	};
+
+	</script>
+</body>
+</html>

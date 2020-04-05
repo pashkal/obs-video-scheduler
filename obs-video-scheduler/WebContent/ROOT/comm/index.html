@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="../css/sched.css">
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+	<title>ICPC Live Wirecast Scheduler</title>
+</head>
+<body>
+<div class="comm-box">
+	<span align="center" id = "commentator-status"/>
+</div>
+
+<script type="text/javascript">
+	function httpGetAsync(theUrl, callback)
+	{
+	    var xmlHttp = new XMLHttpRequest();
+	    xmlHttp.onreadystatechange = function() { 
+	        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+	            callback(xmlHttp.responseText);
+	    }
+	    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+	    xmlHttp.send(null);
+	}	
+	
+	var empty_function = function() {
+	}
+
+	var update_current_status = function() {
+		httpGetAsync('/sched/Commentator', initialize_current_state);
+	}
+
+	var initialize_current_state= function(text) {
+	    document.getElementById("commentator-status").innerHTML=text;
+	};
+
+	httpGetAsync("/sched/Commentator", initialize_current_state);
+
+	setInterval(update_current_status, 1000);
+</script>
+</body>
+</html>
