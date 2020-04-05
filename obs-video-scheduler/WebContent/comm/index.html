@@ -27,14 +27,14 @@
 	}
 
 	var update_current_status = function() {
-		httpGetAsync('/sched/Commentator', initialize_current_state);
+		httpGetAsync('/Commentator', initialize_current_state);
 	}
 
 	var initialize_current_state= function(text) {
 	    document.getElementById("commentator-status").innerHTML=text;
 	};
 
-	httpGetAsync("/sched/Commentator", initialize_current_state);
+	httpGetAsync("/Commentator", initialize_current_state);
 
 	setInterval(update_current_status, 1000);
 </script>
