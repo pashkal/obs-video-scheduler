@@ -127,7 +127,7 @@
 				return;
 	    console.log(all_timecells);
 	    current_timecells = all_timecells;
-	    httpGetAsync('/ScheduleUpdate?schedule=' + all_timecells, empty_function);
+	    httpGetAsync(encodeURI('/ScheduleUpdate?schedule=' + all_timecells), empty_function);
 	};
 
 	var update_contest_timestamp = function() {
