@@ -1,3 +1,4 @@
 [submodule "thrift"]
 	path = obs-thrift-api/thrift
 	url = https://github.com/apache/thrift.git
+	ignore=dirty
