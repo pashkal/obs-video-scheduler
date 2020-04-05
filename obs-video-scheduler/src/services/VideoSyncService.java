@@ -20,22 +20,15 @@ import javax.servlet.ServletContext;
 import util.Config;
 
 public class VideoSyncService implements Runnable {
-	boolean syncEnabled;
 	ServletContext sc;
 
 	public VideoSyncService(ServletContext servletContext) throws FileNotFoundException, IOException {
 		sc = servletContext;
 		Properties pr = new Properties();
 		pr.load(new FileInputStream("../../sched.properties"));
-		syncEnabled = pr.getProperty("video-sync-enabled").equals("true");
 	}
 
 	public void run() {
-		if (!syncEnabled) {
-			 sc.log("Synchronization disabled");
-			 System.err.println("disabed");
-			return;
-		}
 		while (true) {
 			try {
 				HashSet<String> oldFileList = new HashSet<>();
