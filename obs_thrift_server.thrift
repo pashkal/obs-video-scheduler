@@ -1,4 +1,5 @@
 namespace py obsthriftserver
+namespace java scheduler
 
 struct SourceDimensions {
     1: i32 leftMargin = 0;
