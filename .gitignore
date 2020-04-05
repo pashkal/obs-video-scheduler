@@ -1,6 +1,8 @@
 # User-specific files
 
-.war
+*.war
+*.props
+*.exe
 
 # Build results
 obs-thrift-api/obs-thrift-api/bin

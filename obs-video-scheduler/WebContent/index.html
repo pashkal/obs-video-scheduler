@@ -79,42 +79,42 @@
 
 	var start = function() {
 		console.log("starting");
-		var url = '/sched/StartContest';
+		var url = '/StartContest';
 		console.log(url);
 		httpGetAsync(url, null);
 	};
 
 	var reschedule = function() {
 		console.log("rescheduling");
-		var url = '/sched/StartContest?time=' + document.getElementById('reschedule-time').value;
+		var url = '/StartContest?time=' + document.getElementById('reschedule-time').value;
 		console.log(url);
 		httpGetAsync(url, null);
 	};
 
 	var save = function() {
 		console.log("saving");
-		var url = '/sched/SaveSchedule?file=' + document.getElementById('save-file-name').value;
+		var url = '/SaveSchedule?file=' + document.getElementById('save-file-name').value;
 		console.log(url);
 		httpGetAsync(url, null);
 	};
 
 	var load = function() {
 		console.log("loading");
-		var url = '/sched/LoadSchedule?file=' + document.getElementById('load_file').value;
+		var url = '/LoadSchedule?file=' + document.getElementById('load_file').value;
 		console.log(url);
 		httpGetAsync(url, null);
 	};
 
 	var add_activity = function() {
 		console.log("loading");
-		var url = '/sched/AddActivity?name=' + document.getElementById('activity-name').value + "&duration="+ document.getElementById('activity-duration').value;
+		var url = '/AddActivity?name=' + document.getElementById('activity-name').value + "&duration="+ document.getElementById('activity-duration').value;
 		console.log(url);
 		httpGetAsync(url, null);
 	};
 
 	var change_connection = function() {
 		console.log("changing connection");
-		var url = '/sched/ChangeConnection';
+		var url = '/ChangeConnection';
 		console.log(url);
 		httpGetAsync(url, null);
 	};
@@ -127,11 +127,11 @@
 				return;
 	    console.log(all_timecells);
 	    current_timecells = all_timecells;
-	    httpGetAsync('/sched/ScheduleUpdate?schedule=' + all_timecells, empty_function);
+	    httpGetAsync('/ScheduleUpdate?schedule=' + all_timecells, empty_function);
 	};
 
 	var update_contest_timestamp = function() {
-		httpGetAsync('/sched/ContestTimestamp', initialize_contest_timestamp);
+		httpGetAsync('/ContestTimestamp', initialize_contest_timestamp);
 	}
 	var ready = false;
 	var contest_timestamp_ = 0;
@@ -139,13 +139,13 @@
 		var o = JSON.parse(text);
 		contest_timestamp_ = o.contest_timestamp;
 		if (!ready) {
-			httpGetAsync("/sched/ScheduleGet", init_slider);
+			httpGetAsync("/ScheduleGet", init_slider);
 			ready = true;
 		}
 	}
 
 	var update_activity_list = function() {
-		httpGetAsync('/sched/VideoList?type=activity', initialize_activity_list);
+		httpGetAsync('/VideoList?type=activity', initialize_activity_list);
 	}
 
 	var initialize_activity_list = function(text) {
@@ -153,7 +153,7 @@
 	};
 
 	var update_video_list = function() {
-		httpGetAsync('/sched/VideoList?type=video', initialize_video_list);
+		httpGetAsync('/VideoList?type=video', initialize_video_list);
 	}
 
 	var initialize_video_list = function(text) {
@@ -165,7 +165,7 @@
 	};
 
 	var update_current_status = function() {
-		httpGetAsync('/sched/CurrentState', initialize_current_state);
+		httpGetAsync('/CurrentState', initialize_current_state);
 	}
 
 	var initialize_current_state= function(text) {
@@ -173,7 +173,7 @@
 	};
 
 	var update_contest_status = function() {
-		httpGetAsync('/sched/ContestState', initialize_contest_state);
+		httpGetAsync('/ContestState', initialize_contest_state);
 	}
 
 	var initialize_contest_state = function(text) {
@@ -183,13 +183,13 @@
   var current_time = (new Date()).getTime() + ((new Date()).getTimezoneOffset() * 60 * 1000 * -1);
 	var current_timecells = "";
 
-	httpGetAsync("/sched/ContestTimestamp", initialize_contest_timestamp);
-	httpGetAsync("/sched/VideoList?type=video", initialize_video_list);
-	httpGetAsync("/sched/VideoList?type=activity", initialize_activity_list);
-	httpGetAsync("/sched/CurrentState", initialize_current_state);
-	httpGetAsync("/sched/ContestState", initialize_contest_state);
-	httpGetAsync("/sched/ScheduleList", initialize_load_select);
-//	httpGetAsync("/sched/ScheduleGet", init_slider);
+	httpGetAsync("/ContestTimestamp", initialize_contest_timestamp);
+	httpGetAsync("/VideoList?type=video", initialize_video_list);
+	httpGetAsync("/VideoList?type=activity", initialize_activity_list);
+	httpGetAsync("/CurrentState", initialize_current_state);
+	httpGetAsync("/ContestState", initialize_contest_state);
+	httpGetAsync("/ScheduleList", initialize_load_select);
+//	httpGetAsync("/ScheduleGet", init_slider);
 
 	setInterval(update_contest_timestamp, 1000);
 	setInterval(update_contest_status, 1000);
