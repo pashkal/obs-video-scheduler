@@ -27,6 +27,10 @@ public class Config {
 		return getConfigValue("obs-video-dir");
 	}
 
+	public static String getOBSHost() throws FileNotFoundException, IOException {
+		return getConfigValue("obs-host");
+	}
+
 	public static void writeData(Map<String, String> data) throws FileNotFoundException {
 		PrintWriter pw = new PrintWriter(new File(CONFIG_FILE));
 		

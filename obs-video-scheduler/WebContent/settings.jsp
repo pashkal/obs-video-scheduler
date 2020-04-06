@@ -17,6 +17,15 @@
 				<div class="panel-body">
 					<form action="/UpdateConfig" method="post">
 						<div class="form-group">
+							<label for="obs-host">OBS host</label>
+							<br>
+			 				<input
+								id="obs-host" type="text"
+								name="obs-host"
+								value=<%out.println(Config.getOBSHost());%> />
+						</div>
+
+						<div class="form-group">
 							<label for="obs-video-dir">Video directory on OBS host</label>
 							<br>
 			 				<input

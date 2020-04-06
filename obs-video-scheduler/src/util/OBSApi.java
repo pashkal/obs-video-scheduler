@@ -23,30 +23,15 @@ public class OBSApi {
 	ObsThriftServer.Client client;
 	TTransport transport;
 	
-	public static void main(String[] args) {
-		try {
-			TTransport transport = new TSocket("192.168.1.152", 9090);
-			transport.open();
-			TProtocol protocol = new TBinaryProtocol(transport);
-			ObsThriftServer.Client client = new ObsThriftServer.Client(protocol);
-			String[] toMute = new String[]{"NDI Source", "Desktop Audio"}; 
-			//client.removeSource("Scheduled Video", Arrays.asList(toMute));
-			transport.close();
-		} catch (Exception x) {
-			x.printStackTrace();
-		}		
-	}
-	
 	public OBSApi() {
 		try {
-			transport = new TSocket("192.168.1.152", 9090);
+			transport = new TSocket(Config.getOBSHost(), 9090);
 			transport.open();
 			TProtocol protocol = new TBinaryProtocol(transport);
 			client = new ObsThriftServer.Client(protocol);
-		} catch (TException x) {
+		} catch (Exception x) {
 			x.printStackTrace();
 		}
-
 	}
 
 	public void launchVideoByPath(String filePath, String name, List<String> toMute) throws FileNotFoundException, IOException {
