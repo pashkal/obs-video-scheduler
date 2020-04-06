@@ -15,28 +15,12 @@ public class Config {
 
 	private static String CONFIG_FILE = "../../data/config.json";
 
-	public static String getVideoList() throws FileNotFoundException, IOException {
-		return getConfigValue("video-list-file");
+	public static String getServerVideoDir() throws FileNotFoundException, IOException {
+		return getConfigValue("server-video-dir");
 	}
 
-	public static String getContestTimestampFile() throws FileNotFoundException, IOException {
-		return getConfigValue("contest-start-file");
-	}
-
-	public static String getScheduleSaveDir() throws FileNotFoundException, IOException {
-		return getConfigValue("schedule-save-dir");
-	}
-
-	public static String getVideoDir() throws FileNotFoundException, IOException {
-		return getConfigValue("video-sync-dir");
-	}
-
-	public static String getVideoServerDir() throws FileNotFoundException, IOException {
-		return getConfigValue("video-server-dir");
-	}
-
-	public static String getActivityList() throws FileNotFoundException, IOException {
-		return getConfigValue("activity-list-file");
+	public static String getOBSVideoDir() throws FileNotFoundException, IOException {
+		return getConfigValue("obs-video-dir");
 	}
 
 	private static Map<String, String> readData() throws FileNotFoundException {

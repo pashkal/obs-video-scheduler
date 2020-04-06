@@ -34,7 +34,7 @@ public class VideoLaunchService implements Runnable {
 			try {
 				List<ScheduleEntry> schedule = DataProvider.getSchedule();
 				Map<String, Item> items = DataProvider.getMapByName();
-				String videoDir = Config.getVideoServerDir();
+				String videoDir = Config.getOBSVideoDir();
 				long time = new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000;
 				for (ScheduleEntry e : schedule) {
 					try {

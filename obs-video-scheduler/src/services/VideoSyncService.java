@@ -16,6 +16,7 @@ import java.util.StringTokenizer;
 import javax.servlet.ServletContext;
 
 import util.Config;
+import util.DataProvider;
 
 public class VideoSyncService implements Runnable {
 	ServletContext sc;
@@ -29,7 +30,7 @@ public class VideoSyncService implements Runnable {
 			try {
 				HashSet<String> oldFileList = new HashSet<>();
 				HashMap<String, Long> fileDuration = new HashMap<>();
-				Scanner s = new Scanner(new File(Config.getVideoList()));
+				Scanner s = new Scanner(new File(DataProvider.VIDEO_LIST_FILE));
 				while (s.hasNext()) {
 					String name = s.nextLine();
 					long duration = Long.parseLong(s.nextLine());
@@ -37,7 +38,7 @@ public class VideoSyncService implements Runnable {
 				}
 				s.close();
 				HashSet<String> newFileList = new HashSet<>();
-				File videoDirFile = new File(Config.getVideoDir());
+				File videoDirFile = new File(Config.getServerVideoDir());
 				File[] children = videoDirFile.listFiles();
 				for (File f : children) {
 					newFileList.add(f.getName());
@@ -75,7 +76,7 @@ public class VideoSyncService implements Runnable {
 					oldFileList.remove(fileName);
 				}
 
-				PrintWriter pw = new PrintWriter(Config.getVideoList());
+				PrintWriter pw = new PrintWriter(DataProvider.VIDEO_LIST_FILE);
 				for (String fileName : oldFileList) {
 					pw.println(fileName);
 					pw.println(fileDuration.get(fileName));
@@ -98,7 +99,7 @@ public class VideoSyncService implements Runnable {
 	}
 
 	private long getDuration(String fileName) throws IOException {
-		Process p = Runtime.getRuntime().exec("ffmpeg -i \"" + Config.getVideoDir() + fileName + "\"");
+		Process p = Runtime.getRuntime().exec("ffmpeg -i \"" + Config.getServerVideoDir() + fileName + "\"");
 		BufferedReader br = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 		while (true) {
 			String s = br.readLine();

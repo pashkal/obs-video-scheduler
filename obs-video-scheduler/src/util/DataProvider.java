@@ -23,10 +23,14 @@ import javax.json.JsonReader;
 
 public class DataProvider {
 	
-	static String SCHEDULE_FILE = "../../schedule.json";
+	public static String VIDEO_LIST_FILE = "../../data/filelist.txt";
+	private static String ACTIVITY_LIST_FILE = "../../data/alist.txt";
+	private static String SCHEDULE_FILE = "../../data/schedule.json";
+	private static String EVENT_START_TIMESTAMP_FILE = "../../data/timestamp";
+	private static String SCHEDULE_SAVE_DIR = "../../data/schedules/";
 
 	public static long getContestStart() throws IOException {
-		Scanner s = new Scanner(new File(Config.getContestTimestampFile()));
+		Scanner s = new Scanner(new File(EVENT_START_TIMESTAMP_FILE));
 		long res = s.nextLong();
 		s.close();
 		return res;
@@ -37,9 +41,9 @@ public class DataProvider {
 		ArrayList<Item> res = new ArrayList<>();
 		Scanner s;
 		if (videos)
-			s = new Scanner(new File(Config.getVideoList()));
+			s = new Scanner(new File(VIDEO_LIST_FILE));
 		else
-			s = new Scanner(new File(Config.getActivityList()));
+			s = new Scanner(new File(ACTIVITY_LIST_FILE));
 		while (s.hasNext()) {
 			String name = s.nextLine();
 			long duration = Long.parseLong(s.nextLine());
@@ -80,7 +84,7 @@ public class DataProvider {
 		time -= new Date().getTimezoneOffset() * 60 * 1000;
 		long diff = time - getContestStart();
 
-		PrintWriter pw = new PrintWriter(Config.getContestTimestampFile());
+		PrintWriter pw = new PrintWriter(EVENT_START_TIMESTAMP_FILE);
 		pw.println(time);
 		pw.close();
 
@@ -117,7 +121,7 @@ public class DataProvider {
 
 	public static void saveSchedule(String fileName) throws FileNotFoundException, IOException {
 		int cnt = getScheduleVersions(fileName);
-		File f = new File(Config.getScheduleSaveDir() + fileName + "." + cnt);
+		File f = new File(SCHEDULE_SAVE_DIR + fileName + "." + cnt);
 		PrintWriter pw = new PrintWriter(f);
 		long contestStart = getContestStart();
 		pw.println(contestStart);
@@ -129,7 +133,7 @@ public class DataProvider {
 	}
 
 	private static int getScheduleVersions(String fileName) throws FileNotFoundException, IOException {
-		File dir = new File(Config.getScheduleSaveDir());
+		File dir = new File(SCHEDULE_SAVE_DIR);
 		File[] all = dir.listFiles();
 		int cnt = 0;
 		for (File f : all) {
@@ -141,7 +145,7 @@ public class DataProvider {
 
 	public static List<String> getScheduleList() throws FileNotFoundException, IOException {
 		HashSet<String> scheduleList = new HashSet<String>();
-		File dir = new File(Config.getScheduleSaveDir());
+		File dir = new File(SCHEDULE_SAVE_DIR);
 		File[] files = dir.listFiles();
 		for (File f : files) {
 			String name = f.getName();
@@ -155,7 +159,7 @@ public class DataProvider {
 
 	public static void loadSchedule(String fileName) throws IOException {
 		int cnt = getScheduleVersions(fileName);
-		Scanner s = new Scanner(new File(Config.getScheduleSaveDir() + fileName + "." + (cnt - 1)));
+		Scanner s = new Scanner(new File(SCHEDULE_SAVE_DIR + fileName + "." + (cnt - 1)));
 		long timestamp = Long.parseLong(s.nextLine());
 		String schedule = s.nextLine();
 		s.close();
@@ -209,9 +213,9 @@ public class DataProvider {
 	public static void writeList(List<Item> list, boolean video) throws FileNotFoundException, IOException {
 		String filename;
 		if (video) {
-			filename = Config.getVideoList();
+			filename = VIDEO_LIST_FILE;
 		} else
-			filename = Config.getActivityList();
+			filename = ACTIVITY_LIST_FILE;
 		PrintWriter pw = new PrintWriter(filename);
 		for (Item i : list) {
 			pw.println(i.name);
