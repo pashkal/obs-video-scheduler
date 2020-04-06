@@ -3,7 +3,6 @@ package services;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,7 +10,6 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Properties;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -24,8 +22,6 @@ public class VideoSyncService implements Runnable {
 
 	public VideoSyncService(ServletContext servletContext) throws FileNotFoundException, IOException {
 		sc = servletContext;
-		Properties pr = new Properties();
-		pr.load(new FileInputStream("../../sched.properties"));
 	}
 
 	public void run() {

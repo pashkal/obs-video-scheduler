@@ -1,20 +1,11 @@
 package servlets;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import javax.json.stream.JsonParser;
-import javax.json.stream.JsonParser.Event;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,19 +23,11 @@ import util.Item;
 public class ScheduleGet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private String scheduleFile;
-
-	private String fileList;
-
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public ScheduleGet() throws FileNotFoundException, IOException {
 		super();
-		Properties pr = new Properties();
-		pr.load(new FileInputStream("../../sched.properties"));
-		scheduleFile = pr.getProperty("schedule-file");
-		fileList = pr.getProperty("video-list-file");
 	}
 
 	/**
