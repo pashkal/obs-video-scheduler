@@ -4,7 +4,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.json.Json;
@@ -21,6 +25,25 @@ public class Config {
 
 	public static String getOBSVideoDir() throws FileNotFoundException, IOException {
 		return getConfigValue("obs-video-dir");
+	}
+
+	public static void writeData(Map<String, String> data) throws FileNotFoundException {
+		PrintWriter pw = new PrintWriter(new File(CONFIG_FILE));
+		
+		List<String> sortedKeys = new ArrayList<String>(data.keySet());
+		Collections.sort(sortedKeys);
+		
+		pw.println("{\n");
+		for (int i = 0; i < sortedKeys.size(); i++) {
+			pw.printf("\t\"%s\":\t\"%s\"", sortedKeys.get(i), data.get(sortedKeys.get(i)));
+			if (i < sortedKeys.size() - 1) {
+				pw.println(",");
+			} else {
+				pw.println();
+			}
+		}
+		pw.println("}");
+		pw.close();
 	}
 
 	private static Map<String, String> readData() throws FileNotFoundException {
