@@ -55,7 +55,7 @@ public class VideoLaunchService implements Runnable {
 //	                            Thread.sleep(6000);
 //	                            toMute.clear();
 //	                            toMute.add("Disclaimer");                          
-	                            new OBSApi().launchVideoByPath(videoDir + e.itemName, "Scheduled Video", toMute);
+	                            new OBSApi().launchVideoByPath(videoDir + e.itemName, 1, "Scheduled Video", toMute);
 //	                            Thread.sleep(2000);
 //	                            new OBSApi().removeSource("Disclaimer", new ArrayList<String>());
 	                            longSleep = true;

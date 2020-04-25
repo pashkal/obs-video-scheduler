@@ -18,11 +18,12 @@ import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TSSLTransportFactory.TSSLTransportParameters;
 
 import scheduler.ObsThriftServer;
+import scheduler.SourceDimensions;
 
 public class OBSApi {
 	ObsThriftServer.Client client;
 	TTransport transport;
-	
+
 	public OBSApi() {
 		try {
 			transport = new TSocket(Config.getOBSHost(), 9090);
@@ -34,26 +35,26 @@ public class OBSApi {
 		}
 	}
 
-	public void launchVideoByPath(String filePath, String name, List<String> toMute) throws FileNotFoundException, IOException {
-//		try {
-//			client.l
-//			transport.close();
-//		} catch (TException e) {
-//			e.printStackTrace();
-//		}
+	public void launchVideoByPath(String filePath, int layer, String name, List<String> toMute)
+			throws FileNotFoundException, IOException {
+		try {
+			client.launchVideo(filePath, layer, "Scene 1", "Scheduled Video", new SourceDimensions());
+			transport.close();
+		} catch (TException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void removeSource(String name, List<String> toUnMute) throws IOException {
-//		try {
-//			client.removeSource(name, toUnMute);
-//			transport.close();
-//		} catch (TException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			client.removeSource("Scene 1", "Scheduled Video");
+			transport.close();
+		} catch (TException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void close() {
-		//transport.close();
+		// transport.close();
 	}
 }
- 
