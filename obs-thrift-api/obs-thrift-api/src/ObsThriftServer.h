@@ -26,6 +26,7 @@ class ObsThriftServerIf {
   virtual void removeSource(const std::string& sceneName, const std::string& sourceName) = 0;
   virtual void muteSource(const std::string& sourceName) = 0;
   virtual void unmuteSource(const std::string& sourceName) = 0;
+  virtual void heartbeat() = 0;
 };
 
 class ObsThriftServerIfFactory {
@@ -65,6 +66,9 @@ class ObsThriftServerNull : virtual public ObsThriftServerIf {
     return;
   }
   void unmuteSource(const std::string& /* sourceName */) {
+    return;
+  }
+  void heartbeat() {
     return;
   }
 };
@@ -448,6 +452,80 @@ class ObsThriftServer_unmuteSource_presult {
 
 };
 
+
+class ObsThriftServer_heartbeat_args {
+ public:
+
+  ObsThriftServer_heartbeat_args(const ObsThriftServer_heartbeat_args&);
+  ObsThriftServer_heartbeat_args& operator=(const ObsThriftServer_heartbeat_args&);
+  ObsThriftServer_heartbeat_args() {
+  }
+
+  virtual ~ObsThriftServer_heartbeat_args() noexcept;
+
+  bool operator == (const ObsThriftServer_heartbeat_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const ObsThriftServer_heartbeat_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ObsThriftServer_heartbeat_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ObsThriftServer_heartbeat_pargs {
+ public:
+
+
+  virtual ~ObsThriftServer_heartbeat_pargs() noexcept;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ObsThriftServer_heartbeat_result {
+ public:
+
+  ObsThriftServer_heartbeat_result(const ObsThriftServer_heartbeat_result&);
+  ObsThriftServer_heartbeat_result& operator=(const ObsThriftServer_heartbeat_result&);
+  ObsThriftServer_heartbeat_result() {
+  }
+
+  virtual ~ObsThriftServer_heartbeat_result() noexcept;
+
+  bool operator == (const ObsThriftServer_heartbeat_result & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const ObsThriftServer_heartbeat_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ObsThriftServer_heartbeat_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ObsThriftServer_heartbeat_presult {
+ public:
+
+
+  virtual ~ObsThriftServer_heartbeat_presult() noexcept;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 class ObsThriftServerClient : virtual public ObsThriftServerIf {
  public:
   ObsThriftServerClient(std::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
@@ -485,6 +563,9 @@ class ObsThriftServerClient : virtual public ObsThriftServerIf {
   void unmuteSource(const std::string& sourceName);
   void send_unmuteSource(const std::string& sourceName);
   void recv_unmuteSource();
+  void heartbeat();
+  void send_heartbeat();
+  void recv_heartbeat();
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -504,6 +585,7 @@ class ObsThriftServerProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_removeSource(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_muteSource(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_unmuteSource(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_heartbeat(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   ObsThriftServerProcessor(::std::shared_ptr<ObsThriftServerIf> iface) :
     iface_(iface) {
@@ -511,6 +593,7 @@ class ObsThriftServerProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["removeSource"] = &ObsThriftServerProcessor::process_removeSource;
     processMap_["muteSource"] = &ObsThriftServerProcessor::process_muteSource;
     processMap_["unmuteSource"] = &ObsThriftServerProcessor::process_unmuteSource;
+    processMap_["heartbeat"] = &ObsThriftServerProcessor::process_heartbeat;
   }
 
   virtual ~ObsThriftServerProcessor() {}
@@ -575,6 +658,15 @@ class ObsThriftServerMultiface : virtual public ObsThriftServerIf {
     ifaces_[i]->unmuteSource(sourceName);
   }
 
+  void heartbeat() {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->heartbeat();
+    }
+    ifaces_[i]->heartbeat();
+  }
+
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -619,6 +711,9 @@ class ObsThriftServerConcurrentClient : virtual public ObsThriftServerIf {
   void unmuteSource(const std::string& sourceName);
   int32_t send_unmuteSource(const std::string& sourceName);
   void recv_unmuteSource(const int32_t seqid);
+  void heartbeat();
+  int32_t send_heartbeat();
+  void recv_heartbeat(const int32_t seqid);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

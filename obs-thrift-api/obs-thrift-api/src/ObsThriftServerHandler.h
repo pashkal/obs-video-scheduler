@@ -14,6 +14,8 @@ public:
     void muteSource(const std::string& sourceName);
 
     void unmuteSource(const std::string& sourceName);
+
+    void heartbeat();
 };
 
 #endif

@@ -14,5 +14,7 @@ service ObsThriftServer {
 
    void muteSource(1:string sourceName),
    void unmuteSource(1:string sourceName),
+
+   void heartbeat(),
 }
 

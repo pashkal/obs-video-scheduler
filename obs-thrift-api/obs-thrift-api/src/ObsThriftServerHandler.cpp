@@ -95,3 +95,7 @@ void ObsThriftServerHandler::unmuteSource(const std::string& sourceName) {
     obs_source_set_muted(source, false);
     obs_source_release(source);
 }
+
+void ObsThriftServerHandler::heartbeat() {
+
+}
