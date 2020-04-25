@@ -18,10 +18,13 @@
 <span id = "contest-state"/>
 </td>
 <td>
+<span id = "obs-status"/>
+</td>
+<td>
 <span id = "reschedule"/>
 </td>
 <td>
-<form>New start time (in hh-mm format):<input type="text" id="reschedule-time"/><input type = "submit" value = "Reschedule" onclick="reschedule();"/></form><br/>
+<form>New start time (in hh-mm format):<br><input type="text" id="reschedule-time"/><input type = "submit" value = "Reschedule" onclick="reschedule();"/></form><br/>
 <form><input type = "submit" value = "Start now!" onclick="start();"/></form>
 </td>
 <td>
@@ -180,6 +183,14 @@
 	    document.getElementById("contest-state").innerHTML=text;
 	};
 
+	var update_obs_status = function(text) {
+		httpGetAsync('/OBSStatus.jsp', initialize_obs_status);
+	};
+
+	var initialize_obs_status = function(text) {
+	    document.getElementById("obs-status").innerHTML=text;
+	};
+
   var current_time = (new Date()).getTime() + ((new Date()).getTimezoneOffset() * 60 * 1000 * -1);
 	var current_timecells = "";
 
@@ -188,11 +199,13 @@
 	httpGetAsync("/VideoList?type=activity", initialize_activity_list);
 	httpGetAsync("/CurrentState", initialize_current_state);
 	httpGetAsync("/ContestState", initialize_contest_state);
+	httpGetAsync("/OBSStatus.jsp", initialize_obs_status);
 	httpGetAsync("/ScheduleList", initialize_load_select);
 //	httpGetAsync("/ScheduleGet", init_slider);
 
 	setInterval(update_contest_timestamp, 1000);
 	setInterval(update_contest_status, 1000);
+	setInterval(update_obs_status, 1000);
 	setInterval(update_current_status, 1000);
 	setInterval(update_video_list, 1000);
 

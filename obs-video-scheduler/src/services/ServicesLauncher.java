@@ -9,7 +9,7 @@ import javax.servlet.annotation.WebListener;
 @WebListener
 public class ServicesLauncher implements ServletContextListener {
 
-	Thread syncThread, launchThread;
+	Thread syncThread, launchThread, statusThread;
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
@@ -19,13 +19,14 @@ public class ServicesLauncher implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 		try {
-			arg0.getServletContext().log("Launching Wirecast video synchronization");
 			syncThread = new Thread(new VideoSyncService(arg0.getServletContext()));
 			syncThread.start();
 
 			launchThread = new Thread(new VideoLaunchService(arg0.getServletContext()));
 			launchThread.start();
 
+			statusThread = new Thread(new OBSStatusService(arg0.getServletContext()));
+			statusThread.start();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

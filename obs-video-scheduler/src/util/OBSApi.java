@@ -54,6 +54,16 @@ public class OBSApi {
 		}
 	}
 
+	public boolean heartbeat() {
+		try {
+			client.heartbeat();
+			transport.close();
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
 	public void close() {
 		// transport.close();
 	}
