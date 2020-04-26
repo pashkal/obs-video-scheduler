@@ -1,21 +1,14 @@
 package util;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
-import java.util.Scanner;
 
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
-import org.apache.thrift.transport.TSSLTransportFactory;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
-import org.apache.thrift.transport.TSSLTransportFactory.TSSLTransportParameters;
 
 import scheduler.ObsThriftServer;
 import scheduler.SourceDimensions;
@@ -35,10 +28,10 @@ public class OBSApi {
 		}
 	}
 
-	public void launchVideoByPath(String filePath, int layer, String name, List<String> toMute)
+	public void launchVideoByPath(String filePath, List<String> toMute)
 			throws FileNotFoundException, IOException {
 		try {
-			client.launchVideo(filePath, layer, "Scene 1", "Scheduled Video", new SourceDimensions());
+			client.launchVideo(filePath, Config.getSourceLayer(), Config.getSceneName(), Config.getSourceName(), new SourceDimensions());
 			transport.close();
 		} catch (TException e) {
 			e.printStackTrace();
@@ -47,7 +40,7 @@ public class OBSApi {
 
 	public void removeSource(String name, List<String> toUnMute) throws IOException {
 		try {
-			client.removeSource("Scene 1", "Scheduled Video");
+			client.removeSource(Config.getSceneName(), Config.getSourceName());
 			transport.close();
 		} catch (TException e) {
 			e.printStackTrace();
@@ -62,9 +55,5 @@ public class OBSApi {
 		} catch (Exception e) {
 			return false;
 		}
-	}
-
-	public void close() {
-		// transport.close();
 	}
 }

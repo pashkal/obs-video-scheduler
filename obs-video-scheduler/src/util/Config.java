@@ -31,6 +31,18 @@ public class Config {
 		return getConfigValue("obs-host");
 	}
 
+	public static int getSourceLayer() throws FileNotFoundException, IOException {
+		return Integer.valueOf(getConfigValue("source-layer"));
+	}
+
+	public static String getSceneName() throws FileNotFoundException, IOException {
+		return getConfigValue("scene-name");
+	}
+
+	public static String getSourceName() throws FileNotFoundException, IOException {
+		return getConfigValue("source-name");
+	}
+
 	public static void writeData(Map<String, String> data) throws FileNotFoundException {
 		PrintWriter pw = new PrintWriter(new File(CONFIG_FILE));
 		
