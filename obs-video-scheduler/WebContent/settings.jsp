@@ -70,6 +70,20 @@
 							</div>
 						</div>
 					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading">Advanced</div>
+						<div class="panel-body">
+							<div class="form-group">
+								<label for="sources-to-mute"> Sources to mute/unmute </label> <br>
+								<textarea id="sources-to-mute" class="form-control"
+									name="sources-to-mute"><%
+										for (String source: Config.getSourcesToMute()) {
+											out.println(source);
+									}
+								%></textarea>
+							</div>
+						</div>
+					</div>
 				</div>
 				<button type="submit" class="btn btn-primary">Update</button>
 				<a role="button" class="btn btn-secondary" href="/">Back</a>

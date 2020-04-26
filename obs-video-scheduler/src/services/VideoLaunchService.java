@@ -47,33 +47,14 @@ public class VideoLaunchService implements Runnable {
 							sc.log("Launching " + e.itemName);
 							System.err.println("Launching " + e.itemName);
 							System.err.println(videoDir + e.itemName);
-							ArrayList<String> toMute = new ArrayList<String>();
-							toMute.add("vmix NDI");
-//	                            toMute.add("Desktop Audio");                        
 
-//	                            new OBSApi().launchVideoByPath(videoDir + "icpclive splash.mp4", "Disclaimer", toMute);
-//	                            Thread.sleep(6000);
-//	                            toMute.clear();
-//	                            toMute.add("Disclaimer");                          
-							new OBSApi().launchVideoByPath(videoDir + e.itemName, toMute);
-//	                            Thread.sleep(2000);
-//	                            new OBSApi().removeSource("Disclaimer", new ArrayList<String>());
+							new OBSApi().launchVideoByPath(videoDir + e.itemName);
 							longSleep = true;
 
 						}
 						if (time > stop - 500 && time - stop < 1000) {
 							System.err.println("Stopping " + e.itemName);
-							ArrayList<String> toMute = new ArrayList<String>();
-							toMute.add("Scheduled Video");
-//	                            new OBSApi().launchVideoByPath(videoDir + "icpclive splash.mp4", "Disclaimer", toMute);
-//	                            Thread.sleep(2000);
-							ArrayList<String> toUnMute = new ArrayList<String>();
-							toUnMute.add("vmix NDI");
-							new OBSApi().removeSource("Scheduled Video", toUnMute);
-//	                            Thread.sleep(2000);
-//	                            toUnMute.add("Desktop Audio");
-//	                            new OBSApi().removeSource("Disclaimer", toUnMute);
-
+							new OBSApi().removeSource(Config.getSourceName());
 							longSleep = true;
 						}
 

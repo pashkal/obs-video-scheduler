@@ -12,46 +12,73 @@ import java.util.List;
 import java.util.Map;
 
 import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import javax.json.JsonString;
+import javax.json.JsonValue;
 
 public class Config {
 
 	private static String CONFIG_FILE = "../../data/config.json";
 
 	public static String getServerVideoDir() throws FileNotFoundException, IOException {
-		return getConfigValue("server-video-dir");
+		return getStringConfigValue("server-video-dir");
 	}
 
 	public static String getOBSVideoDir() throws FileNotFoundException, IOException {
-		return getConfigValue("obs-video-dir");
+		return getStringConfigValue("obs-video-dir");
 	}
 
 	public static String getOBSHost() throws FileNotFoundException, IOException {
-		return getConfigValue("obs-host");
+		return getStringConfigValue("obs-host");
 	}
 
 	public static int getSourceLayer() throws FileNotFoundException, IOException {
-		return Integer.valueOf(getConfigValue("source-layer"));
+		return getIntConfigValue("source-layer");
 	}
 
 	public static String getSceneName() throws FileNotFoundException, IOException {
-		return getConfigValue("scene-name");
+		return getStringConfigValue("scene-name");
 	}
 
 	public static String getSourceName() throws FileNotFoundException, IOException {
-		return getConfigValue("source-name");
+		return getStringConfigValue("source-name");
+	}
+
+	public static ArrayList<String> getSourcesToMute() throws FileNotFoundException, IOException {
+		return getStringListConfigValue("sources-to-mute");
 	}
 
 	public static void writeData(Map<String, String> data) throws FileNotFoundException {
 		PrintWriter pw = new PrintWriter(new File(CONFIG_FILE));
-		
+
 		List<String> sortedKeys = new ArrayList<String>(data.keySet());
 		Collections.sort(sortedKeys);
-		
+
 		pw.println("{\n");
 		for (int i = 0; i < sortedKeys.size(); i++) {
-			pw.printf("\t\"%s\":\t\"%s\"", sortedKeys.get(i), data.get(sortedKeys.get(i)));
+			String value = data.get(sortedKeys.get(i));
+			
+			if (sortedKeys.get(i).equals("sources-to-mute")) {
+				String[] sources = value.split("\n");
+				value = "[";
+				for (int j = 0; j < sources.length; j++) {
+					String sourceName = sources[j].replaceAll("\r", "");
+					if (!sourceName.equals("")) {
+						if (!value.equals("[")) {
+							value = value + ", ";
+						}
+						value = value + "\"" + sourceName +"\"";
+					}
+				}
+				value = value + "]";
+			} else {
+				value = "\"" + value + "\"";
+			}
+			
+			
+			pw.printf("\t\"%s\":\t%s", sortedKeys.get(i), value);
 			if (i < sortedKeys.size() - 1) {
 				pw.println(",");
 			} else {
@@ -62,18 +89,29 @@ public class Config {
 		pw.close();
 	}
 
-	private static Map<String, String> readData() throws FileNotFoundException {
+	private static Map<String, JsonValue> readData() throws FileNotFoundException {
 		JsonReader jr = Json.createReader(new FileReader(new File(CONFIG_FILE)));
 		JsonObject jo = jr.readObject();
-		HashMap<String, String> data = new HashMap<>();
+		HashMap<String, JsonValue> data = new HashMap<>();
 		for (String key : jo.keySet()) {
-			data.put(key, jo.getString(key));
+			data.put(key, jo.get(key));
 		}
 		return data;
 	}
 
-	private static String getConfigValue(String name) throws FileNotFoundException, IOException {
-		return readData().get(name);
+	private static String getStringConfigValue(String name) throws FileNotFoundException, IOException {
+		return ((JsonString)(readData().get(name))).getString();
+	}
+
+	private static int getIntConfigValue(String name) throws FileNotFoundException, IOException {
+		return Integer.valueOf(((JsonString)(readData().get(name))).getString());
+	}
+
+	private static ArrayList<String> getStringListConfigValue(String name) throws FileNotFoundException, IOException {
+		JsonArray array = readData().get(name).asJsonArray();
+		ArrayList<String> values = new ArrayList<>();
+		array.forEach((value)-> values.add(((JsonString)value).getString()));
+		return values;
 	}
 
 }

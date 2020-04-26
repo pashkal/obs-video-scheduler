@@ -28,19 +28,26 @@ public class OBSApi {
 		}
 	}
 
-	public void launchVideoByPath(String filePath, List<String> toMute)
+	public void launchVideoByPath(String filePath)
 			throws FileNotFoundException, IOException {
 		try {
-			client.launchVideo(filePath, Config.getSourceLayer(), Config.getSceneName(), Config.getSourceName(), new SourceDimensions());
+			for (String source : Config.getSourcesToMute()) {
+				client.muteSource(source);
+			}
+			client.launchVideo(filePath, Config.getSourceLayer(), Config.getSceneName(), Config.getSourceName(),
+					new SourceDimensions());
 			transport.close();
 		} catch (TException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void removeSource(String name, List<String> toUnMute) throws IOException {
+	public void removeSource(String name) throws IOException {
 		try {
 			client.removeSource(Config.getSceneName(), Config.getSourceName());
+			for (String source : Config.getSourcesToMute()) {
+				client.unmuteSource(source);
+			}
 			transport.close();
 		} catch (TException e) {
 			e.printStackTrace();

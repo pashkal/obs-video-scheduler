@@ -6,8 +6,6 @@ import util.OBSApi;
 
 public class Add {
 	public static void main(String[] args) throws FileNotFoundException, IOException, InterruptedException {
-		new OBSApi().launchVideoByPath("D:/videos/all teams video.mp4", 1, new ArrayList<String>());
-		Thread.sleep(1000);
-
+		new OBSApi().launchVideoByPath("D:/videos/all teams video.mp4");
 	}
 }
