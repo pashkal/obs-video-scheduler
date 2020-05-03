@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import util.DataProvider;
+import util.Disclaimer;
 import util.ScheduleEntry;
 import util.Item;
 
@@ -48,7 +49,7 @@ public class ScheduleGet extends HttpServlet {
 			}
 			pw.print("{\"_id\": \"" + e.id + "\",");
 			pw.print("\"start\": " + e.start + ",");
-			pw.print("\"stop\": " + (e.start + videoMap.get(e.itemName).duration) + ",");
+			pw.print("\"stop\": " + (e.start + videoMap.get(e.itemName).duration + Disclaimer.getDuration() * 2) + ",");
 			pw.print("\"name\": \"" + e.itemName + "\"}");
 		}
 		pw.print("]");

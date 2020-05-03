@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import util.DataProvider;
+import util.Disclaimer;
 import util.Item;
 import util.ScheduleEntry;
 
@@ -47,7 +48,7 @@ public class Commentator extends HttpServlet {
 
 		for (ScheduleEntry e : schedule) {
 			long start = e.start;
-			long stop = e.start + list.get(e.itemName).duration;
+			long stop = e.start + list.get(e.itemName).duration + Disclaimer.getDuration() * 2;
 			if (cTime > start && cTime < stop) {
 				w.append("<h1 class=\"green-text\">Now Playing<br><br></h1>");
 				w.append("<h1 class=\"green-text\">" + e.itemName + "<br><br></h1>");

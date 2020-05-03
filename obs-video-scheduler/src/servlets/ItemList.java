@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import util.DataProvider;
+import util.Disclaimer;
 import util.ScheduleEntry;
 import util.Item;
 
@@ -75,7 +76,7 @@ public class ItemList extends HttpServlet {
 
 			w.append("<tr" + (i % 2 == 0 ? "" : " bgcolor = \"#CCCCCC\"") + ">\n");
 			w.append("<td><input type = \"submit\" value=\"Schedule\" onclick='add_event(\"" + list.get(i).name + "\", "
-					+ list.get(i).duration + ");'/></td>");
+					+ (list.get(i).duration + Disclaimer.getDuration() * 2) + ");'/></td>");
 
 			w.append("<td>" + list.get(i).name + "</td>");
 			w.append("<td>" + dur + "</td>");
