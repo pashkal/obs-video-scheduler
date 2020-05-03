@@ -82,6 +82,11 @@
 									}
 								%></textarea>
 							</div>
+							<div class="form-group">
+								<label for="source-name">Disclaimer file name</label> <br> <input
+									id="disclaimer-file-name" type="text" name="disclaimer-file-name"
+									value="<%out.println(Config.getDisclaimerFileName());%>" />
+							</div>
 						</div>
 					</div>
 				</div>

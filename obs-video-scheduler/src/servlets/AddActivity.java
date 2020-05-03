@@ -51,7 +51,7 @@ public class AddActivity extends HttpServlet {
 			duration = Long.parseLong(durationString.substring(0, durationString.indexOf("-"))) * 60000
 					+ Long.parseLong(durationString.substring(durationString.indexOf("-") + 1)) * 1000;
 
-		List<Item> activities = DataProvider.getList(false);
+		List<Item> activities = new ArrayList<>(DataProvider.getActivities().values());
 		activities.add(new Item(name, duration, false));
 		DataProvider.writeList(activities, false);
 	}

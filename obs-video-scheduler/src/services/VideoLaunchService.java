@@ -9,6 +9,7 @@ import javax.servlet.ServletContext;
 
 import util.Config;
 import util.DataProvider;
+import util.Disclaimer;
 import util.ScheduleEntry;
 import util.Item;
 import util.OBSApi;
@@ -16,8 +17,6 @@ import util.OBSApi;
 public class VideoLaunchService implements Runnable {
 
 	private ServletContext sc;
-
-	// OBSApi api = new OBSApi();
 
 	public VideoLaunchService(ServletContext servletContext) {
 		this.sc = servletContext;
@@ -33,28 +32,26 @@ public class VideoLaunchService implements Runnable {
 			boolean longSleep = false;
 			try {
 				List<ScheduleEntry> schedule = DataProvider.getSchedule();
-				Map<String, Item> items = DataProvider.getMapByName();
-				String videoDir = Config.getOBSVideoDir();
+				Map<String, Item> items = DataProvider.getAllItems();
 				long time = new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000;
 				for (ScheduleEntry e : schedule) {
 					try {
 						if (!items.get(e.itemName).isVideo)
 							continue;
 						long start = e.start;
-						long stop = e.start + items.get(e.itemName).duration;
+						long stop = e.start + items.get(e.itemName).duration + Disclaimer.getDuration();
 						System.err.println(start + " " + time);
 						if (time > start - 1000 && Math.abs(start - time) < 2000) {
 							sc.log("Launching " + e.itemName);
 							System.err.println("Launching " + e.itemName);
-							System.err.println(videoDir + e.itemName);
 
-							new OBSApi().launchVideoByPath(videoDir + e.itemName);
+							new OBSApi().launchVideo(e.itemName);
 							longSleep = true;
 
 						}
 						if (time > stop - 500 && time - stop < 1000) {
 							System.err.println("Stopping " + e.itemName);
-							new OBSApi().removeSource(Config.getSourceName());
+							new OBSApi().removeScheduledVideo();
 							longSleep = true;
 						}
 

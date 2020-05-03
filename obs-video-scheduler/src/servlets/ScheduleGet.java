@@ -37,7 +37,7 @@ public class ScheduleGet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("application/json");
-		Map<String, Item> videoMap = DataProvider.getMapByName();
+		Map<String, Item> videoMap = DataProvider.getAllItems();
 		List<ScheduleEntry> schedule = DataProvider.getSchedule();
 		PrintWriter pw = new PrintWriter(response.getWriter());
 		pw.print("[");

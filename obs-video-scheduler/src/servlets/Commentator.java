@@ -1,15 +1,11 @@
 package servlets;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Writer;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -45,10 +41,8 @@ public class Commentator extends HttpServlet {
 			throws ServletException, IOException {
 		Writer w = response.getWriter();
 		w.append("<html>\n");
-		HashMap<String, Item> list = (HashMap<String, Item>) DataProvider.getMapByName();
+		Map<String, Item> list = DataProvider.getAllItems();
 		List<ScheduleEntry> schedule = DataProvider.getSchedule();
-		Date time = new Date();
-//		w.append(time.toString() + "<br/>");
 		long cTime = new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000;
 
 		for (ScheduleEntry e : schedule) {

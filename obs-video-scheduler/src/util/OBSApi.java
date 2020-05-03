@@ -28,23 +28,47 @@ public class OBSApi {
 		}
 	}
 
-	public void launchVideoByPath(String filePath)
-			throws FileNotFoundException, IOException {
+	public void launchVideo(String fileName) throws FileNotFoundException, IOException, InterruptedException {
 		try {
 			for (String source : Config.getSourcesToMute()) {
 				client.muteSource(source);
 			}
-			client.launchVideo(filePath, Config.getSourceLayer(), Config.getSceneName(), Config.getSourceName(),
-					new SourceDimensions());
+			
+			if (Disclaimer.exists()) {
+				client.launchVideo(Config.getOBSVideoDir() + Disclaimer.getFileName(), Config.getSourceLayer(),
+						Config.getSceneName(), "Disclaimer", new SourceDimensions());
+				Thread.sleep(Disclaimer.getDuration());
+			}
+			
+			client.launchVideo(Config.getOBSVideoDir() + fileName, Config.getSourceLayer(), Config.getSceneName(),
+					Config.getSourceName(), new SourceDimensions());
+			
+			if (Disclaimer.exists()) {
+				Thread.sleep(1000);
+				client.removeSource(Config.getSceneName(), "Disclaimer");
+			}
+			
 			transport.close();
 		} catch (TException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void removeSource(String name) throws IOException {
+	public void removeScheduledVideo() throws IOException, InterruptedException {
 		try {
+			if (Disclaimer.exists()) {
+				if (Disclaimer.exists()) {
+					client.launchVideo(Config.getOBSVideoDir() + Disclaimer.getFileName(), Config.getSourceLayer(),
+							Config.getSceneName(), "Disclaimer", new SourceDimensions());
+				}
+				Thread.sleep(Disclaimer.getDuration());
+			}			
+			
 			client.removeSource(Config.getSceneName(), Config.getSourceName());
+			
+			if (Disclaimer.exists()) {
+				client.removeSource(Config.getSceneName(), "Disclaimer");
+			}
 			for (String source : Config.getSourcesToMute()) {
 				client.unmuteSource(source);
 			}

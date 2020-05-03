@@ -6,7 +6,7 @@ import util.OBSApi;
 
 public class Remove {
 	public static void main(String[] args) throws FileNotFoundException, IOException, InterruptedException {
-		new OBSApi().removeSource("Scheduled video");
+		new OBSApi().removeScheduledVideo();
 	}
 
 }

@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -36,9 +37,23 @@ public class DataProvider {
 		return res;
 	}
 
-	public static ArrayList<Item> getList(boolean videos) throws IOException {
-//		System.err.println("getting " + videos);
-		ArrayList<Item> res = new ArrayList<>();
+	public static Map<String, Item> getVideos() throws IOException {
+		return DataProvider.getList(true);
+	}
+	
+	public static Map<String, Item> getActivities() throws IOException {
+		return DataProvider.getList(false);
+	}
+	
+	public static Map<String, Item> getAllItems() throws IOException {
+		Map<String, Item> result = DataProvider.getVideos();
+		result.putAll(DataProvider.getActivities());
+		return result;
+	}
+	
+	
+	private static Map<String, Item> getList(boolean videos) throws IOException {
+		TreeMap<String, Item> res = new TreeMap<>();
 		Scanner s;
 		if (videos)
 			s = new Scanner(new File(VIDEO_LIST_FILE));
@@ -47,23 +62,9 @@ public class DataProvider {
 		while (s.hasNext()) {
 			String name = s.nextLine();
 			long duration = Long.parseLong(s.nextLine());
-			res.add(new Item(name, duration, videos));
+			res.put(name, new Item(name, duration, videos));
 		}
 		s.close();
-//		System.err.println(res.size());
-		return res;
-	}
-
-	public static Map<String, Item> getMapByName() throws IOException {
-		ArrayList<Item> videoList = getList(true);
-		ArrayList<Item> activityList = getList(false);
-		HashMap<String, Item> res = new HashMap<>();
-		for (Item v : videoList) {
-			res.put(v.name, v);
-		}
-		for (Item v : activityList) {
-			res.put(v.name, v);
-		}
 		return res;
 	}
 

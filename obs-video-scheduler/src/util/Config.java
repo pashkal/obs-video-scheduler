@@ -22,6 +22,10 @@ public class Config {
 
 	private static String CONFIG_FILE = "../../data/config.json";
 
+	public static String getDisclaimerFileName() throws FileNotFoundException, IOException {
+		return getStringConfigValue("disclaimer-file-name");
+	}
+
 	public static String getServerVideoDir() throws FileNotFoundException, IOException {
 		return getStringConfigValue("server-video-dir");
 	}

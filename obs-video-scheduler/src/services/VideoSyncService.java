@@ -112,9 +112,8 @@ public class VideoSyncService implements Runnable {
 			while (!t.equals("Duration")) {
 				t = st.nextToken();
 			}
-			long time = Integer.parseInt(st.nextToken()) * 3600 + Integer.parseInt(st.nextToken()) * 60
-					+ Integer.parseInt(st.nextToken());
-			time *= 1000;
+			long time = (Integer.parseInt(st.nextToken()) * 3600 + Integer.parseInt(st.nextToken()) * 60
+					+ Integer.parseInt(st.nextToken())) * 1000 + Integer.parseInt(st.nextToken()) * 10;
 			return time;
 		}
 

@@ -5,9 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.servlet.ServletException;
@@ -42,11 +44,11 @@ public class ItemList extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		ArrayList<Item> list;
+		List<Item> list;
 		if (request.getParameter("type").equals("video"))
-			list = DataProvider.getList(true);
+			list = new ArrayList<>(DataProvider.getVideos().values());
 		else
-			list = DataProvider.getList(false);
+			list = new ArrayList<>(DataProvider.getActivities().values());
 
 		Collections.sort(list);
 

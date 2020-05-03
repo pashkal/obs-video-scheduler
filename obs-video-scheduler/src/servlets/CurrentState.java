@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.servlet.ServletException;
@@ -44,7 +45,7 @@ public class CurrentState extends HttpServlet {
 			throws ServletException, IOException {
 		Writer w = response.getWriter();
 		w.append("<html>\n");
-		HashMap<String, Item> list = (HashMap<String, Item>) DataProvider.getMapByName();
+		Map<String, Item> list = DataProvider.getAllItems();
 		List<ScheduleEntry> schedule = DataProvider.getSchedule();
 		Date time = new Date();
 		w.append(time.toString() + "<br/>");
