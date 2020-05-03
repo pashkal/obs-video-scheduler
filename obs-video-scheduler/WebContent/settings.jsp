@@ -71,6 +71,35 @@
 						</div>
 					</div>
 					<div class="panel panel-default">
+						<div class="panel-heading">Video dimensions</div>
+						<div class="panel-body">
+							<div class="form-group">
+								<label for="video-top-margin">Top margin (px)</label> <br> 
+								<input id="video-top-margin" type="text"
+									name="video-top-margin"
+									value=<%out.println(Config.getVideoTopMargin());%> />
+							</div>
+							<div class="form-group">
+								<label for="video-left-margin">Left margin (px)</label> <br> 
+								<input id="video-left-margin" type="text"
+									name="video-left-margin"
+									value=<%out.println(Config.getVideoLeftMargin());%> />
+							</div>
+							<div class="form-group">
+								<label for="video-width">Width (%)</label> <br> 
+								<input id="video-width" type="text"
+									name="video-width"
+									value=<%out.println(Config.getVideoWidth());%> />
+							</div>
+							<div class="form-group">
+								<label for="video-height">Height (%)</label> <br> 
+								<input id="video-height" type="text"
+									name="video-height"
+									value=<%out.println(Config.getVideoHeight());%> />
+							</div>
+						</div>
+					</div>
+					<div class="panel panel-default">
 						<div class="panel-heading">Advanced</div>
 						<div class="panel-body">
 							<div class="form-group">
