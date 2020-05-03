@@ -17,6 +17,9 @@ Tomcat web application that allows fo scheduling of pre-recorded videos playback
 
 More details TBD.
 
+## License
+TBD
+
 ## Installation instructions
 TBD
 
