@@ -1,7 +1,7 @@
 Write-Host "Checking java installation..."
 
-if ((-not (Test-Path env:JRE_HOME)) -and (-not (Test-Path env:JAVA_HOME))) {
-  Write-Host "There's no JAVA_HOME or JRE_HOME set!"
+if ((-not (Test-Path env:JRE_HOME))) {
+  Write-Host "There's no JRE_HOME set!"
   Write-Host "Install JDK or JRE and set JAVA_HOME or JRE_HOME appropriately"
   exit 1
 }
@@ -27,7 +27,18 @@ try {
 }
 
 Write-Host "Downloading tomcat..."
-Invoke-WebRequest -Uri "https://downloads.apache.org/tomcat/tomcat-9/v9.0.34/bin/apache-tomcat-9.0.34-windows-x64.zip" -Outfile "tomcat.zip"
+Invoke-WebRequest -Uri "https://downloads.apache.org/tomcat/tomcat-9/v9.0.33/bin/apache-tomcat-9.0.33-windows-x64.zip" -Outfile "tomcat.zip"
 Write-Host "Unpacking tomcat..."
-Expand-Archive tomcat.zip
+Expand-Archive -DestinationPath "." "tomcat.zip"
 Remove-Item tomcat.zip
+
+Write-Host "Downloading scheduler..."
+Invoke-WebRequest -Uri "https://github.com/pashkal/obs-video-scheduler/releases/download/0.1/obs-video-scheduler.zip" -Outfile "scheduler.zip"
+Write-Host "Unpacking scheduler..."
+Expand-Archive -DestinationPath "." "scheduler.zip"
+Remove-Item scheduler.zip
+
+Write-Host "Setting up web app..."
+Remove-Item -Recurse apache-tomcat-9.0.33\webapps
+New-Item apache-tomcat-9.0.33\webapps -ItemType directory
+Move-Item -Path ROOT.war -Destination "apache-tomcat-9.0.33\webapps\ROOT.war"
