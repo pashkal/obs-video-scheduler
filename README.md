@@ -21,9 +21,8 @@ More details TBD.
 TBD
 
 ## Acknowledgements
-Project was created for [ICPC](https://icpc.baylor.edu/), a non-profit 
-specializing in running worldwide programming competitions among college students.
-It's been continuously used during [ICPC Live](http://live.icpc.global/) broadcasts since 2016.
+Project was created for [ICPC](https://icpc.baylor.edu/), a largest worlwide college student programming competition.
+It's been used during [ICPC Live](http://live.icpc.global/) broadcasts since 2016.
 
 ## Contacts
 Reach out to me at krotkov.pavel@gmail.com
