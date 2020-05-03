@@ -13,7 +13,7 @@ Functionality supported currently:
 
 ## obs-video-scheduler
 
-Tomcat web application that enables scheduling of pre-recorded videos playbacks during video broadcast.
+Tomcat web application that enables scheduling of pre-recorded videos playbacks during OBS broadcast.
 
 More details TBD.
 
