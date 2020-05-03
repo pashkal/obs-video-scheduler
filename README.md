@@ -1,6 +1,6 @@
 # OBS Video Scheduler
 
-Library and web application allowing managing pre-recorded videos playbacks in Open Broadcaster Software broadcasts.
+Library and web application for managing pre-recorded videos playbacks in Open Broadcaster Software broadcasts.
 
 ## obs-thrift-api
 
