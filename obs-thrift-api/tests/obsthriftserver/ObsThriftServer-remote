@@ -24,7 +24,7 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
     print('Usage: ' + sys.argv[0] + ' [-h host[:port]] [-u url] [-f[ramed]] [-s[sl]] [-novalidate] [-ca_certs certs] [-keyfile keyfile] [-certfile certfile] function [arg1 [arg2...]]')
     print('')
     print('Functions:')
-    print('  void launchVideo(string path, i32 layer, string sceneName, string sourceName, SourceDimensions dimensions)')
+    print('  void launchVideo(string path, i32 layer, string sceneName, string sourceName, SourceDimensions dimensions, bool clearOnMediaEnd)')
     print('  void removeSource(string sceneName, string sourceName)')
     print('  void muteSource(string sourceName)')
     print('  void unmuteSource(string sourceName)')
@@ -109,10 +109,10 @@ client = ObsThriftServer.Client(protocol)
 transport.open()
 
 if cmd == 'launchVideo':
-    if len(args) != 5:
-        print('launchVideo requires 5 args')
+    if len(args) != 6:
+        print('launchVideo requires 6 args')
         sys.exit(1)
-    pp.pprint(client.launchVideo(args[0], eval(args[1]), args[2], args[3], eval(args[4]),))
+    pp.pprint(client.launchVideo(args[0], eval(args[1]), args[2], args[3], eval(args[4]), eval(args[5]),))
 
 elif cmd == 'removeSource':
     if len(args) != 2:

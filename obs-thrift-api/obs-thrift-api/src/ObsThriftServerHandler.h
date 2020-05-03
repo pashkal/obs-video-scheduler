@@ -7,7 +7,14 @@ class ObsThriftServerHandler : virtual public ObsThriftServerIf {
 public:
     ObsThriftServerHandler();
 
-    void launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions);
+    void launchVideo(
+        const std::string& path, 
+        const int32_t layer, 
+        const std::string& sceneName, 
+        const std::string& sourceName, 
+        const SourceDimensions& dimensions, 
+        const bool clearOnMediaEnd
+    );
 
     void removeSource(const std::string& sceneName, const std::string& sourceName);
 

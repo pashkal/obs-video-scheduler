@@ -33,21 +33,27 @@ public class OBSApi {
 			for (String source : Config.getSourcesToMute()) {
 				client.muteSource(source);
 			}
-			
+
 			if (Disclaimer.exists()) {
 				client.launchVideo(Config.getOBSVideoDir() + Disclaimer.getFileName(), Config.getSourceLayer(),
-						Config.getSceneName(), "Disclaimer", new SourceDimensions());
+						Config.getSceneName(), "Disclaimer",
+						new SourceDimensions(Config.getVideoLeftMargin(), Config.getVideoTopMargin(),
+								Config.getVideoWidth() * 1.0 / 100, Config.getVideoHeight() * 1.0 / 100),
+						false);
 				Thread.sleep(Disclaimer.getDuration());
 			}
-			
+
 			client.launchVideo(Config.getOBSVideoDir() + fileName, Config.getSourceLayer(), Config.getSceneName(),
-					Config.getSourceName(), new SourceDimensions());
-			
+					Config.getSourceName(),
+					new SourceDimensions(Config.getVideoLeftMargin(), Config.getVideoTopMargin(),
+							Config.getVideoWidth() * 1.0 / 100, Config.getVideoHeight() * 1.0 / 100),
+					!Disclaimer.exists());
+
 			if (Disclaimer.exists()) {
 				Thread.sleep(1000);
 				client.removeSource(Config.getSceneName(), "Disclaimer");
 			}
-			
+
 			transport.close();
 		} catch (TException e) {
 			e.printStackTrace();
@@ -59,13 +65,16 @@ public class OBSApi {
 			if (Disclaimer.exists()) {
 				if (Disclaimer.exists()) {
 					client.launchVideo(Config.getOBSVideoDir() + Disclaimer.getFileName(), Config.getSourceLayer(),
-							Config.getSceneName(), "Disclaimer", new SourceDimensions());
+							Config.getSceneName(), "Disclaimer",
+							new SourceDimensions(Config.getVideoLeftMargin(), Config.getVideoTopMargin(),
+									Config.getVideoWidth() * 1.0 / 100, Config.getVideoHeight() * 1.0 / 100),
+							true);
 				}
 				Thread.sleep(Disclaimer.getDuration());
-			}			
-			
+			}
+
 			client.removeSource(Config.getSceneName(), Config.getSourceName());
-			
+
 			if (Disclaimer.exists()) {
 				client.removeSource(Config.getSceneName(), "Disclaimer");
 			}

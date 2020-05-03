@@ -19,7 +19,7 @@ all_structs = []
 
 
 class Iface(object):
-    def launchVideo(self, path, layer, sceneName, sourceName, dimensions):
+    def launchVideo(self, path, layer, sceneName, sourceName, dimensions, clearOnMediaEnd):
         """
         Parameters:
          - path
@@ -27,6 +27,7 @@ class Iface(object):
          - sceneName
          - sourceName
          - dimensions
+         - clearOnMediaEnd
 
         """
         pass
@@ -67,7 +68,7 @@ class Client(Iface):
             self._oprot = oprot
         self._seqid = 0
 
-    def launchVideo(self, path, layer, sceneName, sourceName, dimensions):
+    def launchVideo(self, path, layer, sceneName, sourceName, dimensions, clearOnMediaEnd):
         """
         Parameters:
          - path
@@ -75,12 +76,13 @@ class Client(Iface):
          - sceneName
          - sourceName
          - dimensions
+         - clearOnMediaEnd
 
         """
-        self.send_launchVideo(path, layer, sceneName, sourceName, dimensions)
+        self.send_launchVideo(path, layer, sceneName, sourceName, dimensions, clearOnMediaEnd)
         self.recv_launchVideo()
 
-    def send_launchVideo(self, path, layer, sceneName, sourceName, dimensions):
+    def send_launchVideo(self, path, layer, sceneName, sourceName, dimensions, clearOnMediaEnd):
         self._oprot.writeMessageBegin('launchVideo', TMessageType.CALL, self._seqid)
         args = launchVideo_args()
         args.path = path
@@ -88,6 +90,7 @@ class Client(Iface):
         args.sceneName = sceneName
         args.sourceName = sourceName
         args.dimensions = dimensions
+        args.clearOnMediaEnd = clearOnMediaEnd
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
@@ -259,7 +262,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = launchVideo_result()
         try:
-            self._handler.launchVideo(args.path, args.layer, args.sceneName, args.sourceName, args.dimensions)
+            self._handler.launchVideo(args.path, args.layer, args.sceneName, args.sourceName, args.dimensions, args.clearOnMediaEnd)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -379,16 +382,18 @@ class launchVideo_args(object):
      - sceneName
      - sourceName
      - dimensions
+     - clearOnMediaEnd
 
     """
 
 
-    def __init__(self, path=None, layer=None, sceneName=None, sourceName=None, dimensions=None,):
+    def __init__(self, path=None, layer=None, sceneName=None, sourceName=None, dimensions=None, clearOnMediaEnd=None,):
         self.path = path
         self.layer = layer
         self.sceneName = sceneName
         self.sourceName = sourceName
         self.dimensions = dimensions
+        self.clearOnMediaEnd = clearOnMediaEnd
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -425,6 +430,11 @@ class launchVideo_args(object):
                     self.dimensions.read(iprot)
                 else:
                     iprot.skip(ftype)
+            elif fid == 6:
+                if ftype == TType.BOOL:
+                    self.clearOnMediaEnd = iprot.readBool()
+                else:
+                    iprot.skip(ftype)
             else:
                 iprot.skip(ftype)
             iprot.readFieldEnd()
@@ -455,6 +465,10 @@ class launchVideo_args(object):
             oprot.writeFieldBegin('dimensions', TType.STRUCT, 5)
             self.dimensions.write(oprot)
             oprot.writeFieldEnd()
+        if self.clearOnMediaEnd is not None:
+            oprot.writeFieldBegin('clearOnMediaEnd', TType.BOOL, 6)
+            oprot.writeBool(self.clearOnMediaEnd)
+            oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
 
@@ -479,6 +493,7 @@ launchVideo_args.thrift_spec = (
     (3, TType.STRING, 'sceneName', 'UTF8', None, ),  # 3
     (4, TType.STRING, 'sourceName', 'UTF8', None, ),  # 4
     (5, TType.STRUCT, 'dimensions', [SourceDimensions, None], None, ),  # 5
+    (6, TType.BOOL, 'clearOnMediaEnd', None, None, ),  # 6
 )
 
 

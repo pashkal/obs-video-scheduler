@@ -42,6 +42,22 @@ public class Config {
 		return getIntConfigValue("source-layer");
 	}
 
+	public static int getVideoTopMargin() throws FileNotFoundException, IOException {
+		return getIntConfigValue("video-top-margin");
+	}
+
+	public static int getVideoLeftMargin() throws FileNotFoundException, IOException {
+		return getIntConfigValue("video-left-margin");
+	}
+
+	public static int getVideoWidth() throws FileNotFoundException, IOException {
+		return getIntConfigValue("video-width");
+	}
+
+	public static int getVideoHeight() throws FileNotFoundException, IOException {
+		return getIntConfigValue("video-height");
+	}
+
 	public static String getSceneName() throws FileNotFoundException, IOException {
 		return getStringConfigValue("scene-name");
 	}

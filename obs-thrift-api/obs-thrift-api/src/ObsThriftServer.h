@@ -22,7 +22,7 @@
 class ObsThriftServerIf {
  public:
   virtual ~ObsThriftServerIf() {}
-  virtual void launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions) = 0;
+  virtual void launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions, const bool clearOnMediaEnd) = 0;
   virtual void removeSource(const std::string& sceneName, const std::string& sourceName) = 0;
   virtual void muteSource(const std::string& sourceName) = 0;
   virtual void unmuteSource(const std::string& sourceName) = 0;
@@ -56,7 +56,7 @@ class ObsThriftServerIfSingletonFactory : virtual public ObsThriftServerIfFactor
 class ObsThriftServerNull : virtual public ObsThriftServerIf {
  public:
   virtual ~ObsThriftServerNull() {}
-  void launchVideo(const std::string& /* path */, const int32_t /* layer */, const std::string& /* sceneName */, const std::string& /* sourceName */, const SourceDimensions& /* dimensions */) {
+  void launchVideo(const std::string& /* path */, const int32_t /* layer */, const std::string& /* sceneName */, const std::string& /* sourceName */, const SourceDimensions& /* dimensions */, const bool /* clearOnMediaEnd */) {
     return;
   }
   void removeSource(const std::string& /* sceneName */, const std::string& /* sourceName */) {
@@ -74,12 +74,13 @@ class ObsThriftServerNull : virtual public ObsThriftServerIf {
 };
 
 typedef struct _ObsThriftServer_launchVideo_args__isset {
-  _ObsThriftServer_launchVideo_args__isset() : path(false), layer(false), sceneName(false), sourceName(false), dimensions(false) {}
+  _ObsThriftServer_launchVideo_args__isset() : path(false), layer(false), sceneName(false), sourceName(false), dimensions(false), clearOnMediaEnd(false) {}
   bool path :1;
   bool layer :1;
   bool sceneName :1;
   bool sourceName :1;
   bool dimensions :1;
+  bool clearOnMediaEnd :1;
 } _ObsThriftServer_launchVideo_args__isset;
 
 class ObsThriftServer_launchVideo_args {
@@ -87,7 +88,7 @@ class ObsThriftServer_launchVideo_args {
 
   ObsThriftServer_launchVideo_args(const ObsThriftServer_launchVideo_args&);
   ObsThriftServer_launchVideo_args& operator=(const ObsThriftServer_launchVideo_args&);
-  ObsThriftServer_launchVideo_args() : path(), layer(0), sceneName(), sourceName() {
+  ObsThriftServer_launchVideo_args() : path(), layer(0), sceneName(), sourceName(), clearOnMediaEnd(0) {
   }
 
   virtual ~ObsThriftServer_launchVideo_args() noexcept;
@@ -96,6 +97,7 @@ class ObsThriftServer_launchVideo_args {
   std::string sceneName;
   std::string sourceName;
   SourceDimensions dimensions;
+  bool clearOnMediaEnd;
 
   _ObsThriftServer_launchVideo_args__isset __isset;
 
@@ -109,6 +111,8 @@ class ObsThriftServer_launchVideo_args {
 
   void __set_dimensions(const SourceDimensions& val);
 
+  void __set_clearOnMediaEnd(const bool val);
+
   bool operator == (const ObsThriftServer_launchVideo_args & rhs) const
   {
     if (!(path == rhs.path))
@@ -120,6 +124,8 @@ class ObsThriftServer_launchVideo_args {
     if (!(sourceName == rhs.sourceName))
       return false;
     if (!(dimensions == rhs.dimensions))
+      return false;
+    if (!(clearOnMediaEnd == rhs.clearOnMediaEnd))
       return false;
     return true;
   }
@@ -145,6 +151,7 @@ class ObsThriftServer_launchVideo_pargs {
   const std::string* sceneName;
   const std::string* sourceName;
   const SourceDimensions* dimensions;
+  const bool* clearOnMediaEnd;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -551,8 +558,8 @@ class ObsThriftServerClient : virtual public ObsThriftServerIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions);
-  void send_launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions);
+  void launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions, const bool clearOnMediaEnd);
+  void send_launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions, const bool clearOnMediaEnd);
   void recv_launchVideo();
   void removeSource(const std::string& sceneName, const std::string& sourceName);
   void send_removeSource(const std::string& sceneName, const std::string& sourceName);
@@ -622,13 +629,13 @@ class ObsThriftServerMultiface : virtual public ObsThriftServerIf {
     ifaces_.push_back(iface);
   }
  public:
-  void launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions) {
+  void launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions, const bool clearOnMediaEnd) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->launchVideo(path, layer, sceneName, sourceName, dimensions);
+      ifaces_[i]->launchVideo(path, layer, sceneName, sourceName, dimensions, clearOnMediaEnd);
     }
-    ifaces_[i]->launchVideo(path, layer, sceneName, sourceName, dimensions);
+    ifaces_[i]->launchVideo(path, layer, sceneName, sourceName, dimensions, clearOnMediaEnd);
   }
 
   void removeSource(const std::string& sceneName, const std::string& sourceName) {
@@ -699,8 +706,8 @@ class ObsThriftServerConcurrentClient : virtual public ObsThriftServerIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions);
-  int32_t send_launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions);
+  void launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions, const bool clearOnMediaEnd);
+  int32_t send_launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions, const bool clearOnMediaEnd);
   void recv_launchVideo(const int32_t seqid);
   void removeSource(const std::string& sceneName, const std::string& sourceName);
   int32_t send_removeSource(const std::string& sceneName, const std::string& sourceName);

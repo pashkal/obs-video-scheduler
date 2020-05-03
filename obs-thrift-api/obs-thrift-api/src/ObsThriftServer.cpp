@@ -74,6 +74,14 @@ uint32_t ObsThriftServer_launchVideo_args::read(::apache::thrift::protocol::TPro
           xfer += iprot->skip(ftype);
         }
         break;
+      case 6:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->clearOnMediaEnd);
+          this->__isset.clearOnMediaEnd = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -111,6 +119,10 @@ uint32_t ObsThriftServer_launchVideo_args::write(::apache::thrift::protocol::TPr
   xfer += this->dimensions.write(oprot);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("clearOnMediaEnd", ::apache::thrift::protocol::T_BOOL, 6);
+  xfer += oprot->writeBool(this->clearOnMediaEnd);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -144,6 +156,10 @@ uint32_t ObsThriftServer_launchVideo_pargs::write(::apache::thrift::protocol::TP
 
   xfer += oprot->writeFieldBegin("dimensions", ::apache::thrift::protocol::T_STRUCT, 5);
   xfer += (*(this->dimensions)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("clearOnMediaEnd", ::apache::thrift::protocol::T_BOOL, 6);
+  xfer += oprot->writeBool((*(this->clearOnMediaEnd)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -847,13 +863,13 @@ uint32_t ObsThriftServer_heartbeat_presult::read(::apache::thrift::protocol::TPr
   return xfer;
 }
 
-void ObsThriftServerClient::launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions)
+void ObsThriftServerClient::launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions, const bool clearOnMediaEnd)
 {
-  send_launchVideo(path, layer, sceneName, sourceName, dimensions);
+  send_launchVideo(path, layer, sceneName, sourceName, dimensions, clearOnMediaEnd);
   recv_launchVideo();
 }
 
-void ObsThriftServerClient::send_launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions)
+void ObsThriftServerClient::send_launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions, const bool clearOnMediaEnd)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("launchVideo", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -864,6 +880,7 @@ void ObsThriftServerClient::send_launchVideo(const std::string& path, const int3
   args.sceneName = &sceneName;
   args.sourceName = &sourceName;
   args.dimensions = &dimensions;
+  args.clearOnMediaEnd = &clearOnMediaEnd;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1158,7 +1175,7 @@ void ObsThriftServerProcessor::process_launchVideo(int32_t seqid, ::apache::thri
 
   ObsThriftServer_launchVideo_result result;
   try {
-    iface_->launchVideo(args.path, args.layer, args.sceneName, args.sourceName, args.dimensions);
+    iface_->launchVideo(args.path, args.layer, args.sceneName, args.sourceName, args.dimensions, args.clearOnMediaEnd);
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
       this->eventHandler_->handlerError(ctx, "ObsThriftServer.launchVideo");
@@ -1407,13 +1424,13 @@ void ObsThriftServerProcessor::process_heartbeat(int32_t seqid, ::apache::thrift
   return processor;
 }
 
-void ObsThriftServerConcurrentClient::launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions)
+void ObsThriftServerConcurrentClient::launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions, const bool clearOnMediaEnd)
 {
-  int32_t seqid = send_launchVideo(path, layer, sceneName, sourceName, dimensions);
+  int32_t seqid = send_launchVideo(path, layer, sceneName, sourceName, dimensions, clearOnMediaEnd);
   recv_launchVideo(seqid);
 }
 
-int32_t ObsThriftServerConcurrentClient::send_launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions)
+int32_t ObsThriftServerConcurrentClient::send_launchVideo(const std::string& path, const int32_t layer, const std::string& sceneName, const std::string& sourceName, const SourceDimensions& dimensions, const bool clearOnMediaEnd)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -1425,6 +1442,7 @@ int32_t ObsThriftServerConcurrentClient::send_launchVideo(const std::string& pat
   args.sceneName = &sceneName;
   args.sourceName = &sourceName;
   args.dimensions = &dimensions;
+  args.clearOnMediaEnd = &clearOnMediaEnd;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();

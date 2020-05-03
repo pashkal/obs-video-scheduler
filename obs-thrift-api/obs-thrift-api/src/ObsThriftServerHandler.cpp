@@ -26,7 +26,8 @@ void ObsThriftServerHandler::launchVideo(
     const int32_t layer, 
     const std::string& sceneName, 
     const std::string& sourceName, 
-    const SourceDimensions& dimensions
+    const SourceDimensions& dimensions,
+    const bool clearOnMediaEnd
 ) {
     auto addSource = [](void* _data, obs_scene_t* scene) {
         AddSourceData* data = (AddSourceData*)_data;
@@ -43,7 +44,7 @@ void ObsThriftServerHandler::launchVideo(
     
     obs_data_t* sourceData = obs_data_create();
     obs_data_set_string(sourceData, "local_file", path.c_str());
-    obs_data_set_bool(sourceData, "clear_on_media_end", true);
+    obs_data_set_bool(sourceData, "clear_on_media_end", clearOnMediaEnd);
     obs_source_t* newSource = obs_source_create("ffmpeg_source", sourceName.c_str(), sourceData, nullptr);
     obs_source_set_monitoring_type(newSource, OBS_MONITORING_TYPE_MONITOR_AND_OUTPUT);
     data.source = newSource;
