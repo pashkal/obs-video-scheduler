@@ -29,7 +29,6 @@ public class VideoLaunchService implements Runnable {
 		sc.log("Launcher started");
 
 		while (true) {
-			boolean longSleep = false;
 			try {
 				List<ScheduleEntry> schedule = DataProvider.getSchedule();
 				Map<String, Item> items = DataProvider.getAllItems();
@@ -41,18 +40,20 @@ public class VideoLaunchService implements Runnable {
 						long start = e.start;
 						long stop = e.start + items.get(e.itemName).duration + Disclaimer.getDuration();
 						System.err.println(start + " " + time);
-						if (time > start - 1000 && Math.abs(start - time) < 2000) {
+						if (time > start - 2000 && time < start) {
+							Thread.sleep(start - time);
 							sc.log("Launching " + e.itemName);
 							System.err.println("Launching " + e.itemName);
 
 							new OBSApi().launchVideo(e.itemName);
-							longSleep = true;
-
+							
+							Thread.sleep(1500);
 						}
-						if (time > stop - 500 && time - stop < 1000) {
+						if (time > stop - 2000 && time < stop) {
+							Thread.sleep(stop - time);
 							System.err.println("Stopping " + e.itemName);
 							new OBSApi().removeScheduledVideo();
-							longSleep = true;
+							Thread.sleep(1500);
 						}
 
 					} catch (Exception ee) {
@@ -63,12 +64,10 @@ public class VideoLaunchService implements Runnable {
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-			// sc.log("Launcher iteration");
 			try {
-				Thread.sleep(longSleep ? 5000 : 1000);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-				// api.close();
 			}
 		}
 	}
