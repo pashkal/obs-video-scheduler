@@ -9,7 +9,7 @@
 ## Installation
 1) Download `install.ps1` and `obs-thrift-api.dll` from the latest plugin [release](../../../releases)
 2) Copy obs-thrift-api.dll into `<OBS home>\plugins` folder of your OBS installation ([instruction](https://obsproject.com/forum/threads/how-to-install-obs-plugins.4912))
-3) Place install.pd1 script into an empty folder to install web interface tools into and run install.pd1 from windows powershell
+3) Place `install.ps1` script into an empty folder to install web interface tools into and run install.pd1 from windows powershell
 4) Open powershell as administrator and run `Set-ExecutionPolicy unrestricted` to adjust powershell security settings to run the script 
 5) Script will download and install Apache Tomcat and `obs-video-scheduler.zip`
 6) As a result, installation folder should contain `apache-tomcat-9.0.33`, `data`, `install.ps1` and `run.bat`
