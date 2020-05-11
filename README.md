@@ -11,6 +11,8 @@ Functionality supported currently:
 - removing media source from OBS
 - muting/unmuting sources
 
+For full API details see [thrift file](obs_thrift_server.thrift).
+
 ## obs-video-scheduler
 
 Tomcat web application that enables scheduling of pre-recorded videos playbacks during OBS broadcast.
