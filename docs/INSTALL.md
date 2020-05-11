@@ -61,6 +61,6 @@ You can open settings on the “settings” link in upper left corner of web int
 ### Advanced
 | Property | Default value | Description |
 |-|-|-|
-| Sources to mute/unmute | <empty> | |
-| Disclaimer file name | <empty> | video within video directory on OBS host that will be used as intro and outro before and after each video (example: `intro.mp4`) |
+| Sources to mute/unmute | *empty* | |
+| Disclaimer file name | *empty* | video within video directory on OBS host that will be used as intro and outro before and after each video (example: `intro.mp4`) |
 
