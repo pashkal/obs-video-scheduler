@@ -13,7 +13,7 @@ if (Test-Path env:JRE_HOME) {
     Write-Host "Fix your java installation"
     exit 1
   }
-  Write-Host "Found bin\java.exe at $env:JRE_HOME"
+  Write-Host "Found  $env:JRE_HOME\bin\java.exe"
   Invoke-Expression "$env:JRE_HOME\bin\java.exe --version"
 } else {
   if (Test-Path env:JAVA_HOME) {
@@ -23,7 +23,7 @@ if (Test-Path env:JRE_HOME) {
       Write-Host "Fix your java installation"
       exit 1
     }
-    Write-Host "Found bin\java.exe at $env:JAVA_HOME"
+    Write-Host "Found $env:JAVA_HOME\bin\java.exe"
     Invoke-Expression "$env:JAVA_HOME\bin\java.exe --version"
   }
 }
