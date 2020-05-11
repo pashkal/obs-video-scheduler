@@ -4,13 +4,13 @@ https://github.com/pashkal/obs-video-scheduler/releases/tag/0.1
 ==Release 0.1
 OBS video scheduler is a plugin that allows you to set up a video plan into an existing OBS scenes. Scheduled video will automatically start in the upper layer.
 
-===Description
+=== Description
 Scheduler plugin consists of three parts:
 OBS plugin dll
 Localhost web interface for schedule management and settings on  http://localhost:8080 
 Localhost web interface with upcoming video announcement on http://localhost:8080/comm 
 
-===Pre-requirements
+=== Pre-requirements
 Windows
 browser
 OBS (not in studio mode)
@@ -31,17 +31,17 @@ Run OBS
 Create or select a scene to add scheduled videos to
 Run ```run.bat``` from scheduler folder
 Open http://localhost:8080/ in browser
-Web interface should show ìConnected to OBSî in the upper left corner.
+Web interface should show ‚ÄúConnected to OBS‚Äù in the upper left corner.
 
 To schedule a video press ```schedule``` button to the left of video name in the lower left corner
 Drag-n-drop video in the timeline to adjust start time (only round number of seconds allowed)
 Double click on scheduled video to remove
 Move the slider above the timeline to adjust zoom
-Timeline has two timers available: global astronomic time (below timeline) and time from a given start time. To adjust start time use ìNew start timeî and ìRescheduleî button or click ìStart nowî
+Timeline has two timers available: global astronomic time (below timeline) and time from a given start time. To adjust start time use ‚ÄúNew start time‚Äù and ‚ÄúReschedule‚Äù button or click ‚ÄúStart now‚Äù
 http://localhost:8080/comm will show information about upcoming video 1 minute before the video start and during the video
 
 ===Settings
-You can open settings on the ìsettingsî link in upper left corner of web interface or directly on http://localhost:8080/settings.jsp; settings are stored in ```\data\config.json```
+You can open settings on the ‚Äúsettings‚Äù link in upper left corner of web interface or directly on http://localhost:8080/settings.jsp; settings are stored in ```\data\config.json```
 OBS
 OBS host : localhost by default, but can target OBS on another computer available through local network
 Video directory on OBS host: C:/videos/ folder with all videos
