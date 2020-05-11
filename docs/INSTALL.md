@@ -4,7 +4,7 @@ https://github.com/pashkal/obs-video-scheduler/releases/tag/0.1
 ==Release 0.1
 OBS video scheduler is a plugin that allows you to set up a video plan into an existing OBS scenes. Scheduled video will automatically start in the upper layer.
 
-=== Description
+### Description
 Scheduler plugin consists of three parts:
 OBS plugin dll
 Localhost web interface for schedule management and settings on  http://localhost:8080 
