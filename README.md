@@ -6,7 +6,7 @@ Library and web application for managing pre-recorded videos playbacks in [Open 
 
 Tomcat web application that enables scheduling of pre-recorded videos playbacks during OBS broadcast and creating a video plan ahead of the broadcast. Scheduled videos will automatically start in the correct layer.
 
-Currently two interfaces are provided:
+Currently two interfaces are supported:
 - web interface for schedule management and settings (http://localhost:8080)
 - web interface with upcoming video announcements (http://localhost:8080/comm) that can be used by commentators or broadcast director
 
