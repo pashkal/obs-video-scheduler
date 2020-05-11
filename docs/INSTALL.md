@@ -21,12 +21,14 @@
 4) Open http://localhost:8080/ in browser
 5) Web interface should show “Connected to OBS” in the upper left corner.
 
-To schedule a video press ```schedule``` button to the left of video name in the lower left corner
-Drag-n-drop video in the timeline to adjust start time (only round number of seconds allowed)
-Double click on scheduled video to remove
-Move the slider above the timeline to adjust zoom
-Timeline has two timers available: global astronomic time (below timeline) and time from a given start time. To adjust start time use “New start time” and “Reschedule” button or click “Start now”
-http://localhost:8080/comm will show information about upcoming video 1 minute before the video start and during the video
+![](UI.png)
+
+6) To schedule a video press ```schedule``` button to the left of video name in the lower left corner
+7) Drag-n-drop video in the timeline to adjust start time (only round number of seconds allowed)
+8) Double click on scheduled video to remove
+9) Move the slider above the timeline to adjust zoom
+10) Timeline has two timers available: global astronomic time (below timeline) and time from a given start time. To adjust start time use “New start time” and “Reschedule” button or click “Start now”
+11) http://localhost:8080/comm will show information about upcoming video 1 minute before the video start and during the video
 
 ## Settings
 You can open settings on the “settings” link in upper left corner of web interface or directly on http://localhost:8080/settings.jsp; settings are stored in ```\data\config.json```
