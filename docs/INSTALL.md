@@ -32,19 +32,35 @@
 
 ## Settings
 You can open settings on the “settings” link in upper left corner of web interface or directly on http://localhost:8080/settings.jsp; settings are stored in ```\data\config.json```
+
+
 ### OBS
-OBS host : localhost by default, but can target OBS on another computer available through local network
-Video directory on OBS host: C:/videos/ folder with all videos
+| Property | Default value | Description |
+|-|-|-|
+| OBS host | `localhost` | `localhost` for OBS on the same computer or IP address of another computer with OBS in the local network |
+| Video directory on OBS Host | `C:/videos/` | folder with all videos (must end with `/` and only use forward slashes) |
+
 ### Scheduler
-Video directory on the server C:/videos/
-Scene name: Scene1; scene name to add video to (should exist!)
-Source name: Scheduled Video; source name to add video to (should *not* exist)
-Source layer: 0; video source will be set to that layer number; 0 -- on top of all; used to add logos on top of the video
+
+| Property | Default value | Description |
+|-|-|-|
+| Video directory on the server | `C:/videos/` | |
+| Scene name | Scene1 | scene name to add video to (should exist!) |
+| Source name | Scheduled Video| source name to add video to (should *not* exist) |
+| Source layer | 0 | video source will be set to that layer number; 0 -- on top of all; used to add logos on top of the video |
+
 ### Video dimensions
-Top margin (px) 0
-Left margin (px) 0
-Width (%) 100
-Height (%) 100
+
+| Property | Default value | Description |
+|-|-|-|
+| Top margin (px) | 0 | |
+| Left margin (px) | 0 | |
+| Width (%) | 100 | |
+| Height (%)| 100 | |
+
 ### Advanced
-Sources to mute/unmute
-Disclaimer file name: intro.mp4; video within video directory on OBS host that will be used as intro and outro before and after each video
+| Property | Default value | Description |
+|-|-|-|
+| Sources to mute/unmute | <empty> | |
+| Disclaimer file name | <empty> | video within video directory on OBS host that will be used as intro and outro before and after each video (example: `intro.mp4`) |
+
