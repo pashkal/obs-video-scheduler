@@ -7,7 +7,7 @@
 - ffmpeg available from command line / PATH 
 
 ## Installation
-1) Download `install.ps1` and `obs-thrift-api.dll` from the latest plugin [release](/releases)
+1) Download `install.ps1` and `obs-thrift-api.dll` from the latest plugin [release](../../releases)
 2) Copy obs-thrift-api.dll into `<OBS home>\plugins` folder of your OBS installation ([instruction](https://obsproject.com/forum/threads/how-to-install-obs-plugins.4912))
 3) Place install.pd1 script into an empty folder to install web interface tools into and run install.pd1 from windows powershell
 4) Open powershell as administrator and run `Set-ExecutionPolicy unrestricted` to adjust powershell security settings to run the script 
