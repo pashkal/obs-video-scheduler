@@ -1,7 +1,7 @@
 ## Pre-requirements
 - Windows
 - browser
-- OBS (not in studio mode)
+- 64 bit OBS (not in studio mode)
 - PowerShell with administrator rights
 - JDK/JRE & JRE_HOME environment variable (JRE_HOME\bin\java.exe should exist)
 - ffmpeg available from command line / PATH 
