@@ -32,7 +32,7 @@ See detailed installation and usage instructions [here](docs/INSTALL.md).
 TBD
 
 ## Acknowledgements
-Project was created for [ICPC](https://icpc.baylor.edu/), a largest worlwide college student programming competition.
+Project was created for [ICPC](https://icpc.baylor.edu/), the largest worlwide college student programming competition.
 It's been used during [ICPC Live](http://live.icpc.global/) broadcasts since 2016.
 
 obs-video-scheduler is built based on [TimeSlider Plugin for jQuery](https://github.com/v-v-vishnevskiy/timeslider) distributed under The MIT License.
