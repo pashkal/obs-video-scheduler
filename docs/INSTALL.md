@@ -1,37 +1,25 @@
-To migrate to https://github.com/pashkal/obs-video-scheduler 
+### Pre-requirements
+- Windows
+- browser
+- OBS (not in studio mode)
+- PowerShell with administrator rights
+- JDK/JRE & JRE_HOME environment variable (JRE_HOME\bin\java.exe should exist)
+- ffmpeg available from command line / PATH 
 
-https://github.com/pashkal/obs-video-scheduler/releases/tag/0.1
-==Release 0.1
-OBS video scheduler is a plugin that allows you to set up a video plan into an existing OBS scenes. Scheduled video will automatically start in the upper layer.
+### Installation
+1) Download install.ps1 and obs-thrift-api.dll from the latest plugin release.
+2) Copy obs-thrift-api.dll into [OBS home]\plugins folder of your OBS installation https://obsproject.com/forum/threads/how-to-install-obs-plugins.4912/ 
+3) Place install.pd1 script into an empty folder to install web interface tools into and run install.pd1 from windows powershell
+4) Open powershell as administrator and run ```Set-ExecutionPolicy unrestricted```to adjust powershell security settings to run the script 
+5) Script will download and install apache tomcat and ```obs-video-scheduler.zip```
+6) As a result, installation folder should contain ```apache-tomcat-9.0.33``` ```data``` ```install.ps1``` and ```run.bat```
 
-### Description
-Scheduler plugin consists of three parts:
-OBS plugin dll
-Localhost web interface for schedule management and settings on  http://localhost:8080 
-Localhost web interface with upcoming video announcement on http://localhost:8080/comm 
-
-=== Pre-requirements
-Windows
-browser
-OBS (not in studio mode)
-PowerShell with administrator rights
-JDK/JRE & JRE_HOME environment variable (JRE_HOME\bin\java.exe should exist)
-ffmpeg available from command line / PATH 
-
-===Installation
-Download install.ps1 and obs-thrift-api.dll from the latest plugin release.
-Copy obs-thrift-api.dll into [OBS home]\plugins folder of your OBS installation https://obsproject.com/forum/threads/how-to-install-obs-plugins.4912/ 
-Place install.pd1 script into an empty folder to install web interface tools into and run install.pd1 from windows powershell
-Open powershell as administrator and run ```Set-ExecutionPolicy unrestricted```to adjust powershell security settings to run the script 
-Script will download and install apache tomcat and ```obs-video-scheduler.zip```
-As a result, installation folder should contain ```apache-tomcat-9.0.33``` ```data``` ```install.ps1``` and ```run.bat```
-
-===Usage
-Run OBS
-Create or select a scene to add scheduled videos to
-Run ```run.bat``` from scheduler folder
-Open http://localhost:8080/ in browser
-Web interface should show “Connected to OBS” in the upper left corner.
+### Usage
+1) Run OBS
+2) Create or select a scene to add scheduled videos to
+3) Run ```run.bat``` from scheduler folder
+4) Open http://localhost:8080/ in browser
+5) Web interface should show “Connected to OBS” in the upper left corner.
 
 To schedule a video press ```schedule``` button to the left of video name in the lower left corner
 Drag-n-drop video in the timeline to adjust start time (only round number of seconds allowed)
