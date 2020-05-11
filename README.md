@@ -15,15 +15,15 @@ For full API details see [thrift file](obs_thrift_server.thrift).
 
 ## obs-video-scheduler
 
-Tomcat web application that enables scheduling of pre-recorded videos playbacks during OBS broadcast.
-
-More details TBD.
+Tomcat web application that enables scheduling of pre-recorded videos playbacks during OBS broadcast and creating a vide plan ahead of time. Scheduled video will automatically start in the correct layer.
 
 ## License
 TBD
 
 ## Installation instructions
-TBD
+Currently the only supported platform is Windows and 64-bit OBS. It's likely that it can be easily ported to other platforms.
+
+See detailed installation instructions [here](blob/master/docs/INSTALL.md).
 
 ## Acknowledgements
 Project was created for [ICPC](https://icpc.baylor.edu/), a largest worlwide college student programming competition.
