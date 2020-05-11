@@ -23,13 +23,13 @@ Functionality supported currently:
 
 For full API details see [thrift file](obs_thrift_server.thrift).
 
-## License
-TBD
-
 ## Installation and usage
 Currently the only supported platform is Windows and 64-bit OBS. It's likely that it can be easily ported to other platforms.
 
 See detailed installation and usage instructions [here](docs/INSTALL.md).
+
+## License
+TBD
 
 ## Acknowledgements
 Project was created for [ICPC](https://icpc.baylor.edu/), a largest worlwide college student programming competition.
