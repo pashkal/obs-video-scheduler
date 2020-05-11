@@ -23,7 +23,7 @@ TBD
 ## Installation instructions
 Currently the only supported platform is Windows and 64-bit OBS. It's likely that it can be easily ported to other platforms.
 
-See detailed installation instructions [here](blob/master/docs/INSTALL.md).
+See detailed installation instructions [here](docs/INSTALL.md).
 
 ## Acknowledgements
 Project was created for [ICPC](https://icpc.baylor.edu/), a largest worlwide college student programming competition.
