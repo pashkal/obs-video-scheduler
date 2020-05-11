@@ -3,7 +3,7 @@
 - browser
 - 64-bit OBS (not in studio mode)
 - PowerShell with administrator rights
-- JDK/JRE & JRE_HOME environment variable (JRE_HOME\bin\java.exe should exist)
+- JDK/JRE & JRE_HOME environment variable (`JRE_HOME\bin\java.exe` or `JAVA_HOME\bin\java.exe` should exist)
 - ffmpeg available from command line / PATH 
 
 ## Installation
