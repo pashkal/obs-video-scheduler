@@ -1,7 +1,7 @@
 Write-Host "Checking java installation..."
 
-if ((-not (Test-Path env:JRE_HOME))) {
-  Write-Host "There's no JRE_HOME set!"
+if ((-not (Test-Path env:JRE_HOME)) -and (-not (Test-Path env:JAVA_HOME))) {
+  Write-Host "There's no JRE_HOME or JAVA_HOME set!"
   Write-Host "Install JDK or JRE and set JAVA_HOME or JRE_HOME appropriately"
   exit 1
 }
@@ -9,12 +9,23 @@ if ((-not (Test-Path env:JRE_HOME))) {
 if (Test-Path env:JRE_HOME) {
   Write-Host "Found JRE_HOME at $env:JRE_HOME"
   if (-not (Test-Path "$env:JRE_HOME\bin\java.exe")) {
-    Write-Host "There's no bin\java.exe at $env:JRE_HOME"
+    Write-Host "There's no $env:JRE_HOME\bin\java.exe"
     Write-Host "Fix your java installation"
     exit 1
   }
-  Write-Host "Found java.exe at $env:JRE_HOME"
+  Write-Host "Found bin\java.exe at $env:JRE_HOME"
   Invoke-Expression "$env:JRE_HOME\bin\java.exe --version"
+} else {
+  if (Test-Path env:JAVA_HOME) {
+    Write-Host "JRE_HOME is not set, but found JAVA_HOME at $env:JAVA_HOME"
+    if (-not (Test-Path "$env:JAVA_HOME\bin\java.exe")) {
+      Write-Host "There's no $env:JAVA_HOME\bin\java.exe"
+      Write-Host "Fix your java installation"
+      exit 1
+    }
+    Write-Host "Found bin\java.exe at $env:JAVA_HOME"
+    Invoke-Expression "$env:JAVA_HOME\bin\java.exe --version"
+  }
 }
 
 Write-Host "Checking ffmpeg installation..."
