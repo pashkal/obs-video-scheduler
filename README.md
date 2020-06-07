@@ -29,7 +29,7 @@ Currently the only supported platform is Windows and 64-bit OBS. It's likely tha
 See detailed installation and usage instructions [here](docs/INSTALL.md).
 
 ## License
-TBD
+Project is distributed under Apache License. See LICENSE [file](LICENSE) for details.
 
 ## Acknowledgements
 Project was created for [ICPC](https://icpc.baylor.edu/), the largest worlwide college student programming competition.
