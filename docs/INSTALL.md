@@ -5,6 +5,7 @@
 - PowerShell with administrator rights
 - JDK/JRE & JRE_HOME environment variable (`JRE_HOME\bin\java.exe` or `JAVA_HOME\bin\java.exe` should exist)
 - ffmpeg available from command line / PATH 
+- appropriate installation of Microsoft Visual C++ Redistributable for Visual Studio, [download here](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads)
 
 ## Installation
 1) Download `install.ps1` and `obs-thrift-api.dll` from the latest plugin [release](../../../releases)
