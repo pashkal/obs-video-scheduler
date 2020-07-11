@@ -3,9 +3,11 @@ package util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,6 +23,9 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
+import javax.json.JsonWriter;
+import javax.json.JsonWriterFactory;
+import javax.json.stream.JsonGenerator;
 
 public class DataProvider {
 	
@@ -205,10 +210,22 @@ public class DataProvider {
 	}
 
 	public static void updateSchedule(String newSchedule) throws IOException {
-		PrintWriter pw = new PrintWriter(SCHEDULE_FILE);
-		pw.println(newSchedule);
-		pw.close();
-		
+		JsonReader jr = Json.createReader(new StringReader(newSchedule));
+		JsonArray a = jr.readArray();
+		FileWriter w = new FileWriter(SCHEDULE_FILE);
+
+		prettyPrintJsonArray(w, a);
+
+		w.close();
+	}
+
+	private static void prettyPrintJsonArray(Writer w, JsonArray a) {
+		Map<String, Object> map = new HashMap<>();
+        map.put(JsonGenerator.PRETTY_PRINTING, true);
+        JsonWriterFactory writerFactory = Json.createWriterFactory(map);
+        JsonWriter jsonWriter = writerFactory.createWriter(w);
+        jsonWriter.writeArray(a);
+        jsonWriter.close();
 	}
 
 	public static void writeList(List<Item> list, boolean video) throws FileNotFoundException, IOException {
