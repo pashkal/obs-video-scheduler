@@ -53,3 +53,6 @@ Write-Host "Setting up web app..."
 Remove-Item -Recurse apache-tomcat-9.0.33\webapps
 New-Item apache-tomcat-9.0.33\webapps -ItemType directory
 Move-Item -Path ROOT.war -Destination "apache-tomcat-9.0.33\webapps\ROOT.war"
+
+Write-Host "Setting up schedules dir..."
+New-Item data\schedules -ItemType directory
