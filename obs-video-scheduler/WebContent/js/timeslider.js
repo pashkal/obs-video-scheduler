@@ -440,7 +440,8 @@ if (typeof jQuery === 'undefined') {
                 timecell_id = timecell['_id'];
                 start = timecell['start'];
                 stop = timecell['stop'];
-								name = timecell['name'];
+				name = decodeURIComponent(timecell['name']);
+				console.log(name);
             }
         }
         if (typeof this.options.on_add_timecell_callback == 'function') {

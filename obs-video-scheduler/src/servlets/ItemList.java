@@ -4,6 +4,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Writer;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -75,7 +78,7 @@ public class ItemList extends HttpServlet {
 			String dur = duration / 60000 + ":" + duration / 1000 % 60;
 
 			w.append("<tr" + (i % 2 == 0 ? "" : " bgcolor = \"#CCCCCC\"") + ">\n");
-			w.append("<td><input type = \"submit\" value=\"Schedule\" onclick='add_event(\"" + list.get(i).name + "\", "
+			w.append("<td><input type = \"submit\" value=\"Schedule\" onclick='add_event(\"" + URLEncoder.encode(list.get(i).name, StandardCharsets.UTF_8.name()) + "\", "
 					+ (list.get(i).duration + Disclaimer.getDuration() * 2) + ");'/></td>");
 
 			w.append("<td>" + list.get(i).name + "</td>");
