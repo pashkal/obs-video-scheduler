@@ -35,9 +35,7 @@ public class ScheduleUpdate extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String newSchedule = request.getParameter("schedule");
-		
 		DataProvider.updateSchedule(newSchedule);
-		
 	}
 
 	/**
