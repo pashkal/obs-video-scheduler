@@ -3,6 +3,7 @@ package util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -127,14 +128,22 @@ public class DataProvider {
 
 	public static void saveSchedule(String fileName) throws FileNotFoundException, IOException {
 		int cnt = getScheduleVersions(fileName);
-		File f = new File(SCHEDULE_SAVE_DIR + fileName + "." + cnt);
-		PrintWriter pw = new PrintWriter(f);
-		long contestStart = getContestStart();
-		pw.println(contestStart);
 
-		String schedule = new Scanner(new File(SCHEDULE_FILE)).nextLine();
-		pw.println(schedule);
-		pw.close();
+		FileReader fr = new FileReader(new File(SCHEDULE_FILE));
+		JsonReader jr = Json.createReader(fr);
+		JsonArray schedule = jr.readArray();
+		fr.close();
+		
+		JsonObject savedSchedule = Json
+			.createObjectBuilder()
+			.add("start_timestamp", getContestStart())
+			.add("schedule", schedule)
+			.build();
+
+		File f = new File(SCHEDULE_SAVE_DIR + fileName + "." + cnt);
+		FileWriter w = new FileWriter(f);
+		prettyPrintJsonObject(w, savedSchedule);
+		w.close();
 
 	}
 
@@ -165,24 +174,24 @@ public class DataProvider {
 
 	public static void loadSchedule(String fileName) throws IOException {
 		int cnt = getScheduleVersions(fileName);
-		Scanner s = new Scanner(new File(SCHEDULE_SAVE_DIR + fileName + "." + (cnt - 1)));
-		long timestamp = Long.parseLong(s.nextLine());
-		String schedule = s.nextLine();
-		s.close();
-
+		
+		FileReader fr = new FileReader(new File(SCHEDULE_SAVE_DIR + fileName + "." + (cnt - 1)));
+		JsonObject savedSchedule = Json.createReader(fr).readObject();
+		fr.close();
+		
+		long timestamp = savedSchedule.getInt("start_timestamp");
+		JsonArray schedule = savedSchedule.getJsonArray("schedule");
+		
 		Date contestStart = new Date();
 		Date loadedContestStart = new Date(timestamp);
 		adjustDate(contestStart, loadedContestStart);
 		System.out.println(contestStart + " " + loadedContestStart);
 		startContest(contestStart.getTime() + new Date().getTimezoneOffset() * 60 * 1000);
 
-		JsonReader jr = Json.createReader(new StringReader(schedule));
-		JsonArray ja = jr.readArray();
-
 		JsonArrayBuilder jab = Json.createArrayBuilder();
 		System.out.println(schedule);
-		for (int i = 0; i < ja.size(); i++) {
-			JsonObject jo = ja.getJsonObject(i);
+		for (int i = 0; i < schedule.size(); i++) {
+			JsonObject jo = schedule.getJsonObject(i);
 			System.out.println(i);
 			try {
 				long oldTimestamp = jo.getJsonNumber("start_timestamp").longValueExact();
@@ -225,6 +234,15 @@ public class DataProvider {
         JsonWriterFactory writerFactory = Json.createWriterFactory(map);
         JsonWriter jsonWriter = writerFactory.createWriter(w);
         jsonWriter.writeArray(a);
+        jsonWriter.close();
+	}
+
+	private static void prettyPrintJsonObject(Writer w, JsonObject o) {
+		Map<String, Object> map = new HashMap<>();
+        map.put(JsonGenerator.PRETTY_PRINTING, true);
+        JsonWriterFactory writerFactory = Json.createWriterFactory(map);
+        JsonWriter jsonWriter = writerFactory.createWriter(w);
+        jsonWriter.writeObject(o);
         jsonWriter.close();
 	}
 
