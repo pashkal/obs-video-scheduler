@@ -25,13 +25,13 @@
 							<div class="form-group">
 								<label for="obs-host">OBS host</label> <br> <input
 									id="obs-host" type="text" name="obs-host"
-									value=<%out.println(Config.getOBSHost());%> />
+									value="<%out.println(Config.getOBSHost());%>" />
 							</div>
 
 							<div class="form-group">
 								<label for="obs-video-dir">Video directory on OBS host</label> <br>
 								<input id="obs-video-dir" type="text" name="obs-video-dir"
-									value=<%out.println(Config.getOBSVideoDir());%> />
+									value="<%out.println(Config.getOBSVideoDir());%>" />
 							</div>
 						</div>
 					</div>
@@ -42,7 +42,7 @@
 								<label for="server-video-dir">Video directory on the
 									server</label> <br> <input id="server-video-dir" type="text"
 									name="server-video-dir"
-									value=<%out.println(Config.getServerVideoDir());%> />
+									value="<%out.println(Config.getServerVideoDir());%>" />
 							</div>
 							<div class="form-group">
 								<label for="scene-name">Scene name</label> <br> <input
@@ -77,25 +77,25 @@
 								<label for="video-top-margin">Top margin (px)</label> <br> 
 								<input id="video-top-margin" type="text"
 									name="video-top-margin"
-									value=<%out.println(Config.getVideoTopMargin());%> />
+									value="<%out.println(Config.getVideoTopMargin());%>" />
 							</div>
 							<div class="form-group">
 								<label for="video-left-margin">Left margin (px)</label> <br> 
 								<input id="video-left-margin" type="text"
 									name="video-left-margin"
-									value=<%out.println(Config.getVideoLeftMargin());%> />
+									value="<%out.println(Config.getVideoLeftMargin());%>" />
 							</div>
 							<div class="form-group">
 								<label for="video-width">Width (%)</label> <br> 
 								<input id="video-width" type="text"
 									name="video-width"
-									value=<%out.println(Config.getVideoWidth());%> />
+									value="<%out.println(Config.getVideoWidth());%>" />
 							</div>
 							<div class="form-group">
 								<label for="video-height">Height (%)</label> <br> 
 								<input id="video-height" type="text"
 									name="video-height"
-									value=<%out.println(Config.getVideoHeight());%> />
+									value="<%out.println(Config.getVideoHeight());%>" />
 							</div>
 						</div>
 					</div>
