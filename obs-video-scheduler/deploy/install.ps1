@@ -44,7 +44,7 @@ Expand-Archive -DestinationPath "." "tomcat.zip"
 Remove-Item tomcat.zip
 
 Write-Host "Downloading scheduler..."
-Invoke-WebRequest -Uri "https://github.com/pashkal/obs-video-scheduler/releases/download/0.1/obs-video-scheduler.zip" -Outfile "scheduler.zip"
+Invoke-WebRequest -Uri "https://github.com/pashkal/obs-video-scheduler/releases/download/0.1.1/obs-video-scheduler.zip" -Outfile "scheduler.zip"
 Write-Host "Unpacking scheduler..."
 Expand-Archive -DestinationPath "." "scheduler.zip"
 Remove-Item scheduler.zip
