@@ -80,6 +80,8 @@ public class Config {
 		for (int i = 0; i < sortedKeys.size(); i++) {
 			String value = data.get(sortedKeys.get(i));
 			
+			// TODO: this really needs some more generic validation / processing for different fields
+			// and pretty json printing instead of this crap
 			if (sortedKeys.get(i).equals("sources-to-mute")) {
 				String[] sources = value.split("\n");
 				value = "[";
@@ -94,6 +96,20 @@ public class Config {
 				}
 				value = value + "]";
 			} else {
+				if (sortedKeys.get(i).equals("obs-video-dir")) {
+					if (!value.endsWith("/")) {
+						value = value + "/";
+					}
+				}
+				
+				// TODO: can check if the directory exists on the server and throw if it doesn't 
+				// once there's some nice way of highlighting errors on the settings page
+				if (sortedKeys.get(i).equals("server-video-dir")) {
+					if (!value.endsWith("/")) {
+						value = value + "/";
+					}
+				}
+				
 				value = "\"" + value + "\"";
 			}
 			
