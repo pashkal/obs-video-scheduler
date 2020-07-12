@@ -4,8 +4,6 @@
 # Use deploy-and-run.bat to copy over changed *.class files and other web-app 
 # related files when doing development
 
-# Some extensions or dirs might be missing!
-
 pushd apache-tomcat-9.0.33\webapps\ROOT
 
 pushd WEB-INF\classes
@@ -30,6 +28,16 @@ popd
 pushd css
 del *.css
 copy ..\..\..\..\..\WebContent\css\*.css .
+popd
+
+pushd comm
+del *.html
+copy ..\..\..\..\..\WebContent\comm\*.html .
+popd
+
+pushd js
+del *.js
+copy ..\..\..\..\..\WebContent\js\*.js .
 popd
 
 
