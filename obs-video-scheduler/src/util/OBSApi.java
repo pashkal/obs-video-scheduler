@@ -2,6 +2,7 @@ package util;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.List;
 
 import org.apache.thrift.TException;
@@ -9,6 +10,7 @@ import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
+import org.apache.thrift.transport.TTransportException;
 
 import scheduler.ObsThriftServer;
 import scheduler.SourceDimensions;
@@ -24,7 +26,11 @@ public class OBSApi {
 			TProtocol protocol = new TBinaryProtocol(transport);
 			client = new ObsThriftServer.Client(protocol);
 		} catch (Exception x) {
-			x.printStackTrace();
+			if (x.getCause() instanceof ConnectException) {
+				System.err.println("Can't connect to OBS!\n1) Make sure OBS is running\n2) Make sure obs-thrift-api plugin initialized successfully");
+			} else {
+				x.printStackTrace();
+			}
 		}
 	}
 
