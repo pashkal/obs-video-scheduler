@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.Writer;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -221,8 +219,6 @@ public class DataProvider {
 	}
 
 	public static void updateSchedule(String newSchedule) throws IOException {
-		newSchedule = URLDecoder.decode(newSchedule, StandardCharsets.UTF_8.name());
-		
 		JsonReader jr = Json.createReader(new StringReader(newSchedule));
 		JsonArray a = jr.readArray();
 		FileWriter w = new FileWriter(SCHEDULE_FILE);
