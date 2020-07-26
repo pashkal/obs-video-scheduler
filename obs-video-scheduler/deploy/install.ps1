@@ -14,7 +14,7 @@ if (Test-Path env:JRE_HOME) {
     exit 1
   }
   Write-Host "Found  $env:JRE_HOME\bin\java.exe"
-  Invoke-Expression "$env:JRE_HOME\bin\java.exe --version"
+  Invoke-Expression "& '$env:JRE_HOME\bin\java.exe' --version"
 } else {
   if (Test-Path env:JAVA_HOME) {
     Write-Host "JRE_HOME is not set, but found JAVA_HOME at $env:JAVA_HOME"
@@ -24,7 +24,7 @@ if (Test-Path env:JRE_HOME) {
       exit 1
     }
     Write-Host "Found $env:JAVA_HOME\bin\java.exe"
-    Invoke-Expression "$env:JAVA_HOME\bin\java.exe --version"
+    Invoke-Expression "& '$env:JAVA_HOME\bin\java.exe' --version"
   }
 }
 
