@@ -68,10 +68,10 @@
 	}	
 	
 	var add_event = function(name, duration) {
-		var current_t = (new Date()).getTime() + ((new Date()).getTimezoneOffset() * 60 * 1000 * -1);
+    var current_t = (new Date()).getTime() + ((new Date()).getTimezoneOffset() * 60 * 1000 * -1);
 		var id = current_t;
 		current_t = current_t - current_t % 60000 + contest_timestamp_ % 60000;
-   		var tc = {'_id': id, 'start': current_t + 60 * 5 * 1000, 'stop': current_t + 60 * 5 * 1000 + duration, 'name': decodeURIComponent(name)};
+   	var tc = {'_id': id, 'start': current_t + 60 * 5 * 1000, 'stop': current_t + 60 * 5 * 1000 + duration, 'name': name};
 		ts.TimeSlider('add', tc);
 	};
 
