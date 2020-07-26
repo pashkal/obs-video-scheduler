@@ -25,11 +25,10 @@ public class OBSApi {
 			transport.open();
 			TProtocol protocol = new TBinaryProtocol(transport);
 			client = new ObsThriftServer.Client(protocol);
-		} catch (Exception x) {
-			if (x.getCause() instanceof ConnectException) {
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (e.getCause() instanceof ConnectException) {
 				System.err.println("Can't connect to OBS!\n1) Make sure OBS is running\n2) Make sure obs-thrift-api plugin initialized successfully");
-			} else {
-				x.printStackTrace();
 			}
 		}
 	}
