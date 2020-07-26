@@ -37,6 +37,8 @@ try {
   exit 1
 }
 
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
 Write-Host "Downloading tomcat..."
 Invoke-WebRequest -Uri "https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.33/bin/apache-tomcat-9.0.33-windows-x64.zip" -Outfile "tomcat.zip"
 Write-Host "Unpacking tomcat..."
