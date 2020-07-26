@@ -39,7 +39,6 @@ public class VideoLaunchService implements Runnable {
 							continue;
 						long start = e.start;
 						long stop = e.start + items.get(e.itemName).duration + Disclaimer.getDuration();
-						System.err.println(start + " " + time);
 						if (time > start - 2000 && time < start) {
 							Thread.sleep(start - time);
 							sc.log("Launching " + e.itemName);
