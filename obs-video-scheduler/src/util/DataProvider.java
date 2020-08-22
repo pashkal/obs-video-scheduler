@@ -12,6 +12,7 @@ import java.io.Writer;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,7 +33,7 @@ import javax.json.stream.JsonGenerator;
 
 public class DataProvider {
 	
-	public static String VIDEO_LIST_FILE = "../../data/filelist.txt";
+	private static String VIDEO_LIST_FILE = "../../data/filelist.txt";
 	private static String ACTIVITY_LIST_FILE = "../../data/alist.txt";
 	private static String SCHEDULE_FILE = "../../data/schedule.json";
 	private static String EVENT_START_TIMESTAMP_FILE = "../../data/timestamp";
@@ -46,11 +47,19 @@ public class DataProvider {
 	}
 
 	public static Map<String, Item> getVideos() throws IOException {
-		return DataProvider.getList(true);
+		return DataProvider.getItems(VIDEO_LIST_FILE);
 	}
 	
 	public static Map<String, Item> getActivities() throws IOException {
-		return DataProvider.getList(false);
+		return DataProvider.getItems(ACTIVITY_LIST_FILE);
+	}
+	
+	public static void writeVideos(Collection<Item> items) throws IOException {
+		writeItems(VIDEO_LIST_FILE, items);
+	}
+	
+	public static void writeActivities(Collection<Item> items) throws IOException {
+		writeItems(ACTIVITY_LIST_FILE, items);
 	}
 	
 	public static Map<String, Item> getAllItems() throws IOException {
@@ -60,22 +69,6 @@ public class DataProvider {
 	}
 	
 	
-	private static Map<String, Item> getList(boolean videos) throws IOException {
-		TreeMap<String, Item> res = new TreeMap<>();
-		Scanner s;
-		if (videos)
-			s = new Scanner(new File(VIDEO_LIST_FILE));
-		else
-			s = new Scanner(new File(ACTIVITY_LIST_FILE));
-		while (s.hasNext()) {
-			String name = s.nextLine();
-			long duration = Long.parseLong(s.nextLine());
-			res.put(name, new Item(name, duration, videos));
-		}
-		s.close();
-		return res;
-	}
-
 	public static List<ScheduleEntry> getSchedule() throws FileNotFoundException, IOException {
 		JsonReader jr = Json.createReader(new FileInputStream(SCHEDULE_FILE));
 		JsonArray ja = jr.readArray();
@@ -142,10 +135,8 @@ public class DataProvider {
 			.add("schedule", schedule)
 			.build();
 
-		File f = new File(SCHEDULE_SAVE_DIR + fileName + "." + cnt);
-		FileWriter w = new FileWriter(f);
-		prettyPrintJsonObject(w, savedSchedule);
-		w.close();
+		fileName = SCHEDULE_SAVE_DIR + fileName + "." + cnt;
+		prettyPrintJsonObject(fileName, savedSchedule);
 
 	}
 
@@ -225,42 +216,58 @@ public class DataProvider {
 		
 		JsonReader jr = Json.createReader(new StringReader(newSchedule));
 		JsonArray a = jr.readArray();
-		FileWriter w = new FileWriter(SCHEDULE_FILE);
 
-		prettyPrintJsonArray(w, a);
-
-		w.close();
+		prettyPrintJsonArray(SCHEDULE_FILE, a);
 	}
 
-	private static void prettyPrintJsonArray(Writer w, JsonArray a) {
+	private static void prettyPrintJsonArray(String fileName, JsonArray a) throws IOException {
 		Map<String, Object> map = new HashMap<>();
         map.put(JsonGenerator.PRETTY_PRINTING, true);
         JsonWriterFactory writerFactory = Json.createWriterFactory(map);
+		FileWriter w = new FileWriter(fileName);
         JsonWriter jsonWriter = writerFactory.createWriter(w);
         jsonWriter.writeArray(a);
         jsonWriter.close();
+		w.close();
 	}
 
-	private static void prettyPrintJsonObject(Writer w, JsonObject o) {
+	private static void prettyPrintJsonObject(String fileName, JsonObject o) throws IOException {
 		Map<String, Object> map = new HashMap<>();
         map.put(JsonGenerator.PRETTY_PRINTING, true);
         JsonWriterFactory writerFactory = Json.createWriterFactory(map);
+		FileWriter w = new FileWriter(fileName);
         JsonWriter jsonWriter = writerFactory.createWriter(w);
         jsonWriter.writeObject(o);
         jsonWriter.close();
+        w.close();
+	}
+	
+	private static JsonArray readJsonArray(String fileName) throws IOException {
+		FileReader fr = new FileReader(new File(fileName));
+		JsonArray array = Json.createReader(fr).readArray();
+		fr.close();	
+		return array;
 	}
 
-	public static void writeList(List<Item> list, boolean video) throws FileNotFoundException, IOException {
-		String filename;
-		if (video) {
-			filename = VIDEO_LIST_FILE;
-		} else
-			filename = ACTIVITY_LIST_FILE;
-		PrintWriter pw = new PrintWriter(filename);
-		for (Item i : list) {
-			pw.println(i.name);
-			pw.println(i.duration);
+	private static Map<String, Item> getItems(String fileName) throws IOException {
+		JsonArray a = readJsonArray(fileName);
+
+		HashMap<String, Item> result = new HashMap<>();
+		for (Object o: a.toArray()) {
+			if (o instanceof JsonObject) {
+				JsonObject v = (JsonObject) o;
+				result.put(v.getString("name"), Item.fromJsonObject(v));
+			}
 		}
-		pw.close();
+		return result;
+	}
+	
+	private static void writeItems(String fileName, Collection<Item> list) throws FileNotFoundException, IOException {
+		JsonArrayBuilder b = Json.createArrayBuilder();
+		for (Item i : list) {
+			b.add(i.toJsonObject());
+		}
+		
+		prettyPrintJsonArray(fileName, b.build());
 	}
 }

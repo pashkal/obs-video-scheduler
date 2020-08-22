@@ -10,6 +10,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -17,6 +18,7 @@ import javax.servlet.ServletContext;
 
 import util.Config;
 import util.DataProvider;
+import util.Item;
 
 public class VideoSyncService implements Runnable {
 	ServletContext sc;
@@ -28,15 +30,8 @@ public class VideoSyncService implements Runnable {
 	public void run() {
 		while (true) {
 			try {
-				HashSet<String> oldFileList = new HashSet<>();
-				HashMap<String, Long> fileDuration = new HashMap<>();
-				Scanner s = new Scanner(new File(DataProvider.VIDEO_LIST_FILE));
-				while (s.hasNext()) {
-					String name = s.nextLine();
-					long duration = Long.parseLong(s.nextLine());
-					fileDuration.put(name, duration);
-				}
-				s.close();
+				Map<String, Item> oldList = DataProvider.getVideos();
+				
 				HashSet<String> newFileList = new HashSet<>();
 				File videoDirFile = new File(Config.getServerVideoDir());
 				File[] children = videoDirFile.listFiles();
@@ -49,13 +44,13 @@ public class VideoSyncService implements Runnable {
 					if (!fileName.endsWith("mkv") && !fileName.endsWith("mp4") && !fileName.endsWith("avi") && !fileName.endsWith("mov")) {
 						continue;
 					}
-					if (!oldFileList.contains(fileName)) {
+					if (!oldList.containsKey(fileName)) {
 						toAdd.add(fileName);
 					}
 				}
 
 				HashSet<String> toRemove = new HashSet<String>();
-				for (String fileName : oldFileList) {
+				for (String fileName : oldList.keySet()) {
 					if (!newFileList.contains(fileName)) {
 						toRemove.add(fileName);
 					}
@@ -64,8 +59,7 @@ public class VideoSyncService implements Runnable {
 				for (String fileName : toAdd) {
 					try {
 						long duration = getDuration(fileName);
-						fileDuration.put(fileName, duration);
-						oldFileList.add(fileName);
+						oldList.put(fileName, new Item(fileName, duration, true));
 					} catch (Throwable e) {
 						e.printStackTrace();
 						System.err.println(fileName);
@@ -73,16 +67,10 @@ public class VideoSyncService implements Runnable {
 				}
 
 				for (String fileName : toRemove) {
-					oldFileList.remove(fileName);
+					oldList.remove(fileName);
 				}
-
-				PrintWriter pw = new PrintWriter(DataProvider.VIDEO_LIST_FILE);
-				for (String fileName : oldFileList) {
-					pw.println(fileName);
-					pw.println(fileDuration.get(fileName));
-				}
-				pw.close();
-
+				
+				DataProvider.writeVideos(oldList.values());
 			} catch (Throwable e) {
 				ByteArrayOutputStream bos = new ByteArrayOutputStream();
 				PrintStream ps = new PrintStream(bos);
@@ -92,7 +80,6 @@ public class VideoSyncService implements Runnable {
 			try {
 				Thread.sleep(5000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

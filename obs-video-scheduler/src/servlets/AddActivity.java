@@ -53,7 +53,7 @@ public class AddActivity extends HttpServlet {
 
 		List<Item> activities = new ArrayList<>(DataProvider.getActivities().values());
 		activities.add(new Item(name, duration, false));
-		DataProvider.writeList(activities, false);
+		DataProvider.writeActivities(activities);
 	}
 
 	/**
