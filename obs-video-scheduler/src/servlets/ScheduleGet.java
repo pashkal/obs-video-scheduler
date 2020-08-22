@@ -22,48 +22,48 @@ import util.Item;
  */
 @WebServlet("/ScheduleGet")
 public class ScheduleGet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public ScheduleGet() throws FileNotFoundException, IOException {
-		super();
-	}
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ScheduleGet() throws FileNotFoundException, IOException {
+        super();
+    }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		response.setContentType("application/json");
-		Map<String, Item> videoMap = DataProvider.getAllItems();
-		List<ScheduleEntry> schedule = DataProvider.getSchedule();
-		PrintWriter pw = new PrintWriter(response.getWriter());
-		pw.print("[");
-		for (int i = 0; i < schedule.size(); i++) {
-			ScheduleEntry e = schedule.get(i);
-			if (i > 0) {
-				pw.print(",");
-			}
-			pw.print("{\"_id\": \"" + e.id + "\",");
-			pw.print("\"start\": " + e.start + ",");
-			pw.print("\"stop\": " + (e.start + videoMap.get(e.itemName).duration + Disclaimer.getDuration() * 2) + ",");
-			pw.print("\"name\": \"" + e.itemName + "\"}");
-		}
-		pw.print("]");
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("application/json");
+        Map<String, Item> videoMap = DataProvider.getAllItems();
+        List<ScheduleEntry> schedule = DataProvider.getSchedule();
+        PrintWriter pw = new PrintWriter(response.getWriter());
+        pw.print("[");
+        for (int i = 0; i < schedule.size(); i++) {
+            ScheduleEntry e = schedule.get(i);
+            if (i > 0) {
+                pw.print(",");
+            }
+            pw.print("{\"_id\": \"" + e.id + "\",");
+            pw.print("\"start\": " + e.start + ",");
+            pw.print("\"stop\": " + (e.start + videoMap.get(e.itemName).duration + Disclaimer.getDuration() * 2) + ",");
+            pw.print("\"name\": \"" + e.itemName + "\"}");
+        }
+        pw.print("]");
 
-	}
+    }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // TODO Auto-generated method stub
+        doGet(request, response);
+    }
 
 }

@@ -1,4 +1,5 @@
 package servlets;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -20,30 +21,34 @@ import util.DataProvider;
  */
 @WebServlet("/ScheduleUpdate")
 public class ScheduleUpdate extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	   
+    private static final long serialVersionUID = 1L;
+
     /**
      * @see HttpServlet#HttpServlet()
      */
-	public ScheduleUpdate() throws FileNotFoundException, IOException {
-		super();
-		
-	}
+    public ScheduleUpdate() throws FileNotFoundException, IOException {
+        super();
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String newSchedule = request.getParameter("schedule");
-		DataProvider.updateSchedule(newSchedule);
-	}
+    }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String newSchedule = request.getParameter("schedule");
+        DataProvider.updateSchedule(newSchedule);
+    }
+
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // TODO Auto-generated method stub
+        doGet(request, response);
+    }
 
 }

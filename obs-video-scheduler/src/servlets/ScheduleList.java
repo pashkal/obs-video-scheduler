@@ -29,34 +29,34 @@ import util.DataProvider;
  */
 @WebServlet("/ScheduleList")
 public class ScheduleList extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		List<String> files = DataProvider.getScheduleList();
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        List<String> files = DataProvider.getScheduleList();
 
-		Writer w = response.getWriter();
-		w.append("<form> Load schedule ");
-		w.append("<select id = \"load_file\">");
-		for (String s : files) {
-			w.append("<option value = \"" + s + "\">" + s + "</option>");
-		}
-		w.append("</select>");
-		w.append("<input type = \"submit\" value = \"Load\" onclick = \"load();\"/></form>");
-	}
+        Writer w = response.getWriter();
+        w.append("<form> Load schedule ");
+        w.append("<select id = \"load_file\">");
+        for (String s : files) {
+            w.append("<option value = \"" + s + "\">" + s + "</option>");
+        }
+        w.append("</select>");
+        w.append("<input type = \"submit\" value = \"Load\" onclick = \"load();\"/></form>");
+    }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // TODO Auto-generated method stub
+        doGet(request, response);
+    }
 
 }

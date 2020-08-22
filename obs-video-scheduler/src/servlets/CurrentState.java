@@ -27,59 +27,59 @@ import util.Item;
  */
 @WebServlet("/CurrentState")
 public class CurrentState extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Default constructor.
-	 * 
-	 * @throws IOException
-	 * @throws FileNotFoundException
-	 */
-	public CurrentState() throws FileNotFoundException, IOException {
-	}
+    /**
+     * Default constructor.
+     * 
+     * @throws IOException
+     * @throws FileNotFoundException
+     */
+    public CurrentState() throws FileNotFoundException, IOException {
+    }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		Writer w = response.getWriter();
-		w.append("<html>\n");
-		Map<String, Item> list = DataProvider.getAllItems();
-		List<ScheduleEntry> schedule = DataProvider.getSchedule();
-		Date time = new Date();
-		w.append(time.toString() + "<br/>");
-		long cTime = new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000;
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Writer w = response.getWriter();
+        w.append("<html>\n");
+        Map<String, Item> list = DataProvider.getAllItems();
+        List<ScheduleEntry> schedule = DataProvider.getSchedule();
+        Date time = new Date();
+        w.append(time.toString() + "<br/>");
+        long cTime = new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000;
 
-		for (ScheduleEntry e : schedule) {
-			long start = e.start;
-			long stop = e.start + list.get(e.itemName).duration + Disclaimer.getDuration() * 2;
-			if (cTime > start && cTime < stop) {
-				w.append("Currently playing: " + e.itemName + ", " + ((stop - cTime) / 1000) + " seconds left");
-				w.append("</html>");
-				return;
-			}
-			if (cTime < start && start - cTime < 30000) {
-				long cntdwn = (long) ((start - cTime) / 1000);
-				w.append("Playing soon: " + e.itemName + ", in " + cntdwn + " seconds");
-				w.append("</html>");
+        for (ScheduleEntry e : schedule) {
+            long start = e.start;
+            long stop = e.start + list.get(e.itemName).duration + Disclaimer.getDuration() * 2;
+            if (cTime > start && cTime < stop) {
+                w.append("Currently playing: " + e.itemName + ", " + ((stop - cTime) / 1000) + " seconds left");
+                w.append("</html>");
+                return;
+            }
+            if (cTime < start && start - cTime < 30000) {
+                long cntdwn = (long) ((start - cTime) / 1000);
+                w.append("Playing soon: " + e.itemName + ", in " + cntdwn + " seconds");
+                w.append("</html>");
 
-				return;
-			}
-		}
-		w.append("Currently happens nothing.\n");
-		w.append("</html>");
-	}
+                return;
+            }
+        }
+        w.append("Currently happens nothing.\n");
+        w.append("</html>");
+    }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // TODO Auto-generated method stub
+        doGet(request, response);
+    }
 
 }
