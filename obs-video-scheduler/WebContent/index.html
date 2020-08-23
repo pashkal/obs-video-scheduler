@@ -110,13 +110,6 @@
 		httpGetAsync(url, null);
 	};
 
-	var change_connection = function() {
-		console.log("changing connection");
-		var url = '/ChangeConnection';
-		console.log(url);
-		httpGetAsync(url, null);
-	};
-
 	var empty_function = function() {
 	}
 
@@ -127,7 +120,7 @@
 	    current_timecells = all_timecells;
 	    httpGetAsync(encodeURI('/ScheduleUpdate?schedule=' + encodeURIComponent(all_timecells)), empty_function);
 	};
-
+	
 	var ready = false;
 	var contest_timestamp_ = 0;
 	
