@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import util.DataProvider;
 import util.Item;
 import util.ScheduleEntry;
+import util.SimpleScheduleEntry;
 
 /**
  * Servlet implementation class VideoList
@@ -52,7 +53,7 @@ public class AddScheduleEntry extends HttpServlet {
         Map<String, Item> items = DataProvider.getAllItemsByUUID();
         
         List<ScheduleEntry> schedule = DataProvider.getSchedule();
-        schedule.add(new ScheduleEntry(UUID.randomUUID().toString(), startTime, items.get(uuid).name));
+        schedule.add(new SimpleScheduleEntry(UUID.randomUUID().toString(), startTime, items.get(uuid).name));
         
         DataProvider.updateSchedule(schedule);
         

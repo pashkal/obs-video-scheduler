@@ -91,9 +91,7 @@ public class DataProvider {
         ArrayList<ScheduleEntry> schedule = new ArrayList<>();
         for (int i = 0; i < ja.size(); i++) {
             JsonObject o = ja.getJsonObject(i);
-            ScheduleEntry e = new ScheduleEntry(o.getString("uuid"),
-                    o.getJsonNumber("start_timestamp").longValue(), o.getString("name"));
-            schedule.add(e);
+            schedule.add(ScheduleEntry.fromJsonObject(o));
         }
         return schedule;
     }
@@ -204,8 +202,9 @@ public class DataProvider {
                 Date oldDate = new Date(oldTimestamp);
                 Date newDate = new Date();
                 adjustDate(newDate, oldDate);
-                jab.add(Json.createObjectBuilder().add("id", jo.getJsonNumber("id")).add("name", jo.get("name"))
-                        .add("start_timestamp", newDate.getTime()).build());
+                ScheduleEntry se = ScheduleEntry.fromJsonObject(jo);
+                se.start = newDate.getTime();
+                jab.add(se.toJsonValue());
             } catch (Exception e) {
                 e.printStackTrace(System.out);
             }
