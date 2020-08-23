@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -32,19 +33,10 @@ public class VideoSyncService implements Runnable {
             try {
                 Map<String, Item> oldList = DataProvider.getVideos();
 
-                HashSet<String> newFileList = new HashSet<>();
-                File videoDirFile = new File(Config.getServerVideoDir());
-                File[] children = videoDirFile.listFiles();
-                for (File f : children) {
-                    newFileList.add(f.getName());
-                }
-                sc.log(newFileList.toString());
+                ArrayList<String> allFiles = getAllChildren(new File(Config.getServerVideoDir()));
+                
                 HashSet<String> toAdd = new HashSet<String>();
-                for (String fileName : newFileList) {
-                    if (!fileName.endsWith("mkv") && !fileName.endsWith("mp4") && !fileName.endsWith("avi")
-                            && !fileName.endsWith("mov")) {
-                        continue;
-                    }
+                for (String fileName : allFiles) {
                     if (!oldList.containsKey(fileName)) {
                         toAdd.add(fileName);
                     }
@@ -52,7 +44,7 @@ public class VideoSyncService implements Runnable {
 
                 HashSet<String> toRemove = new HashSet<String>();
                 for (String fileName : oldList.keySet()) {
-                    if (!newFileList.contains(fileName)) {
+                    if (!allFiles.contains(fileName)) {
                         toRemove.add(fileName);
                     }
                 }
@@ -83,6 +75,33 @@ public class VideoSyncService implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+    }
+    
+    private ArrayList<String> getAllChildren(File dir) {
+        ArrayList<String> result = new ArrayList<>();
+        listPathsRecursively(result, dir, "");
+        return result;
+    }
+    
+    private void listPathsRecursively(ArrayList<String> result, File dir, String relativePath) {
+        File[] children = dir.listFiles();
+        for (File f : children) {
+            if (f.isDirectory()) {
+                continue;
+            }
+            String fileName = f.getName();
+            if (!fileName.endsWith("mkv") && !fileName.endsWith("mp4") && !fileName.endsWith("avi")
+                    && !fileName.endsWith("mov")) {
+                continue;
+            }
+            result.add(relativePath + fileName);              
+        }
+        for (File f : children) {
+            if (!f.isDirectory()) {
+                continue;
+            }
+            listPathsRecursively(result, f, relativePath + f.getName() + '/');
         }
     }
 
