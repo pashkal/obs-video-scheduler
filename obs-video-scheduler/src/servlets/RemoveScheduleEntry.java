@@ -46,9 +46,10 @@ public class RemoveScheduleEntry extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String uuid = request.getParameter("uuid");
+        System.err.println(uuid);
         
         List<ScheduleEntry> schedule = DataProvider.getSchedule();
-        schedule.removeIf(entry -> entry.id == Long.parseLong(uuid));
+        schedule.removeIf(entry -> entry.uuid.equals(uuid));
         
         DataProvider.updateSchedule(schedule);
         

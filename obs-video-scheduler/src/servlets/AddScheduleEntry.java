@@ -52,7 +52,7 @@ public class AddScheduleEntry extends HttpServlet {
         Map<String, Item> items = DataProvider.getAllItemsByUUID();
         
         List<ScheduleEntry> schedule = DataProvider.getSchedule();
-        schedule.add(new ScheduleEntry(startTime, startTime, items.get(uuid).name));
+        schedule.add(new ScheduleEntry(UUID.randomUUID().toString(), startTime, items.get(uuid).name));
         
         DataProvider.updateSchedule(schedule);
         

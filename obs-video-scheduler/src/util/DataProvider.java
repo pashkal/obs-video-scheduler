@@ -91,7 +91,7 @@ public class DataProvider {
         ArrayList<ScheduleEntry> schedule = new ArrayList<>();
         for (int i = 0; i < ja.size(); i++) {
             JsonObject o = ja.getJsonObject(i);
-            ScheduleEntry e = new ScheduleEntry(o.getJsonNumber("id").longValue(),
+            ScheduleEntry e = new ScheduleEntry(o.getString("uuid"),
                     o.getJsonNumber("start_timestamp").longValue(), o.getString("name"));
             schedule.add(e);
         }
@@ -118,7 +118,7 @@ public class DataProvider {
         JsonArrayBuilder a = Json.createArrayBuilder();
         for (ScheduleEntry sce : sc) {
             JsonObjectBuilder job = Json.createObjectBuilder();
-            job.add("id", sce.id);
+            job.add("id", sce.uuid);
             job.add("start_timestamp", sce.start);
             job.add("name", sce.itemName);
             a.add(job);
@@ -246,7 +246,7 @@ public class DataProvider {
 
         for (ScheduleEntry e : schedule) {
             long stop = (e.start + videoMap.get(e.itemName).duration + Disclaimer.getDuration() * 2);
-            scheduleBuilder.add(Json.createObjectBuilder().add("_id", e.id).add("start", e.start).add("stop", stop)
+            scheduleBuilder.add(Json.createObjectBuilder().add("_id", e.uuid).add("start", e.start).add("stop", stop)
                     .add("name", e.itemName).build());
         }
 

@@ -51,7 +51,7 @@ public class RescheduleScheduleEntry extends HttpServlet {
         List<ScheduleEntry> schedule = DataProvider.getSchedule();
         
         for (ScheduleEntry e : schedule) {
-            if (e.id == Long.parseLong(uuid)) {
+            if (e.uuid.equals(uuid)) {
                 if (e.start == newStart) {
                     response.getWriter().write("no-op");
                     return;
