@@ -75,6 +75,10 @@
 		httpGetAsync('/RemoveScheduleEntry?uuid=' + uuid, update_slider);
 	};
 
+	var reschedule_event = function(uuid, new_start) {	
+		httpGetAsync('/RescheduleScheduleEntry?uuid=' + uuid + '&start=' + new_start, update_slider);
+	};
+
 	var start = function() {
 		console.log("starting");
 		var url = '/StartContest';
@@ -83,7 +87,7 @@
 	};
 
 	var reschedule = function() {
-		console.log("rescheduling");
+		console.log("reschedule()");
 		var url = '/StartContest?time=' + document.getElementById('reschedule-time').value;
 		console.log(url);
 		httpGetAsync(url, null);
@@ -113,14 +117,6 @@
 	var empty_function = function() {
 	}
 
-	var print_all_timestamps = function(all_timecells) {
-	    if (all_timecells == current_timecells)
-				return;
-	    console.log(all_timecells);
-	    current_timecells = all_timecells;
-	    httpGetAsync(encodeURI('/ScheduleUpdate?schedule=' + encodeURIComponent(all_timecells)), empty_function);
-	};
-	
 	var ready = false;
 	var contest_timestamp_ = 0;
 	
@@ -193,7 +189,7 @@
 	setInterval(update_current_status, 1000);
 	setInterval(update_video_list, 1000);
 	setInterval(update_schedule, 1000);
-
+	
 	var ts = null;
 
 	function init_slider(text, t) {
@@ -207,9 +203,10 @@
 				remove_event(p_id);
 			},
 			timecell_enable_resize: false,
-			on_change_timecell_callback: function() {ts.TimeSlider('report', print_all_timestamps)},
-			on_add_timecell_callback: function() {ts.TimeSlider('report', print_all_timestamps)},
-			on_remove_timecell_callback: function() {ts.TimeSlider('report', print_all_timestamps)},
+			on_change_timecell_callback: function(id, start) {
+				console.log('on_change_timecell');
+				reschedule_event(id, start);
+			},
 			init_cells: data.schedule
 		});
 		console.log('init');
@@ -225,6 +222,9 @@
 	};
 	
 	function update_slider(text) {
+		if (text == 'no-op') {
+			return;
+		}
 		var data = JSON.parse(text);
 		console.log(data);
 		contest_timestamp_ = data.contest_timestamp;

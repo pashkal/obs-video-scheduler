@@ -254,7 +254,7 @@ public class DataProvider {
         r.getWriter().print(result.build().toString());
     }
 
-    public static void updateSchedule(String newSchedule) throws IOException {
+    private static void updateSchedule(String newSchedule) throws IOException {
         newSchedule = URLDecoder.decode(newSchedule, StandardCharsets.UTF_8.name());
 
         JsonReader jr = Json.createReader(new StringReader(newSchedule));
