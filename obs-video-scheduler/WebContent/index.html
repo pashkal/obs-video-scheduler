@@ -71,6 +71,10 @@
 		httpGetAsync('/AddScheduleEntry?uuid=' + uuid, update_slider);
 	};
 
+	var remove_event = function(uuid) {	
+		httpGetAsync('/RemoveScheduleEntry?uuid=' + uuid, update_slider);
+	};
+
 	var start = function() {
 		console.log("starting");
 		var url = '/StartContest';
@@ -200,7 +204,7 @@
 			start_timestamp: current_time - 600 * 1000,
 			contest_timestamp: data.contest_timestamp,
 			on_dblclick_timecell_callback: function(p_id, start, stop) {
-			  ts.TimeSlider('remove', p_id);
+				remove_event(p_id);
 			},
 			timecell_enable_resize: false,
 			on_change_timecell_callback: function() {ts.TimeSlider('report', print_all_timestamps)},
