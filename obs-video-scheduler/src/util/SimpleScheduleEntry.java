@@ -6,8 +6,12 @@ import javax.json.Json;
 import javax.json.JsonValue;
 
 public class SimpleScheduleEntry extends ScheduleEntry {
-    public SimpleScheduleEntry(String uuid, long start, String itemName) {
+    protected SimpleScheduleEntry(String uuid, long start, String itemName) {
         super(uuid, start, itemName);
+    }
+
+    public SimpleScheduleEntry(long start, String itemName) {
+        super(start, itemName);
     }
 
     @Override

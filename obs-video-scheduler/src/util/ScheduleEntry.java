@@ -1,6 +1,7 @@
 package util;
 
 import java.util.Map;
+import java.util.UUID;
 
 import javax.json.JsonObject;
 import javax.json.JsonValue;
@@ -10,8 +11,14 @@ public abstract class ScheduleEntry {
     public long start;
     public String itemName;
 
-    public ScheduleEntry(String uuid, long start, String itemName) {
+    protected ScheduleEntry(String uuid, long start, String itemName) {
         this.uuid = uuid;
+        this.start = start;
+        this.itemName = itemName;
+    }
+    
+    public ScheduleEntry(long start, String itemName) {
+        this.uuid = UUID.randomUUID().toString();
         this.start = start;
         this.itemName = itemName;
     }

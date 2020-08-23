@@ -48,12 +48,12 @@ public class AddScheduleEntry extends HttpServlet {
             throws ServletException, IOException {
         String uuid = request.getParameter("uuid");
         
-        Long startTime = System.currentTimeMillis() - new Date().getTimezoneOffset() * 60 * 1000 + 5 * 60 * 1000;
+        long startTime = System.currentTimeMillis() - new Date().getTimezoneOffset() * 60 * 1000 + 5 * 60 * 1000;
         
         Map<String, Item> items = DataProvider.getAllItemsByUUID();
         
         List<ScheduleEntry> schedule = DataProvider.getSchedule();
-        schedule.add(new SimpleScheduleEntry(UUID.randomUUID().toString(), startTime, items.get(uuid).name));
+        schedule.add(new SimpleScheduleEntry(startTime, items.get(uuid).name));
         
         DataProvider.updateSchedule(schedule);
         
