@@ -19,8 +19,9 @@ public class ScheduleEntry {
     public String toString() {
         return "ScheduleEntry [id=" + id + ", start=" + start + ", itemName=" + itemName + "]";
     }
-    
+
     public JsonValue toJsonValue() {
-        return Json.createObjectBuilder().add("id",this.id).add("start_timestamp", this.start).add("name", itemName).build();
+        return Json.createObjectBuilder().add("id", this.id).add("start_timestamp", this.start).add("name", itemName)
+                .build();
     }
 }

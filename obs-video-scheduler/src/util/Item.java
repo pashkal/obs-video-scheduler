@@ -38,6 +38,7 @@ public class Item implements Comparable<Item> {
     }
 
     public JsonObject toJsonObject() {
-        return Json.createObjectBuilder().add("uuid", uuid).add("name", name).add("duration", duration).add("isVideo", isVideo).build();
+        return Json.createObjectBuilder().add("uuid", uuid).add("name", name).add("duration", duration)
+                .add("isVideo", isVideo).build();
     }
 }
