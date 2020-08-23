@@ -508,6 +508,9 @@ if (typeof jQuery === 'undefined') {
     };
 
     TimeSlider.prototype.remove_all_timecells = function() {
+    	if (this.clicked_on != null) {
+    		return;
+    	}
         var timecells = [];
         var _this = this;
         var $timecells = this.$ruler.children('.timecell');
@@ -582,6 +585,7 @@ if (typeof jQuery === 'undefined') {
         };
 
         var time_cell_mousedown_event = function(e) {
+        	_this
             if (e.which == 1) { // left mouse button event
                 _this.clicked_on = 'timecell';
                 var id = $(this).attr('p_id');
@@ -779,6 +783,10 @@ if (typeof jQuery === 'undefined') {
     };
 
     TimeSlider.prototype.add_cells = function(cells) {
+    	if (this.clicked_on != null) {
+    		return;
+    	}
+        
         var _this = this;
         $.each(cells, function(index, cell) {
             _this.add_cell(cell);
@@ -1195,22 +1203,27 @@ if (typeof jQuery === 'undefined') {
                             data.remove_all_timecells();
                             break;
                         case 'report':
-												    return data.report_all_timecells(timecell);
-												    break;
+                        	return data.report_all_timecells(timecell);
+							break;
                         case 'new_start_timestamp':
                             data.set_new_start_timestamp(timecell);
                             break;
                         case 'move_start_caret':
-														console.log("setting caret");
+							console.log("setting caret");
                             data.set_contest_caret_position();
                             break;
                         case 'move_zero':
                             data.set_ruler_position(0);
                             break;
+                            
+                        case 'update_cells':
+                        	data.remove_all_timecells();
+                            data.add_cells(timecell);
+                            break;
                     }
                 }
                 else {
-										console.log("setting options" + options);
+                	console.log("setting options" + options);
                     data.set_options(options);
                 }
             }

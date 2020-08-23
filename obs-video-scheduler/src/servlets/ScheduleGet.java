@@ -2,10 +2,12 @@ package servlets;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -40,20 +42,18 @@ public class ScheduleGet extends HttpServlet {
         response.setContentType("application/json");
         Map<String, Item> videoMap = DataProvider.getAllItems();
         List<ScheduleEntry> schedule = DataProvider.getSchedule();
-        PrintWriter pw = new PrintWriter(response.getWriter());
-        pw.print("[");
-        for (int i = 0; i < schedule.size(); i++) {
-            ScheduleEntry e = schedule.get(i);
-            if (i > 0) {
-                pw.print(",");
-            }
-            pw.print("{\"_id\": \"" + e.id + "\",");
-            pw.print("\"start\": " + e.start + ",");
-            pw.print("\"stop\": " + (e.start + videoMap.get(e.itemName).duration + Disclaimer.getDuration() * 2) + ",");
-            pw.print("\"name\": \"" + e.itemName + "\"}");
+        
+        JsonObjectBuilder result = Json.createObjectBuilder().add("contest_timestamp", DataProvider.getContestStart());
+        
+        JsonArrayBuilder scheduleBuilder = Json.createArrayBuilder();
+        
+        for (ScheduleEntry e : schedule) {
+            long stop = (e.start + videoMap.get(e.itemName).duration + Disclaimer.getDuration() * 2);
+            scheduleBuilder.add(Json.createObjectBuilder().add("_id", e.id).add("start", e.start).add("stop", stop).add("name", e.itemName).build());
         }
-        pw.print("]");
-
+        
+        result.add("schedule", scheduleBuilder.build());
+        response.getWriter().print(result.build().toString());
     }
 
     /**

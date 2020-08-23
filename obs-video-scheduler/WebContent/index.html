@@ -128,18 +128,16 @@
 	    httpGetAsync(encodeURI('/ScheduleUpdate?schedule=' + encodeURIComponent(all_timecells)), empty_function);
 	};
 
-	var update_contest_timestamp = function() {
-		httpGetAsync('/ContestTimestamp', initialize_contest_timestamp);
-	}
 	var ready = false;
 	var contest_timestamp_ = 0;
-	var initialize_contest_timestamp = function(text) {
-		var o = JSON.parse(text);
-		contest_timestamp_ = o.contest_timestamp;
-		if (!ready) {
-			httpGetAsync("/ScheduleGet", init_slider);
-			ready = true;
-		}
+	
+	
+	var update_schedule = function() {
+		httpGetAsync('/ScheduleGet', update_slider);
+	}
+	
+	var initialize_schedule = function(text) {
+		httpGetAsync("/ScheduleGet", init_slider);						
 	}
 
 	var update_activity_list = function() {
@@ -186,30 +184,32 @@
 	    document.getElementById("obs-status").innerHTML=text;
 	};
 
-  var current_time = (new Date()).getTime() + ((new Date()).getTimezoneOffset() * 60 * 1000 * -1);
+  	var current_time = (new Date()).getTime() + ((new Date()).getTimezoneOffset() * 60 * 1000 * -1);
 	var current_timecells = "";
 
-	httpGetAsync("/ContestTimestamp", initialize_contest_timestamp);
 	httpGetAsync("/VideoList?type=video", initialize_video_list);
 	httpGetAsync("/VideoList?type=activity", initialize_activity_list);
 	httpGetAsync("/CurrentState", initialize_current_state);
 	httpGetAsync("/ContestState", initialize_contest_state);
 	httpGetAsync("/OBSStatus.jsp", initialize_obs_status);
 	httpGetAsync("/ScheduleList", initialize_load_select);
+	httpGetAsync("/ScheduleGet", initialize_schedule);
 
-	setInterval(update_contest_timestamp, 1000);
 	setInterval(update_contest_status, 1000);
 	setInterval(update_obs_status, 1000);
 	setInterval(update_current_status, 1000);
 	setInterval(update_video_list, 1000);
+	setInterval(update_schedule, 1000);
 
 	var ts = null;
 
-	function init_slider(initial_cells, t) {
-		console.log(initial_cells);
+	function init_slider(text, t) {
+		var data = JSON.parse(text);
+		console.log(data);
+		contest_timestamp_ = data.contest_timestamp;
 		ts = $('#slider123').TimeSlider({
 			start_timestamp: current_time - 600 * 1000,
-			contest_timestamp: contest_timestamp_,
+			contest_timestamp: data.contest_timestamp,
 			on_dblclick_timecell_callback: function(p_id, start, stop) {
 			  ts.TimeSlider('remove', p_id);
 			},
@@ -217,8 +217,9 @@
 			on_change_timecell_callback: function() {ts.TimeSlider('report', print_all_timestamps)},
 			on_add_timecell_callback: function() {ts.TimeSlider('report', print_all_timestamps)},
 			on_remove_timecell_callback: function() {ts.TimeSlider('report', print_all_timestamps)},
-			init_cells: JSON.parse(initial_cells)
+			init_cells: data.schedule
 		});
+		console.log('init');
 		$('#zoom-slider123').slider({
 			min: 0.33,
 			max: 8,
@@ -228,8 +229,13 @@
 				$('#slider123').TimeSlider({hours_per_ruler: ui.value});
 			}
 		});
-
-
+	};
+	
+	function update_slider(text) {
+		var data = JSON.parse(text);
+		console.log(data);
+		contest_timestamp_ = data.contest_timestamp;
+		$('#slider123').TimeSlider('update_cells', data.schedule);
 	};
 
 	</script>
