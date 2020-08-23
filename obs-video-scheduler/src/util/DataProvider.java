@@ -30,6 +30,9 @@ import javax.json.JsonReader;
 import javax.json.JsonWriter;
 import javax.json.JsonWriterFactory;
 import javax.json.stream.JsonGenerator;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.http.HttpResponse;
 
 public class DataProvider {
 	
@@ -46,14 +49,22 @@ public class DataProvider {
 		return res;
 	}
 
-	public static Map<String, Item> getVideos() throws IOException {
-		return DataProvider.getItems(VIDEO_LIST_FILE);
+	public static Map<String, Item> getVideosByName() throws IOException {
+		return DataProvider.getItemsByName(VIDEO_LIST_FILE);
 	}
 	
-	public static Map<String, Item> getActivities() throws IOException {
-		return DataProvider.getItems(ACTIVITY_LIST_FILE);
+    public static Map<String, Item> getVideosByUUID() throws IOException {
+        return DataProvider.getItemsByUUID(VIDEO_LIST_FILE);
+    }
+    
+	public static Map<String, Item> getActivitiesByName() throws IOException {
+		return DataProvider.getItemsByName(ACTIVITY_LIST_FILE);
 	}
 	
+    public static Map<String, Item> getActivitiesByUUID() throws IOException {
+        return DataProvider.getItemsByUUID(ACTIVITY_LIST_FILE);
+    }
+    
 	public static void writeVideos(Collection<Item> items) throws IOException {
 		writeItems(VIDEO_LIST_FILE, items);
 	}
@@ -62,12 +73,18 @@ public class DataProvider {
 		writeItems(ACTIVITY_LIST_FILE, items);
 	}
 	
-	public static Map<String, Item> getAllItems() throws IOException {
-		Map<String, Item> result = DataProvider.getVideos();
-		result.putAll(DataProvider.getActivities());
+	public static Map<String, Item> getAllItemsByName() throws IOException {
+		Map<String, Item> result = DataProvider.getVideosByName();
+		result.putAll(DataProvider.getActivitiesByName());
 		return result;
 	}
 	
+    public static Map<String, Item> getAllItemsByUUID() throws IOException {
+        Map<String, Item> result = DataProvider.getVideosByUUID();
+        result.putAll(DataProvider.getActivitiesByUUID());
+        return result;
+    }
+    
 	
 	public static List<ScheduleEntry> getSchedule() throws FileNotFoundException, IOException {
 		JsonReader jr = Json.createReader(new FileInputStream(SCHEDULE_FILE));
@@ -211,6 +228,35 @@ public class DataProvider {
 				.setTime(contestStart.getTime() - contestStart.getTime() % 1000 + loadedContestStart.getTime() % 1000);
 	}
 
+	public static void updateSchedule(Collection<ScheduleEntry> newSchedule) throws IOException {
+        JsonArrayBuilder ab = Json.createArrayBuilder();
+        
+        for (ScheduleEntry se : newSchedule) {
+            ab.add(se.toJsonValue());
+        }
+        
+        prettyPrintJsonArray(SCHEDULE_FILE, ab.build());
+    }
+	
+	public static void writeScheduleToClient(HttpServletResponse r, Collection<ScheduleEntry> schedule) throws IOException {
+	    r.setContentType("application/json");
+        
+	    Map<String, Item> videoMap = DataProvider.getAllItemsByName();
+        
+        JsonObjectBuilder result = Json.createObjectBuilder().add("contest_timestamp", DataProvider.getContestStart());
+        
+        JsonArrayBuilder scheduleBuilder = Json.createArrayBuilder();
+        
+        for (ScheduleEntry e : schedule) {
+            long stop = (e.start + videoMap.get(e.itemName).duration + Disclaimer.getDuration() * 2);
+            scheduleBuilder.add(Json.createObjectBuilder().add("_id", e.id).add("start", e.start).add("stop", stop).add("name", e.itemName).build());
+        }
+        
+        result.add("schedule", scheduleBuilder.build());
+        r.getWriter().print(result.build().toString());
+	}
+
+	
 	public static void updateSchedule(String newSchedule) throws IOException {
 		newSchedule = URLDecoder.decode(newSchedule, StandardCharsets.UTF_8.name());
 		
@@ -249,7 +295,20 @@ public class DataProvider {
 		return array;
 	}
 
-	private static Map<String, Item> getItems(String fileName) throws IOException {
+    private static Map<String, Item> getItemsByUUID(String fileName) throws IOException {
+        JsonArray a = readJsonArray(fileName);
+
+        HashMap<String, Item> result = new HashMap<>();
+        for (Object o: a.toArray()) {
+            if (o instanceof JsonObject) {
+                JsonObject v = (JsonObject) o;
+                result.put(v.getString("uuid"), Item.fromJsonObject(v));
+            }
+        }
+        return result;
+    }
+	
+	private static Map<String, Item> getItemsByName(String fileName) throws IOException {
 		JsonArray a = readJsonArray(fileName);
 
 		HashMap<String, Item> result = new HashMap<>();

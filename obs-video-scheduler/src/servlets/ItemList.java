@@ -47,9 +47,9 @@ public class ItemList extends HttpServlet {
             throws ServletException, IOException {
         List<Item> list;
         if (request.getParameter("type").equals("video"))
-            list = new ArrayList<>(DataProvider.getVideos().values());
+            list = new ArrayList<>(DataProvider.getVideosByName().values());
         else
-            list = new ArrayList<>(DataProvider.getActivities().values());
+            list = new ArrayList<>(DataProvider.getActivitiesByName().values());
 
         Collections.sort(list);
 
@@ -75,8 +75,7 @@ public class ItemList extends HttpServlet {
             String dur = duration / 60000 + ":" + duration / 1000 % 60;
 
             w.append("<tr" + (i % 2 == 0 ? "" : " bgcolor = \"#CCCCCC\"") + ">\n");
-            w.append("<td><input type = \"submit\" value=\"Schedule\" onclick='add_event(\"" + list.get(i).name + "\", "
-                    + (list.get(i).duration + Disclaimer.getDuration() * 2) + ");'/></td>");
+            w.append("<td><input type = \"submit\" value=\"Schedule\" onclick='add_event(\"" + list.get(i).uuid+ "\");'/></td>");
 
             w.append("<td>" + list.get(i).name + "</td>");
             w.append("<td>" + dur + "</td>");

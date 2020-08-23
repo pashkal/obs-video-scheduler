@@ -1,13 +1,18 @@
 package servlets;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Writer;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.UUID;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,22 +20,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import util.DataProvider;
-import util.Disclaimer;
-import util.ScheduleEntry;
 import util.Item;
+import util.ScheduleEntry;
 
 /**
- * Servlet implementation class ScheduleGet
+ * Servlet implementation class VideoList
  */
-@WebServlet("/ScheduleGet")
-public class ScheduleGet extends HttpServlet {
+@WebServlet("/AddScheduleEntry")
+public class AddScheduleEntry extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
-     * @see HttpServlet#HttpServlet()
+     * Default constructor.
+     * 
+     * @throws IOException
+     * @throws FileNotFoundException
      */
-    public ScheduleGet() throws FileNotFoundException, IOException {
-        super();
+    public AddScheduleEntry() throws FileNotFoundException, IOException {
     }
 
     /**
@@ -39,9 +45,16 @@ public class ScheduleGet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<ScheduleEntry> schedule = DataProvider.getSchedule();
+        String uuid = request.getParameter("uuid");
         
-        JsonObjectBuilder result = Json.createObjectBuilder().add("contest_timestamp", DataProvider.getContestStart());
+        Long startTime = System.currentTimeMillis() - new Date().getTimezoneOffset() * 60 * 1000 + 5 * 60 * 1000;
+        
+        Map<String, Item> items = DataProvider.getAllItemsByUUID();
+        
+        List<ScheduleEntry> schedule = DataProvider.getSchedule();
+        schedule.add(new ScheduleEntry(startTime, startTime, items.get(uuid).name));
+        
+        DataProvider.updateSchedule(schedule);
         
         DataProvider.writeScheduleToClient(response, schedule);
     }

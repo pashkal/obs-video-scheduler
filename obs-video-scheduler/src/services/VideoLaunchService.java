@@ -31,7 +31,7 @@ public class VideoLaunchService implements Runnable {
         while (true) {
             try {
                 List<ScheduleEntry> schedule = DataProvider.getSchedule();
-                Map<String, Item> items = DataProvider.getAllItems();
+                Map<String, Item> items = DataProvider.getAllItemsByName();
                 long time = new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000;
                 for (ScheduleEntry e : schedule) {
                     try {

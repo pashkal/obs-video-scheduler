@@ -46,7 +46,7 @@ public class CurrentState extends HttpServlet {
             throws ServletException, IOException {
         Writer w = response.getWriter();
         w.append("<html>\n");
-        Map<String, Item> list = DataProvider.getAllItems();
+        Map<String, Item> list = DataProvider.getAllItemsByName();
         List<ScheduleEntry> schedule = DataProvider.getSchedule();
         Date time = new Date();
         w.append(time.toString() + "<br/>");

@@ -31,7 +31,7 @@ public class VideoSyncService implements Runnable {
     public void run() {
         while (true) {
             try {
-                Map<String, Item> oldList = DataProvider.getVideos();
+                Map<String, Item> oldList = DataProvider.getVideosByName();
 
                 ArrayList<String> allFiles = getAllChildren(new File(Config.getServerVideoDir()));
                 

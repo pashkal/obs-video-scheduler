@@ -42,7 +42,7 @@ public class Commentator extends HttpServlet {
             throws ServletException, IOException {
         Writer w = response.getWriter();
         w.append("<html>\n");
-        Map<String, Item> list = DataProvider.getAllItems();
+        Map<String, Item> list = DataProvider.getAllItemsByName();
         List<ScheduleEntry> schedule = DataProvider.getSchedule();
         long cTime = new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000;
 
