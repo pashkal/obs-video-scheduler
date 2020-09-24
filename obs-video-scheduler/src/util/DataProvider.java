@@ -109,22 +109,7 @@ public class DataProvider {
             sce.start += diff;
         }
 
-        printSchedule(sc);
-    }
-
-    private static void printSchedule(List<ScheduleEntry> sc) throws IOException {
-        JsonArrayBuilder a = Json.createArrayBuilder();
-        for (ScheduleEntry sce : sc) {
-            JsonObjectBuilder job = Json.createObjectBuilder();
-            job.add("id", sce.uuid);
-            job.add("start_timestamp", sce.start);
-            job.add("name", sce.itemName);
-            a.add(job);
-        }
-        String s = a.build().toString();
-        PrintWriter pw = new PrintWriter(SCHEDULE_FILE);
-        pw.println(s);
-        pw.close();
+        updateSchedule(sc);
     }
 
     public static void startContest() throws IOException {
@@ -244,9 +229,7 @@ public class DataProvider {
         JsonArrayBuilder scheduleBuilder = Json.createArrayBuilder();
 
         for (ScheduleEntry e : schedule) {
-            long stop = (e.start + videoMap.get(e.itemName).duration + Disclaimer.getDuration() * 2 - Disclaimer.getTransitionTime() * 2);
-            scheduleBuilder.add(Json.createObjectBuilder().add("_id", e.uuid).add("start", e.start).add("stop", stop)
-                    .add("name", e.itemName).build());
+            scheduleBuilder.add(e.toClientJsonValue(videoMap));
         }
 
         result.add("schedule", scheduleBuilder.build());
@@ -273,7 +256,7 @@ public class DataProvider {
         w.close();
     }
 
-    private static void prettyPrintJsonObject(String fileName, JsonObject o) throws IOException {
+    public static void prettyPrintJsonObject(String fileName, JsonObject o) throws IOException {
         Map<String, Object> map = new HashMap<>();
         map.put(JsonGenerator.PRETTY_PRINTING, true);
         JsonWriterFactory writerFactory = Json.createWriterFactory(map);

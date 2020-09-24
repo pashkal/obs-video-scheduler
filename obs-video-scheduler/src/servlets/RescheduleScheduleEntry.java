@@ -56,7 +56,7 @@ public class RescheduleScheduleEntry extends HttpServlet {
                     response.getWriter().write("no-op");
                     return;
                 }
-                e.start = newStart;
+                e.reschedule(newStart);
             }
         }
         

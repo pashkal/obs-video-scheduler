@@ -1,5 +1,7 @@
 package util;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
 
 import javax.json.Json;
@@ -20,8 +22,14 @@ public class SimpleScheduleEntry extends ScheduleEntry {
     }
 
     public JsonValue toJsonValue() {
-        return Json.createObjectBuilder().add("uuid", this.uuid).add("start_timestamp", this.start).add("name", itemName)
+        return Json.createObjectBuilder().add("type", "simple").add("uuid", this.uuid).add("start_timestamp", this.start).add("name", itemName)
                 .build();
+    }
+    
+    public JsonValue toClientJsonValue(Map<String, Item> allItems) throws IOException {
+        long stop = (this.start + allItems.get(this.itemName).duration + Disclaimer.getDuration() * 2) - Disclaimer.getTransitionTime() * 2;
+        return Json.createObjectBuilder().add("_id", this.uuid).add("start", this.start).add("stop", stop)
+                .add("name", this.itemName).build();
     }
     
     public void process(Map<String, Item> allItems, long time) {
@@ -50,5 +58,16 @@ public class SimpleScheduleEntry extends ScheduleEntry {
             e.printStackTrace();
             System.err.println(e.toString());
         }
+    }
+
+    @Override
+    public void reschedule(long newStart) {
+        this.start = newStart;
+        
+    }
+
+    @Override
+    public long getStopTime(Map<String, Item> allItems) throws IOException {
+        return this.start + allItems.get(this.itemName).duration + Disclaimer.getDuration() * 2 - Disclaimer.getTransitionTime() * 2;
     }
 }

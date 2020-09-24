@@ -4,12 +4,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Writer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,15 +20,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import util.DataProvider;
-import util.Disclaimer;
-import util.ScheduleEntry;
 import util.Item;
+import util.ScheduleEntry;
+import util.ShuffledDirectoryScheduleEntry;
+import util.SimpleScheduleEntry;
 
 /**
  * Servlet implementation class VideoList
  */
-@WebServlet("/CurrentState")
-public class CurrentState extends HttpServlet {
+@WebServlet("/AddShuffledDirectoryScheduleEntry")
+public class AddShuffledDirectoryScheduleEntry extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -35,7 +38,7 @@ public class CurrentState extends HttpServlet {
      * @throws IOException
      * @throws FileNotFoundException
      */
-    public CurrentState() throws FileNotFoundException, IOException {
+    public AddShuffledDirectoryScheduleEntry() throws FileNotFoundException, IOException {
     }
 
     /**
@@ -44,34 +47,20 @@ public class CurrentState extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Writer w = response.getWriter();
-        w.append("<html>\n");
-        Map<String, Item> allItems = DataProvider.getAllItemsByName();
+        String name = request.getParameter("name");
+        long length = Long.parseLong(request.getParameter("length")) * 1000;
+        
+        long startTime = System.currentTimeMillis() - new Date().getTimezoneOffset() * 60 * 1000 + 5 * 60 * 1000;
+        long contestStart = DataProvider.getContestStart();
+        
+        startTime -= Math.abs(startTime - contestStart) % 60000;
+        
         List<ScheduleEntry> schedule = DataProvider.getSchedule();
-        Date time = new Date();
-        w.append(time.toString() + "<br/>");
-        long cTime = new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000;
-
-        for (ScheduleEntry e : schedule) {
-            long start = e.start;
-            long stop = e.getStopTime(allItems);
-            if (cTime > start && cTime < stop) {
-                w.append("Currently playing: " + e.itemName + ", " + ((stop - cTime) / 1000) + " seconds left");
-                w.append("</html>");
-                return;
-            }
-            if (cTime < start && start - cTime < 30000) {
-                long cntdwn = (long) ((start - cTime) / 1000);
-                w.append("Playing soon: " + e.itemName + ", in " + cntdwn + " seconds");
-                w.append("</html>");
-
-                return;
-            }
-        }
-        w.append("Currently happens nothing.\n");
-        w.append("</html>");
+        schedule.add(new ShuffledDirectoryScheduleEntry(startTime, startTime + length, name));
+        DataProvider.updateSchedule(schedule);
+    
+        DataProvider.writeScheduleToClient(response, schedule);
     }
-
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
      *      response)

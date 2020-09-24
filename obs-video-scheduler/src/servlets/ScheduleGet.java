@@ -40,9 +40,9 @@ public class ScheduleGet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         List<ScheduleEntry> schedule = DataProvider.getSchedule();
-        
+
         JsonObjectBuilder result = Json.createObjectBuilder().add("contest_timestamp", DataProvider.getContestStart());
-        
+
         DataProvider.writeScheduleToClient(response, schedule);
     }
 

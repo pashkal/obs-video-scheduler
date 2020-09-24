@@ -43,6 +43,13 @@
 <table>
 <tr>
 <td valign = "top">
+Schedule shuffled directory<br/>
+Directory name: <input type="text" id="shuffled-name"/><br/>
+Length (seconds): <input type="text" id="shuffled-length"/><br/>
+<input type="submit" value="Schedule" onclick="schedule_shuffled()"/>
+</form>
+</td>
+<td valign = "top">
 	<span id = "videoList"></span>
 </td>
 <td valign = "top">
@@ -69,6 +76,14 @@
 	
 	var add_event = function(uuid) {	
 		httpGetAsync('/AddScheduleEntry?uuid=' + uuid, update_slider);
+	};
+
+	var schedule_shuffled = function() {
+		var name = document.getElementById('shuffled-name').value;
+		var length = document.getElementById('shuffled-length').value;
+		console.log(name);
+		console.log(length);
+		httpGetAsync('/AddShuffledDirectoryScheduleEntry?name=' + name + '&length=' + length, update_slider);
 	};
 
 	var remove_event = function(uuid) {	
@@ -230,6 +245,8 @@
 		contest_timestamp_ = data.contest_timestamp;
 		$('#slider123').TimeSlider('update_cells', data.schedule);
 	};
+	
+	
 
 	</script>
 </body>

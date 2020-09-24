@@ -98,6 +98,25 @@ public class OBSApi {
         }
     }
 
+    public void switchVideo(String fileName, String newSourceName, String oldSourceName)
+            throws FileNotFoundException, IOException {
+        try {
+            if (fileName != null && newSourceName != null) {
+                client.launchVideo(fileName, Config.getSourceLayer(), Config.getSceneName(), newSourceName,
+                        new SourceDimensions(Config.getVideoLeftMargin(), Config.getVideoTopMargin(),
+                                Config.getVideoWidth() * 1.0 / 100, Config.getVideoHeight() * 1.0 / 100),
+                        true);
+            }
+            if (oldSourceName != null) {
+                client.removeSource(Config.getSceneName(), oldSourceName);
+            }
+            transport.close();
+        } catch (TException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public boolean heartbeat() {
         try {
             client.heartbeat();
