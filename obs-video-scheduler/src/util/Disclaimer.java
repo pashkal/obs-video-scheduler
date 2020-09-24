@@ -23,6 +23,13 @@ public class Disclaimer {
         } else {
             return 0;
         }
-
+    }
+    
+    public static long getTransitionTime() throws FileNotFoundException, IOException {
+        if (Disclaimer.exists()) {
+            return ((long) Config.getDisclaimerTransitionTime()) * 1000;
+        } else {
+            return 0;
+        }
     }
 }

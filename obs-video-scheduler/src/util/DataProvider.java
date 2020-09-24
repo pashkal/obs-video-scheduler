@@ -244,7 +244,7 @@ public class DataProvider {
         JsonArrayBuilder scheduleBuilder = Json.createArrayBuilder();
 
         for (ScheduleEntry e : schedule) {
-            long stop = (e.start + videoMap.get(e.itemName).duration + Disclaimer.getDuration() * 2);
+            long stop = (e.start + videoMap.get(e.itemName).duration + Disclaimer.getDuration() * 2 - Disclaimer.getTransitionTime() * 2);
             scheduleBuilder.add(Json.createObjectBuilder().add("_id", e.uuid).add("start", e.start).add("stop", stop)
                     .add("name", e.itemName).build());
         }
@@ -293,7 +293,6 @@ public class DataProvider {
 
     private static Map<String, Item> getItemsByUUID(String fileName) throws IOException {
         JsonArray a = readJsonArray(fileName);
-
         HashMap<String, Item> result = new HashMap<>();
         for (Object o : a.toArray()) {
             if (o instanceof JsonObject) {

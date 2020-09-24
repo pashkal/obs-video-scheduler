@@ -25,6 +25,10 @@ public class Config {
     public static String getDisclaimerFileName() throws FileNotFoundException, IOException {
         return getStringConfigValue("disclaimer-file-name");
     }
+    
+    public static double getDisclaimerTransitionTime() throws FileNotFoundException, IOException {
+        return getDoubleConfigValue("disclaimer-transition-time");
+    }
 
     public static String getServerVideoDir() throws FileNotFoundException, IOException {
         return getStringConfigValue("server-video-dir");
@@ -141,6 +145,10 @@ public class Config {
 
     private static int getIntConfigValue(String name) throws FileNotFoundException, IOException {
         return Integer.valueOf(((JsonString) (readData().get(name))).getString());
+    }
+
+    private static double getDoubleConfigValue(String name) throws FileNotFoundException, IOException {
+        return Double.valueOf(((JsonString) (readData().get(name))).getString());
     }
 
     private static ArrayList<String> getStringListConfigValue(String name) throws FileNotFoundException, IOException {

@@ -46,17 +46,22 @@ public class OBSApi {
                         new SourceDimensions(Config.getVideoLeftMargin(), Config.getVideoTopMargin(),
                                 Config.getVideoWidth() * 1.0 / 100, Config.getVideoHeight() * 1.0 / 100),
                         false);
-                Thread.sleep(Disclaimer.getDuration());
+                Thread.sleep(Disclaimer.getDuration() - Disclaimer.getTransitionTime());
+            }
+            
+            int videoLayer = Config.getSourceLayer();
+            if (Disclaimer.exists() && Disclaimer.getTransitionTime() > 0) {
+                videoLayer++;
             }
 
-            client.launchVideo(Config.getOBSVideoDir() + fileName, Config.getSourceLayer(), Config.getSceneName(),
+            client.launchVideo(Config.getOBSVideoDir() + fileName, videoLayer, Config.getSceneName(),
                     Config.getSourceName(),
                     new SourceDimensions(Config.getVideoLeftMargin(), Config.getVideoTopMargin(),
                             Config.getVideoWidth() * 1.0 / 100, Config.getVideoHeight() * 1.0 / 100),
-                    !Disclaimer.exists());
+                    !Disclaimer.exists() || Disclaimer.getTransitionTime() > 0);
 
             if (Disclaimer.exists()) {
-                Thread.sleep(1000);
+                Thread.sleep(Disclaimer.getTransitionTime() + 1000);
                 client.removeSource(Config.getSceneName(), "Disclaimer");
             }
 

@@ -29,7 +29,7 @@ public class SimpleScheduleEntry extends ScheduleEntry {
             if (!allItems.get(this.itemName).isVideo)
                 return;
             long start = this.start;
-            long stop = this.start + allItems.get(this.itemName).duration + Disclaimer.getDuration();
+            long stop = this.start + allItems.get(this.itemName).duration + Disclaimer.getDuration() - Disclaimer.getTransitionTime() * 2;
             
             if (time > start - 2000 && time < start) {
                 Thread.sleep(start - time);

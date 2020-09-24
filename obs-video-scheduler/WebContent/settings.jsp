@@ -116,6 +116,11 @@
 									id="disclaimer-file-name" type="text" name="disclaimer-file-name"
 									value="<%out.println(Config.getDisclaimerFileName());%>" />
 							</div>
+                            <div class="form-group">
+                             <label for="disclaimer-transition">Disclaimer transition time</label> <br> <input
+                              id="disclaimer-transition-time" type="text" name="disclaimer-transition-time"
+                              value="<%out.println(Config.getDisclaimerTransitionTime());%>" />
+                            </div>
 						</div>
 					</div>
 				</div>
