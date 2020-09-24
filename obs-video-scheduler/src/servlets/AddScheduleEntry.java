@@ -49,6 +49,9 @@ public class AddScheduleEntry extends HttpServlet {
         String uuid = request.getParameter("uuid");
         
         long startTime = System.currentTimeMillis() - new Date().getTimezoneOffset() * 60 * 1000 + 5 * 60 * 1000;
+        long contestStart = DataProvider.getContestStart();
+
+        startTime -= Math.abs(startTime - contestStart) % 60000;
         
         Map<String, Item> items = DataProvider.getAllItemsByUUID();
         
