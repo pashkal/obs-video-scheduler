@@ -54,7 +54,7 @@ public class CurrentState extends HttpServlet {
 
         for (ScheduleEntry e : schedule) {
             long start = e.start;
-            long stop = e.start + list.get(e.itemName).duration + Disclaimer.getDuration() * 2;
+            long stop = e.start + list.get(e.itemName).duration + Disclaimer.getDuration() * 2 - Disclaimer.getTransitionTime();
             if (cTime > start && cTime < stop) {
                 w.append("Currently playing: " + e.itemName + ", " + ((stop - cTime) / 1000) + " seconds left");
                 w.append("</html>");
