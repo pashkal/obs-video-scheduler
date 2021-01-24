@@ -15,6 +15,8 @@
 5) Script will download and install Apache Tomcat and `obs-video-scheduler.zip`
 6) As a result, installation folder should contain `apache-tomcat-9.0.33`, `data`, `install.ps1` and `run.bat`
 
+Video walkthrough of the installation process: [youtube](https://www.youtube.com/watch?v=nvNznDg5yh4)
+
 ## Usage
 1) Run OBS
 2) Create or select a scene to add scheduled videos to
