@@ -28,7 +28,7 @@ Currently the only supported platform is Windows and 64-bit OBS. It's likely tha
 
 See detailed installation and usage instructions [here](docs/INSTALL.md).
 
-[Video walkthroug](https://www.youtube.com/watch?v=nvNznDg5yh4)
+[Video walkthrough](https://www.youtube.com/watch?v=nvNznDg5yh4)
 
 ## License
 Project is distributed under Apache License. See LICENSE [file](LICENSE) for details.
