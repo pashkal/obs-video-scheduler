@@ -109,22 +109,7 @@ public class DataProvider {
             sce.start += diff;
         }
 
-        printSchedule(sc);
-    }
-
-    private static void printSchedule(List<ScheduleEntry> sc) throws IOException {
-        JsonArrayBuilder a = Json.createArrayBuilder();
-        for (ScheduleEntry sce : sc) {
-            JsonObjectBuilder job = Json.createObjectBuilder();
-            job.add("id", sce.uuid);
-            job.add("start_timestamp", sce.start);
-            job.add("name", sce.itemName);
-            a.add(job);
-        }
-        String s = a.build().toString();
-        PrintWriter pw = new PrintWriter(SCHEDULE_FILE);
-        pw.println(s);
-        pw.close();
+        updateSchedule(sc);
     }
 
     public static void startContest() throws IOException {
