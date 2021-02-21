@@ -46,8 +46,7 @@ if (typeof jQuery === 'undefined') {
     TimeSlider.DEFAULTS = {
         start_timestamp: (new Date()).getTime() + ((new Date()).getTimezoneOffset() * 60 * 1000 * -1),   // left border
         current_timestamp: (new Date()).getTime() + ((new Date()).getTimezoneOffset() * 60 * 1000 * -1), // current timestamp
-//        contest_timestamp: (new Date()).getTime() + ((new Date()).getTimezoneOffset() * 60 * 1000 * -1),
-                hours_per_ruler: 1,                    // length of graduation ruler in hours (min 1, max 48)
+        hours_per_ruler: 1,                    // length of graduation ruler in hours (min 1, max 48)
         graduation_step: 20,                    // minimum pixels between graduations
         distance_between_gtitle: 80,            // minimum pixels between titles of graduations
         update_timestamp_interval: 1000,        // interval for updating current time
@@ -71,7 +70,6 @@ if (typeof jQuery === 'undefined') {
     };
 
     TimeSlider.prototype.init = function(element, options) {
-//              console.log(options);
         this.$element = $(element);
         this.$element.append('<div class="graduation-title" style="display:none">init</div>');
         this.gt_height = this.$element.find('.graduation-title').height();
@@ -129,8 +127,7 @@ if (typeof jQuery === 'undefined') {
         var _ms = ms - (h * (3600 * 1000)) - (m * (60 * 1000)) - (s * 1000);
         if (this.options.show_ms) {
             _ms = '.' + ('00' + _ms.toString()).substr(-3);
-        }
-        else {
+        } else {
             _ms = '';
         }
         if (h) {
@@ -140,8 +137,7 @@ if (typeof jQuery === 'undefined') {
             s = s.toString();
             s = s.length > 1 ? s : '0' + s;
             return h + ':' + m + ':' + s + _ms;
-        }
-        else if (true) {
+        } else if (true) {
             m = m.toString();
             s = s.toString();
             s = s.length > 1 ? s : '0' + s  + _ms;
@@ -208,43 +204,28 @@ if (typeof jQuery === 'undefined') {
                 this.set_time_cells_position();
             }
         }
-                if (options.contest_timestamp) {
-                    this.options.contest_timestamp = options.contest_timestamp;
-                }
+        if (options.contest_timestamp) {
+            this.options.contest_timestamp = options.contest_timestamp;
+        }
     };
 
     TimeSlider.prototype.timestamp_to_date = function(timestamp) {
         var datetime = new Date(timestamp);
-                return ('0' + datetime.getUTCHours().toString()).substr(-2) + ':' +
-                 ('0' + datetime.getUTCMinutes().toString()).substr(-2) + ':' +
-                 ('0' + datetime.getUTCSeconds().toString()).substr(-2);
-            
-/*        return ('0' + datetime.getUTCDate().toString()).substr(-2) + '.' +
-            ('0' + (0datetime.getUTCMonth() + 1).toString()).substr(-2) + '.' +
-            datetime.getUTCFullYear() + ' ' +
-            ('0' + datetime.getUTCHours().toString()).substr(-2) + ':' +
-            ('0' + datetime.getUTCMinutes().toString()).substr(-2) + ':' +
-            ('0' + datetime.getUTCSeconds().toString()).substr(-2) +
-            (this.options.show_ms ? ('.' + ('00' + datetime.getUTCMilliseconds().toString()).substr(-3)) : '');*/
+        return ('0' + datetime.getUTCHours().toString()).substr(-2) + ':' +
+         ('0' + datetime.getUTCMinutes().toString()).substr(-2) + ':' +
+         ('0' + datetime.getUTCSeconds().toString()).substr(-2);
     };
 
     TimeSlider.prototype.timestamp_to_time_from_start = function(timestamp) {
         timestamp -= this.options.contest_timestamp - 59999;
-                timestamp = Math.floor(timestamp / 60000);
-                var h = Math.floor(timestamp / 60);
-                var m = timestamp % 60;
-                var ms = '0' + m;
-                if (m >= 10)
-                    ms = m;
-                return h + ":" + ms;
-/*        return ('0' + datetime.getUTCDate().toString()).substr(-2) + '.' +
-            ('0' + (datetime.getUTCMonth() + 1).toString()).substr(-2) + '.' +
-            datetime.getUTCFullYear() + ' ' +
-            ('0' + datetime.getUTCHours().toString()).substr(-2) + ':' +
-            ('0' + datetime.getUTCMinutes().toString()).substr(-2) + ':' +
-            ('0' + datetime.getUTCSeconds().toString()).substr(-2) +
-            (this.options.show_ms ? ('.' + ('00' + datetime.getUTCMilliseconds().toString()).substr(-3)) : '');
-*/    };
+        timestamp = Math.floor(timestamp / 60000);
+        var h = Math.floor(timestamp / 60);
+        var m = timestamp % 60;
+        var ms = '0' + m;
+        if (m >= 10)
+            ms = m;
+        return h + ":" + ms;
+    };
 
     TimeSlider.prototype.graduation_title = function(datetime) {
         if (datetime.getUTCHours() == 0 && datetime.getUTCMinutes() == 0 && datetime.getUTCMilliseconds() == 0) {
@@ -256,18 +237,21 @@ if (typeof jQuery === 'undefined') {
     };
 
     TimeSlider.prototype.top_graduation_title = function(datetime) {
-                var diff = Math.floor((datetime.getTime() - this.options.contest_timestamp + 59999) / 60000);
-                var h = Math.floor(Math.abs(diff) / 60);
-                if (h > 60)
-                    return "";
-                var m = Math.abs(diff) % 60;
-                var s = h + ":" + m;
-                if (m < 10)
-                    s = h + ":0" + m;
-                if (diff < 0)
+        var diff = Math.floor((datetime.getTime() - this.options.contest_timestamp + 59999) / 60000);
+        var h = Math.floor(Math.abs(diff) / 60);
+        if (h > 60) {
+            return "";
+        }
+        var m = Math.abs(diff) % 60;
+        var s = h + ":" + m;
+        if (m < 10) {
+            s = h + ":0" + m;
+        }
+        if (diff < 0) {
             return "-" + s;
-                else
-                    return s;
+        } else {
+            return s;
+        }
     };
 
     TimeSlider.prototype.ms_to_next_step = function(timestamp, step) {
@@ -440,7 +424,7 @@ if (typeof jQuery === 'undefined') {
                 timecell_id = timecell['_id'];
                 start = timecell['start'];
                 stop = timecell['stop'];
-                                name = timecell['name'];
+                name = timecell['name'];
             }
         }
         if (typeof this.options.on_add_timecell_callback == 'function') {
@@ -477,8 +461,7 @@ if (typeof jQuery === 'undefined') {
             this.$ruler.find('#t' + timecell_id).remove();
             this.$prompts.find('#l-prompt-' + timecell_id).remove();
             this.$prompts.find('#r-prompt-' + timecell_id).remove();
-        }
-        else {
+        } else {
             timecell_id = null;
         }
         if (typeof this.options.on_remove_timecell_callback == 'function') {
@@ -491,7 +474,7 @@ if (typeof jQuery === 'undefined') {
         var _this = this;
         var $timecells = this.$ruler.children('.timecell');
         var defer = $.Deferred();
-    var res = '[';
+        var res = '[';
         $timecells.each(function (index) {
             timecells.push({
                 _id: $(this).attr('id'),
@@ -499,12 +482,12 @@ if (typeof jQuery === 'undefined') {
                 stop: $(this).attr('stop_timestamp') ? parseInt($(this).attr('stop_timestamp')) : null,
                 name: $(this).attr('name')
             });
-        if (res.length > 1)
-        res = res + ',';
-        res = res + '{"id": ' + ($(this).attr('id')) + ', "start_timestamp": ' + parseInt($(this).attr('start_timestamp')) + ', "name": "' + $(this).attr('name') + '"}';
+            if (res.length > 1)
+            res = res + ',';
+            res = res + '{"id": ' + ($(this).attr('id')) + ', "start_timestamp": ' + parseInt($(this).attr('start_timestamp')) + ', "name": "' + $(this).attr('name') + '"}';
         });
-    res = res + ']';
-    reportFunction(res);
+        res = res + ']';
+        reportFunction(res);
     };
 
     TimeSlider.prototype.remove_all_timecells = function() {
@@ -553,80 +536,21 @@ if (typeof jQuery === 'undefined') {
             timecell['_id'] = 'cell-' + timecell['start'];
         }
 
-        var get_selected_area = function(e) {
-            var width = parseFloat($(this).css('width'));
-            var pos_x = parseFloat(e.offsetX);
-            if (_this.options.timecell_enable_move && _this.options.timecell_enable_resize) {
-                if (pos_x <= 3) {
-                    return 'left';
-                }
-                else if (pos_x > 3 && pos_x < (width - 4)) {
-                    return 'center';
-                }
-                else {
-                    return 'right';
-                }
-            }
-            else if (_this.options.timecell_enable_move) {
-                return 'center';
-            }
-            else if (_this.options.timecell_enable_resize) {
-                if (pos_x <= 3) {
-                    return 'left';
-                }
-                else if (pos_x > 3 && pos_x < (width - 4)) {
-                    return null;
-                }
-                else {
-                    return 'right';
-                }
-            }
-            return null;
-        };
-
         var time_cell_mousedown_event = function(e) {
             _this
             if (e.which == 1) { // left mouse button event
                 _this.clicked_on = 'timecell';
                 var id = $(this).attr('p_id');
-                switch(get_selected_area.call(this, e)) {
-                    case 'left':
-                        _this.time_cell_selected = {
-                            element: _this.$ruler.find('#' + id),
-                            l_prompt: _this.$prompts.find('#l-prompt-' + id + '.prompt'),
-                            t_element: $(this),
-                            hover: true
-                        };
-                        _this.is_mouse_down_left = true;
-                        $(this).addClass('moving');
-                        break;
-
-                    case 'center':
-                        if (! $(this).hasClass('current')) {
-                            _this.time_cell_selected = {
-                                element: _this.$ruler.find('#' + id),
-                                l_prompt: _this.$prompts.find('#l-prompt-' + id + '.prompt'),
-                                t_element: $(this),
-                                r_prompt: _this.$prompts.find('#r-prompt-' + id + '.prompt'),
-                                hover: true
-                            };
-                            _this.is_mouse_down_left = true;
-                            $(this).addClass('moving');
-                        }
-                        break;
-
-                    case 'right':
-                        if (! $(this).hasClass('current')) {
-                            _this.time_cell_selected = {
-                                element: _this.$ruler.find('#' + id),
-                                t_element: $(this),
-                                r_prompt: _this.$prompts.find('#r-prompt-' + id + '.prompt'),
-                                hover: true
-                            };
-                            _this.is_mouse_down_left = true;
-                            $(this).addClass('moving');
-                        }
-                        break;
+                if (! $(this).hasClass('current')) {
+                    _this.time_cell_selected = {
+                        element: _this.$ruler.find('#' + id),
+                        l_prompt: _this.$prompts.find('#l-prompt-' + id + '.prompt'),
+                        t_element: $(this),
+                        r_prompt: _this.$prompts.find('#r-prompt-' + id + '.prompt'),
+                        hover: true
+                    };
+                    _this.is_mouse_down_left = true;
+                    $(this).addClass('moving');
                 }
                 _this.prev_cursor_x = _this.get_cursor_x_position(e);
             }
@@ -637,48 +561,14 @@ if (typeof jQuery === 'undefined') {
                 var id = $(this).attr('p_id');
                 $(this).addClass('hover');
                 $(this).css('cursor', 'default');
-                switch(get_selected_area.call(this, e)) {
-                    case 'left':
-                        _this.$prompts.find('#l-prompt-' + id + '.prompt').fadeIn(150);
-                        _this.$prompts.find('#r-prompt-' + id + '.prompt').fadeOut(150);
-                        $(this).css('cursor', 'w-resize');
-                        break;
-
-                    case 'center':
-                        if ($(this).hasClass('current')) {
-                            $(this).css('cursor', 'default');
-                            _this.$prompts.find('#l-prompt-' + id + '.prompt').fadeIn(150);
-                            _this.$prompts.find('#r-prompt-' + id + '.prompt').fadeOut(150);
-                        }
-                        else {
-                            _this.$prompts.find('#l-prompt-' + id + '.prompt').fadeIn(150);
-                            //_this.$prompts.find('#r-prompt-' + id + '.prompt').fadeIn(150);
-                            $(this).css('cursor', 'move');
-                        }
-                        break;
-
-                    case 'right':
-                        if ($(this).hasClass('current')) {
-                            $(this).css('cursor', 'default');
-                            _this.$prompts.find('#l-prompt-' + id + '.prompt').fadeOut(150);
-                            _this.$prompts.find('#r-prompt-' + id + '.prompt').fadeOut(150);
-                        }
-                        else {
-                            _this.$prompts.find('#l-prompt-' + id + '.prompt').fadeOut(150);
-                            _this.$prompts.find('#r-prompt-' + id + '.prompt').fadeIn(150);
-                            $(this).css('cursor', 'e-resize');
-                        }
-                        break;
-
-                    default:
-                        if ($(this).hasClass('current')) {
-                            _this.$prompts.find('#l-prompt-' + id + '.prompt').fadeIn(150);
-                            _this.$prompts.find('#r-prompt-' + id + '.prompt').fadeOut(150);
-                        }
-                        else {
-                            _this.$prompts.find('#l-prompt-' + id + '.prompt').fadeIn(150);
-                            _this.$prompts.find('#r-prompt-' + id + '.prompt').fadeIn(150);
-                        }
+                if ($(this).hasClass('current')) {
+                    $(this).css('cursor', 'default');
+                    _this.$prompts.find('#l-prompt-' + id + '.prompt').fadeIn(150);
+                    _this.$prompts.find('#r-prompt-' + id + '.prompt').fadeOut(150);
+                } else {
+                    _this.$prompts.find('#l-prompt-' + id + '.prompt').fadeIn(150);
+                    //_this.$prompts.find('#r-prompt-' + id + '.prompt').fadeIn(150);
+                    $(this).css('cursor', 'move');
                 }
             }
             else {
@@ -919,55 +809,53 @@ if (typeof jQuery === 'undefined') {
         var left;
         var datetime_caret;
         var i = -4;
-                var cnt = 0;
-                var ct = this.options.contest_timestamp;
-                var ppms = this.px_per_ms;
+        var cnt = 0;
+        var ct = this.options.contest_timestamp;
+        var ppms = this.px_per_ms;
         this.$ruler.children('.graduation').each(function () {
             caret_class = '';
             date = new Date(minute_caret);
             left = i * px_per_step + _this.px_per_ms * ms_offset;
             if (date.getUTCHours() == 0 && date.getUTCMinutes() == 0) {
                 caret_class = 'big';
-            }
-            else if (minute_caret / (60 * 1000) % medium_step == 0) {
+            } else if (minute_caret / (60 * 1000) % medium_step == 0) {
                 caret_class = 'middle';
             }
-//                      console.log($(this));
-                        var cl = (cnt % 2) == 0;
-//                      console.log(cl);
+            var cl = (cnt % 2) == 0;
             $(this).removeClass('middle big top topmiddle');
-                        if (cl)
-                            caret_class = 'top' + caret_class;
-//                      console.log(caret_class);
+            if (cl) {
+                caret_class = 'top' + caret_class;
+            }
             if (caret_class) {
                 $(this).addClass(caret_class);
             }
-                        var nleft = ct % 60000 * ppms + left;
-                        if (!cl)
+            var nleft = ct % 60000 * ppms + left;
+            if (!cl) {
                 $(this).css('left', left);
-                        else
-                            $(this).css('left', nleft);
+            } else {
+                $(this).css('left', nleft);
+            }
 
-                        if (!cl) {
+            if (!cl) {
                 datetime_caret = _this.$ruler.find('#graduation-title-' + $(this).attr('id')).css('left', left - 40).html(_this.graduation_title(date));
-              if (caret_class) {
+                if (caret_class) {
                     datetime_caret.removeClass('hidden');
-              }
-                else {
+                } else {
                   datetime_caret.addClass('hidden');
                 }
-                        } else {
+            } else {
                 datetime_caret = _this.$ruler.find('#graduation-title-' + $(this).attr('id')).css('left', nleft - 40).html(_this.top_graduation_title(date));
-                            if (caret_class == 'top')
-                                datetime_caret.addClass('hidden');
-                            else
-                                datetime_caret.removeClass('hidden');
-                        }
+                if (caret_class == 'top') {
+                    datetime_caret.addClass('hidden');
+                } else {
+                    datetime_caret.removeClass('hidden');
+                }
+            }
             if (!cl) {
-                            minute_caret += min_step * 60 * 1000;
+                minute_caret += min_step * 60 * 1000;
                 i++;
-                        }
-                        cnt++;
+            }
+            cnt++;
         });
         this.set_time_cells_position();
         if (typeof this.options.on_move_ruler_callback == 'function') {
@@ -978,8 +866,8 @@ if (typeof jQuery === 'undefined') {
     TimeSlider.prototype._edit_time_cell = function(options) {
         var has_start = options.start !== undefined && options.start !== null;
         var has_stop = options.stop !== undefined && options.stop !== null && options.element.attr('stop_timestamp');
-                var real_start = options.start - options.start % 60000;
-                var real_stop = options.stop - options.start % 60000;
+        var real_start = options.start - options.start % 60000;
+        var real_stop = options.stop - options.start % 60000;
         if (has_start) {
             var stop = null;
             if (options.stop !== undefined && options.stop) {
