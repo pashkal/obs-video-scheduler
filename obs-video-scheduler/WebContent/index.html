@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<title>ICPC Live OBS Scheduler</title>
-	<meta name="description" content="TimeSlider Plugin for jQuery">
-	<meta name="keywords" content="timeslider, time-slider, time slider, rangeslider, range-slider, range slider, jquery, javascript">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
-	<link href="css/timeslider.css" rel="stylesheet" type="text/css"/>
+    <meta charset="utf-8">
+    <title>ICPC Live OBS Scheduler</title>
+    <meta name="description" content="TimeSlider Plugin for jQuery">
+    <meta name="keywords" content="timeslider, time-slider, time slider, rangeslider, range-slider, range slider, jquery, javascript">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+    <link href="css/timeslider.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <table style="width:100%;">
@@ -34,203 +34,203 @@
 </tr>
 </table>
 <div style="overflow:hidden;width:100%;height:250px;">
-	<h3> Timeline </h3>
-		<div id="zoom-slider123" style="width:300px;"></div>
-	<div style="margin: 50px 0px;">
-		<div id="slider123" class="time-slider"></div>
-	</div>
+    <h3> Timeline </h3>
+        <div id="zoom-slider123" style="width:300px;"></div>
+    <div style="margin: 50px 0px;">
+        <div id="slider123" class="time-slider"></div>
+    </div>
 </div>
 <table>
 <tr>
 <td valign = "top">
-	<span id = "videoList"></span>
+    <span id = "videoList"></span>
 </td>
 <td valign = "top">
-	<span id = "activityList"></span>
+    <span id = "activityList"></span>
 </td>
 </tr>
 </table>
 
-	<script src="https://code.jquery.com/jquery-1.x-git.min.js"></script>
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-	<script src="js/timeslider.js"></script>
-	<script type="text/javascript">
+    <script src="https://code.jquery.com/jquery-1.x-git.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="js/timeslider.js"></script>
+    <script type="text/javascript">
 
-	function httpGetAsync(theUrl, callback)
-	{
-	    var xmlHttp = new XMLHttpRequest();
-	    xmlHttp.onreadystatechange = function() { 
-	        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-	            callback(xmlHttp.responseText);
-	    }
-	    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
-	    xmlHttp.send(null);
-	}	
-	
-	var add_event = function(uuid) {	
-		httpGetAsync('/AddScheduleEntry?uuid=' + uuid, update_slider);
-	};
+    function httpGetAsync(theUrl, callback)
+    {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() { 
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                callback(xmlHttp.responseText);
+        }
+        xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+        xmlHttp.send(null);
+    }   
+    
+    var add_event = function(uuid) {    
+        httpGetAsync('/AddScheduleEntry?uuid=' + uuid, update_slider);
+    };
 
-	var remove_event = function(uuid) {	
-		httpGetAsync('/RemoveScheduleEntry?uuid=' + uuid, update_slider);
-	};
+    var remove_event = function(uuid) { 
+        httpGetAsync('/RemoveScheduleEntry?uuid=' + uuid, update_slider);
+    };
 
-	var reschedule_event = function(uuid, new_start) {	
-		httpGetAsync('/RescheduleScheduleEntry?uuid=' + uuid + '&start=' + new_start, update_slider);
-	};
+    var reschedule_event = function(uuid, new_start) {  
+        httpGetAsync('/RescheduleScheduleEntry?uuid=' + uuid + '&start=' + new_start, update_slider);
+    };
 
-	var start = function() {
-		console.log("starting");
-		var url = '/StartContest';
-		console.log(url);
-		httpGetAsync(url, null);
-	};
+    var start = function() {
+        console.log("starting");
+        var url = '/StartContest';
+        console.log(url);
+        httpGetAsync(url, null);
+    };
 
-	var reschedule = function() {
-		console.log("reschedule()");
-		var url = '/StartContest?time=' + document.getElementById('reschedule-time').value;
-		console.log(url);
-		httpGetAsync(url, null);
-	};
+    var reschedule = function() {
+        console.log("reschedule()");
+        var url = '/StartContest?time=' + document.getElementById('reschedule-time').value;
+        console.log(url);
+        httpGetAsync(url, null);
+    };
 
-	var save = function() {
-		console.log("saving");
-		var url = '/SaveSchedule?file=' + document.getElementById('save-file-name').value;
-		console.log(url);
-		httpGetAsync(url, null);
-	};
+    var save = function() {
+        console.log("saving");
+        var url = '/SaveSchedule?file=' + document.getElementById('save-file-name').value;
+        console.log(url);
+        httpGetAsync(url, null);
+    };
 
-	var load = function() {
-		console.log("loading");
-		var url = '/LoadSchedule?file=' + document.getElementById('load_file').value;
-		console.log(url);
-		httpGetAsync(url, null);
-	};
+    var load = function() {
+        console.log("loading");
+        var url = '/LoadSchedule?file=' + document.getElementById('load_file').value;
+        console.log(url);
+        httpGetAsync(url, null);
+    };
 
-	var add_activity = function() {
-		console.log("loading");
-		var url = '/AddActivity?name=' + document.getElementById('activity-name').value + "&duration="+ document.getElementById('activity-duration').value;
-		console.log(url);
-		httpGetAsync(url, null);
-	};
+    var add_activity = function() {
+        console.log("loading");
+        var url = '/AddActivity?name=' + document.getElementById('activity-name').value + "&duration="+ document.getElementById('activity-duration').value;
+        console.log(url);
+        httpGetAsync(url, null);
+    };
 
-	var empty_function = function() {
-	}
+    var empty_function = function() {
+    }
 
-	var ready = false;
-	var contest_timestamp_ = 0;
-	
-	
-	var update_schedule = function() {
-		httpGetAsync('/ScheduleGet', update_slider);
-	}
-	
-	var initialize_schedule = function(text) {
-		httpGetAsync("/ScheduleGet", init_slider);						
-	}
+    var ready = false;
+    var contest_timestamp_ = 0;
+    
+    
+    var update_schedule = function() {
+        httpGetAsync('/ScheduleGet', update_slider);
+    }
+    
+    var initialize_schedule = function(text) {
+        httpGetAsync("/ScheduleGet", init_slider);                      
+    }
 
-	var update_activity_list = function() {
-		httpGetAsync('/VideoList?type=activity', initialize_activity_list);
-	}
+    var update_activity_list = function() {
+        httpGetAsync('/VideoList?type=activity', initialize_activity_list);
+    }
 
-	var initialize_activity_list = function(text) {
-	    document.getElementById("activityList").innerHTML=text;
-	};
+    var initialize_activity_list = function(text) {
+        document.getElementById("activityList").innerHTML=text;
+    };
 
-	var update_video_list = function() {
-		httpGetAsync('/VideoList?type=video', initialize_video_list);
-	}
+    var update_video_list = function() {
+        httpGetAsync('/VideoList?type=video', initialize_video_list);
+    }
 
-	var initialize_video_list = function(text) {
-	    document.getElementById("videoList").innerHTML=text;
-	};
+    var initialize_video_list = function(text) {
+        document.getElementById("videoList").innerHTML=text;
+    };
 
-	var initialize_load_select = function(text) {
-	    document.getElementById("load-select").innerHTML=text;
-	};
+    var initialize_load_select = function(text) {
+        document.getElementById("load-select").innerHTML=text;
+    };
 
-	var update_current_status = function() {
-		httpGetAsync('/CurrentState', initialize_current_state);
-	}
+    var update_current_status = function() {
+        httpGetAsync('/CurrentState', initialize_current_state);
+    }
 
-	var initialize_current_state= function(text) {
-	    document.getElementById("current-state").innerHTML=text;
-	};
+    var initialize_current_state= function(text) {
+        document.getElementById("current-state").innerHTML=text;
+    };
 
-	var update_contest_status = function() {
-		httpGetAsync('/ContestState', initialize_contest_state);
-	}
+    var update_contest_status = function() {
+        httpGetAsync('/ContestState', initialize_contest_state);
+    }
 
-	var initialize_contest_state = function(text) {
-	    document.getElementById("contest-state").innerHTML=text;
-	};
+    var initialize_contest_state = function(text) {
+        document.getElementById("contest-state").innerHTML=text;
+    };
 
-	var update_obs_status = function(text) {
-		httpGetAsync('/OBSStatus.jsp', initialize_obs_status);
-	};
+    var update_obs_status = function(text) {
+        httpGetAsync('/OBSStatus.jsp', initialize_obs_status);
+    };
 
-	var initialize_obs_status = function(text) {
-	    document.getElementById("obs-status").innerHTML=text;
-	};
+    var initialize_obs_status = function(text) {
+        document.getElementById("obs-status").innerHTML=text;
+    };
 
-  	var current_time = (new Date()).getTime() + ((new Date()).getTimezoneOffset() * 60 * 1000 * -1);
-	var current_timecells = "";
+    var current_time = (new Date()).getTime() + ((new Date()).getTimezoneOffset() * 60 * 1000 * -1);
+    var current_timecells = "";
 
-	httpGetAsync("/VideoList?type=video", initialize_video_list);
-	httpGetAsync("/VideoList?type=activity", initialize_activity_list);
-	httpGetAsync("/CurrentState", initialize_current_state);
-	httpGetAsync("/ContestState", initialize_contest_state);
-	httpGetAsync("/OBSStatus.jsp", initialize_obs_status);
-	httpGetAsync("/ScheduleList", initialize_load_select);
-	httpGetAsync("/ScheduleGet", initialize_schedule);
+    httpGetAsync("/VideoList?type=video", initialize_video_list);
+    httpGetAsync("/VideoList?type=activity", initialize_activity_list);
+    httpGetAsync("/CurrentState", initialize_current_state);
+    httpGetAsync("/ContestState", initialize_contest_state);
+    httpGetAsync("/OBSStatus.jsp", initialize_obs_status);
+    httpGetAsync("/ScheduleList", initialize_load_select);
+    httpGetAsync("/ScheduleGet", initialize_schedule);
 
-	setInterval(update_contest_status, 1000);
-	setInterval(update_obs_status, 1000);
-	setInterval(update_current_status, 1000);
-	setInterval(update_video_list, 1000);
-	setInterval(update_schedule, 1000);
-	
-	var ts = null;
+    setInterval(update_contest_status, 1000);
+    setInterval(update_obs_status, 1000);
+    setInterval(update_current_status, 1000);
+    setInterval(update_video_list, 1000);
+    setInterval(update_schedule, 1000);
+    
+    var ts = null;
 
-	function init_slider(text, t) {
-		var data = JSON.parse(text);
-		console.log(data);
-		contest_timestamp_ = data.contest_timestamp;
-		ts = $('#slider123').TimeSlider({
-			start_timestamp: current_time - 600 * 1000,
-			contest_timestamp: data.contest_timestamp,
-			on_dblclick_timecell_callback: function(p_id, start, stop) {
-				remove_event(p_id);
-			},
-			timecell_enable_resize: false,
-			on_change_timecell_callback: function(id, start) {
-				console.log('on_change_timecell');
-				reschedule_event(id, start);
-			},
-			init_cells: data.schedule
-		});
-		console.log('init');
-		$('#zoom-slider123').slider({
-			min: 0.33,
-			max: 8,
-			value: 1,
-			step: 0.2,
-			slide: function(event, ui) {
-				$('#slider123').TimeSlider({hours_per_ruler: ui.value});
-			}
-		});
-	};
-	
-	function update_slider(text) {
-		if (text == 'no-op') {
-			return;
-		}
-		var data = JSON.parse(text);
-		console.log(data);
-		contest_timestamp_ = data.contest_timestamp;
-		$('#slider123').TimeSlider('update_cells', data.schedule);
-	};
+    function init_slider(text, t) {
+        var data = JSON.parse(text);
+        console.log(data);
+        contest_timestamp_ = data.contest_timestamp;
+        ts = $('#slider123').TimeSlider({
+            start_timestamp: current_time - 600 * 1000,
+            contest_timestamp: data.contest_timestamp,
+            on_dblclick_timecell_callback: function(p_id, start, stop) {
+                remove_event(p_id);
+            },
+            timecell_enable_resize: false,
+            on_change_timecell_callback: function(id, start) {
+                console.log('on_change_timecell');
+                reschedule_event(id, start);
+            },
+            init_cells: data.schedule
+        });
+        console.log('init');
+        $('#zoom-slider123').slider({
+            min: 0.33,
+            max: 8,
+            value: 1,
+            step: 0.2,
+            slide: function(event, ui) {
+                $('#slider123').TimeSlider({hours_per_ruler: ui.value});
+            }
+        });
+    };
+    
+    function update_slider(text) {
+        if (text == 'no-op') {
+            return;
+        }
+        var data = JSON.parse(text);
+        console.log(data);
+        contest_timestamp_ = data.contest_timestamp;
+        $('#slider123').TimeSlider('update_cells', data.schedule);
+    };
 
-	</script>
+    </script>
 </body>
 </html>
