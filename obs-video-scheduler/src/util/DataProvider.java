@@ -218,7 +218,7 @@ public class DataProvider {
         prettyPrintJsonArray(SCHEDULE_FILE, ab.build());
     }
 
-    public static void writeScheduleToClient(HttpServletResponse r, Collection<ScheduleEntry> schedule)
+    public static void writeScheduleToClient(HttpServletResponse r)
             throws IOException {
         r.setContentType("application/json");
 
@@ -227,6 +227,8 @@ public class DataProvider {
         JsonObjectBuilder result = Json.createObjectBuilder().add("contest_timestamp", DataProvider.getContestStart());
 
         JsonArrayBuilder scheduleBuilder = Json.createArrayBuilder();
+        
+        List<ScheduleEntry> schedule = DataProvider.getSchedule();
 
         for (ScheduleEntry e : schedule) {
             long stop = (e.start + videoMap.get(e.itemName).duration + Disclaimer.getDuration() * 2 - Disclaimer.getTransitionTime() * 2);

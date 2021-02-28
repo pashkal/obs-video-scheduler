@@ -60,7 +60,7 @@ public class AddScheduleEntry extends HttpServlet {
         
         DataProvider.updateSchedule(schedule);
         
-        DataProvider.writeScheduleToClient(response, schedule);
+        DataProvider.writeScheduleToClient(response);
     }
 
     /**
