@@ -49,11 +49,6 @@
 									id="scene-name" type="text" name="scene-name"
 									value="<%out.println(Config.getSceneName());%>" />
 							</div>
-							<div class="form-group">
-								<label for="source-name">Source name</label> <br> <input
-									id="source-name" type="text" name="source-name"
-									value="<%out.println(Config.getSourceName());%>" />
-							</div>
 							<%
 								int layer = Config.getSourceLayer();
 							%>

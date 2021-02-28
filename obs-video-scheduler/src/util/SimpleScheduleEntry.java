@@ -43,7 +43,7 @@ public class SimpleScheduleEntry extends ScheduleEntry {
             if (time > stop - 2000 && time < stop) {
                 Thread.sleep(stop - time);
                 System.err.println("Stopping " + this.itemName);
-                new OBSApi().removeScheduledVideo();
+                new OBSApi().removeScheduledVideo(this.itemName);
                 Thread.sleep(1500);
             }
         } catch (Exception e) {

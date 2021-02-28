@@ -55,7 +55,7 @@ public class OBSApi {
             }
 
             client.launchVideo(Config.getOBSVideoDir() + fileName, videoLayer, Config.getSceneName(),
-                    Config.getSourceName(),
+                    "Scheduler: " + fileName,
                     new SourceDimensions(Config.getVideoLeftMargin(), Config.getVideoTopMargin(),
                             Config.getVideoWidth() * 1.0 / 100, Config.getVideoHeight() * 1.0 / 100),
                     !Disclaimer.exists() || Disclaimer.getTransitionTime() > 0);
@@ -71,7 +71,7 @@ public class OBSApi {
         }
     }
 
-    public void removeScheduledVideo() throws IOException, InterruptedException {
+    public void removeScheduledVideo(String fileName) throws IOException, InterruptedException {
         try {
             if (Disclaimer.exists()) {
                 if (Disclaimer.exists()) {
@@ -84,7 +84,7 @@ public class OBSApi {
                 Thread.sleep(Disclaimer.getDuration());
             }
 
-            client.removeSource(Config.getSceneName(), Config.getSourceName());
+            client.removeSource(Config.getSceneName(), "Scheduler: " + fileName);
 
             if (Disclaimer.exists()) {
                 client.removeSource(Config.getSceneName(), "Disclaimer");

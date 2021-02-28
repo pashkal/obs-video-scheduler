@@ -66,10 +66,6 @@ public class Config {
         return getStringConfigValue("scene-name");
     }
 
-    public static String getSourceName() throws FileNotFoundException, IOException {
-        return getStringConfigValue("source-name");
-    }
-
     public static ArrayList<String> getSourcesToMute() throws FileNotFoundException, IOException {
         return getStringListConfigValue("sources-to-mute");
     }
