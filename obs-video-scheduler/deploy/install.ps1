@@ -40,7 +40,7 @@ try {
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 Write-Host "Downloading tomcat..."
-Invoke-WebRequest -Uri "https://archive.apache.org/dist/tomcat/tomcat-10/v10.0.2/bin/apache-tomcat-10.0.2-windows-x64.zip" -Outfile "tomcat.zip"
+Invoke-WebRequest -Uri "https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.43/bin/apache-tomcat-9.0.43-windows-x64.zip" -Outfile "tomcat.zip"
 Write-Host "Unpacking tomcat..."
 Expand-Archive -DestinationPath "." "tomcat.zip"
 Remove-Item tomcat.zip
@@ -52,9 +52,9 @@ Expand-Archive -DestinationPath "." "scheduler.zip"
 Remove-Item scheduler.zip
 
 Write-Host "Setting up web app..."
-Remove-Item -Recurse apache-tomcat-10.0.2\webapps
-New-Item apache-tomcat-10.0.2\webapps -ItemType directory
-Move-Item -Path ROOT.war -Destination "apache-tomcat-10.0.2\webapps\ROOT.war"
+Remove-Item -Recurse apache-tomcat-9.0.43\webapps
+New-Item apache-tomcat-9.0.43\webapps -ItemType directory
+Move-Item -Path ROOT.war -Destination "apache-tomcat-9.0.43\webapps\ROOT.war"
 
 Write-Host "Setting up schedules dir..."
 New-Item data\schedules -ItemType directory

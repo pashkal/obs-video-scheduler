@@ -1,4 +1,4 @@
-pushd apache-tomcat-10.0.2 
+pushd apache-tomcat-9.0.43 
 pushd bin
 
 catalina.bat run
