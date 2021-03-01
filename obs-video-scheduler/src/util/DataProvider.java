@@ -233,7 +233,7 @@ public class DataProvider {
         List<ScheduleEntry> schedule = DataProvider.getSchedule();
 
         for (ScheduleEntry e : schedule) {
-            long stop = (e.start + videoMap.get(e.itemName).duration + Disclaimer.getDuration() * 2 - Disclaimer.getTransitionTime() * 2);
+            long stop = e.getStopTime(videoMap);
             scheduleBuilder.add(Json.createObjectBuilder().add("_id", e.uuid).add("start", e.start).add("stop", stop)
                     .add("name", e.itemName).build());
         }

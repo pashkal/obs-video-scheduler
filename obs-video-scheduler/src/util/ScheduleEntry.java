@@ -1,12 +1,15 @@
 package util;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonValue;
 
-public abstract class ScheduleEntry implements Comparable<ScheduleEntry> {
+public class ScheduleEntry implements Comparable<ScheduleEntry> {
     public String uuid;
     public long start;
     public String itemName;
@@ -24,7 +27,7 @@ public abstract class ScheduleEntry implements Comparable<ScheduleEntry> {
     }
     
     public static ScheduleEntry fromJsonObject(JsonObject o) {
-        return new SimpleScheduleEntry(o.getString("uuid"),
+        return new ScheduleEntry(o.getString("uuid"),
                 o.getJsonNumber("start_timestamp").longValue(), o.getString("name"));
     }
     
@@ -33,11 +36,25 @@ public abstract class ScheduleEntry implements Comparable<ScheduleEntry> {
         return Long.compare(start, o.start);
     }
 
-
     @Override
-    public abstract String toString();
+    public String toString() {
+        return "ScheduleEntry [id=" + uuid + ", start=" + start + ", itemName=" + itemName + "]";
+    }
 
-    public abstract JsonValue toJsonValue();
+    public JsonValue toJsonValue() {
+        return Json.createObjectBuilder().add("uuid", this.uuid).add("start_timestamp", this.start).add("name", itemName)
+                .build();
+    }
+
+    public long getStopTime(Map<String, Item> allItems) throws FileNotFoundException, IOException {
+        return this.start + allItems.get(this.itemName).duration + Disclaimer.getDuration() * 2 - Disclaimer.getTransitionTime() * 2;
+    }
+
+    public String getSourceName() {
+        return "Scheduler: " + itemName + " [" + uuid + "]";
+    }
     
-    public abstract void process(Map<String, Item> allItems, long time);
+    public String getDisclaimerSourceName() {
+        return "Scheduler: disclaimer [" + uuid + "]";
+    }
 }

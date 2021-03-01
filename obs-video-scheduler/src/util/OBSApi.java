@@ -29,40 +29,66 @@ public class OBSApi {
             e.printStackTrace();
             if (e.getCause() instanceof ConnectException) {
                 System.err.println(
-                        "Can't connect to OBS!\n1) Make sure OBS is running\n2) Make sure obs-thrift-api plugin initialized successfully");
+                    "Can't connect to OBS!\n1) Make sure OBS is running\n2) Make sure obs-thrift-api plugin initialized successfully");
             }
         }
     }
 
-    public void launchVideo(String fileName) throws FileNotFoundException, IOException, InterruptedException {
+    public void startPlayback(ScheduleEntry entry, boolean hasNext)
+            throws FileNotFoundException, IOException, InterruptedException {
+        System.err.println("Launching " + entry.itemName);
+
         try {
             for (String source : Config.getSourcesToMute()) {
                 client.muteSource(source);
             }
 
             if (Disclaimer.exists()) {
-                client.launchVideo(Config.getOBSVideoDir() + Disclaimer.getFileName(), Config.getSourceLayer(),
-                        Config.getSceneName(), "Disclaimer",
-                        new SourceDimensions(Config.getVideoLeftMargin(), Config.getVideoTopMargin(),
-                                Config.getVideoWidth() * 1.0 / 100, Config.getVideoHeight() * 1.0 / 100),
-                        false);
-                Thread.sleep(Disclaimer.getDuration() - Disclaimer.getTransitionTime());
+                client.launchVideo(
+                    Config.getOBSVideoDir() + Disclaimer.getFileName(),
+                    Config.getSourceLayer(),
+                    Config.getSceneName(),
+                    entry.getDisclaimerSourceName(),
+                    new SourceDimensions(
+                        Config.getVideoLeftMargin(),
+                        Config.getVideoTopMargin(),
+                        Config.getVideoWidth() * 1.0 / 100,
+                        Config.getVideoHeight() * 1.0 / 100),
+                    false);
+                Thread.sleep(
+                    Disclaimer.getDuration() - Disclaimer.getTransitionTime());
             }
-            
+
             int videoLayer = Config.getSourceLayer();
             if (Disclaimer.exists() && Disclaimer.getTransitionTime() > 0) {
                 videoLayer++;
             }
 
-            client.launchVideo(Config.getOBSVideoDir() + fileName, videoLayer, Config.getSceneName(),
-                    "Scheduler: " + fileName,
-                    new SourceDimensions(Config.getVideoLeftMargin(), Config.getVideoTopMargin(),
-                            Config.getVideoWidth() * 1.0 / 100, Config.getVideoHeight() * 1.0 / 100),
-                    !Disclaimer.exists() || Disclaimer.getTransitionTime() > 0);
+            boolean clearOnEnd = true;
+            if (hasNext && !Disclaimer.exists()) {
+                clearOnEnd = false;
+            }
+            if (Disclaimer.exists() && Disclaimer.getTransitionTime() == 0) {
+                clearOnEnd = false;
+            }
+
+            client.launchVideo(
+                Config.getOBSVideoDir() + entry.itemName,
+                videoLayer,
+                Config.getSceneName(),
+                entry.getSourceName(),
+                new SourceDimensions(
+                    Config.getVideoLeftMargin(),
+                    Config.getVideoTopMargin(),
+                    Config.getVideoWidth() * 1.0 / 100,
+                    Config.getVideoHeight() * 1.0 / 100),
+                clearOnEnd);
 
             if (Disclaimer.exists()) {
-                Thread.sleep(Disclaimer.getTransitionTime() + 1000);
-                client.removeSource(Config.getSceneName(), "Disclaimer");
+                Thread.sleep(Disclaimer.getTransitionTime() + 500);
+                client.removeSource(
+                    Config.getSceneName(),
+                    entry.getDisclaimerSourceName());
             }
 
             transport.close();
@@ -71,26 +97,106 @@ public class OBSApi {
         }
     }
 
-    public void removeScheduledVideo(String fileName) throws IOException, InterruptedException {
+    public void endPlayback(ScheduleEntry entry)
+            throws IOException, InterruptedException {
+        System.err.println("Stopping " + entry.itemName);
         try {
             if (Disclaimer.exists()) {
                 if (Disclaimer.exists()) {
-                    client.launchVideo(Config.getOBSVideoDir() + Disclaimer.getFileName(), Config.getSourceLayer(),
-                            Config.getSceneName(), "Disclaimer",
-                            new SourceDimensions(Config.getVideoLeftMargin(), Config.getVideoTopMargin(),
-                                    Config.getVideoWidth() * 1.0 / 100, Config.getVideoHeight() * 1.0 / 100),
-                            true);
+                    client.launchVideo(
+                        Config.getOBSVideoDir() + Disclaimer.getFileName(),
+                        Config.getSourceLayer(),
+                        Config.getSceneName(),
+                        entry.getDisclaimerSourceName(),
+                        new SourceDimensions(
+                            Config.getVideoLeftMargin(),
+                            Config.getVideoTopMargin(),
+                            Config.getVideoWidth() * 1.0 / 100,
+                            Config.getVideoHeight() * 1.0 / 100),
+                        true);
                 }
                 Thread.sleep(Disclaimer.getDuration());
             }
 
-            client.removeSource(Config.getSceneName(), "Scheduler: " + fileName);
+            client.removeSource(Config.getSceneName(), entry.getSourceName());
 
             if (Disclaimer.exists()) {
-                client.removeSource(Config.getSceneName(), "Disclaimer");
+                client.removeSource(
+                    Config.getSceneName(),
+                    entry.getDisclaimerSourceName());
             }
             for (String source : Config.getSourcesToMute()) {
                 client.unmuteSource(source);
+            }
+            transport.close();
+        } catch (TException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void switchPlayback(ScheduleEntry prev, ScheduleEntry next, boolean hasNext) throws FileNotFoundException, IOException, InterruptedException {
+        System.err.println("Switching from " + prev.itemName + " to " + next.itemName);
+        try {
+            if (Disclaimer.exists()) {
+                client.launchVideo(
+                    Config.getOBSVideoDir() + Disclaimer.getFileName(),
+                    Config.getSourceLayer(),
+                    Config.getSceneName(),
+                    prev.getDisclaimerSourceName(),
+                    new SourceDimensions(
+                        Config.getVideoLeftMargin(),
+                        Config.getVideoTopMargin(),
+                        Config.getVideoWidth() * 1.0 / 100,
+                        Config.getVideoHeight() * 1.0 / 100),
+                    false);
+                Thread.sleep(Disclaimer.getDuration());
+                client.launchVideo(
+                    Config.getOBSVideoDir() + Disclaimer.getFileName(),
+                    Config.getSourceLayer(),
+                    Config.getSceneName(),
+                    next.getDisclaimerSourceName(),
+                    new SourceDimensions(
+                        Config.getVideoLeftMargin(),
+                        Config.getVideoTopMargin(),
+                        Config.getVideoWidth() * 1.0 / 100,
+                        Config.getVideoHeight() * 1.0 / 100),
+                    false);
+                Thread.sleep(Disclaimer.getDuration() - Disclaimer.getTransitionTime());
+            }
+
+            int videoLayer = Config.getSourceLayer();
+            if (Disclaimer.exists() && Disclaimer.getTransitionTime() > 0) {
+                videoLayer++;
+            }
+
+            boolean clearOnEnd = true;
+            if (hasNext && !Disclaimer.exists()) {
+                clearOnEnd = false;
+            }
+            if (Disclaimer.exists() && Disclaimer.getTransitionTime() == 0) {
+                clearOnEnd = false;
+            }
+            client.launchVideo(
+                Config.getOBSVideoDir() + next.itemName,
+                videoLayer,
+                Config.getSceneName(),
+                next.getSourceName(),
+                new SourceDimensions(
+                    Config.getVideoLeftMargin(),
+                    Config.getVideoTopMargin(),
+                    Config.getVideoWidth() * 1.0 / 100,
+                    Config.getVideoHeight() * 1.0 / 100),
+                clearOnEnd);
+            Thread.sleep(500);
+            client.removeSource(Config.getSceneName(), prev.getSourceName());
+
+            if (Disclaimer.exists()) {
+                client.removeSource(
+                    Config.getSceneName(),
+                    prev.getDisclaimerSourceName());
+                client.removeSource(
+                    Config.getSceneName(),
+                    next.getDisclaimerSourceName());
             }
             transport.close();
         } catch (TException e) {
