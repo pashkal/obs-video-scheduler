@@ -40,21 +40,21 @@ try {
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 Write-Host "Downloading tomcat..."
-Invoke-WebRequest -Uri "https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.33/bin/apache-tomcat-9.0.33-windows-x64.zip" -Outfile "tomcat.zip"
+Invoke-WebRequest -Uri "https://archive.apache.org/dist/tomcat/tomcat-10/v10.0.2/bin/apache-tomcat-10.0.2-windows-x64.zip" -Outfile "tomcat.zip"
 Write-Host "Unpacking tomcat..."
 Expand-Archive -DestinationPath "." "tomcat.zip"
 Remove-Item tomcat.zip
 
 Write-Host "Downloading scheduler..."
-Invoke-WebRequest -Uri "https://github.com/pashkal/obs-video-scheduler/releases/download/0.1.2/obs-video-scheduler.zip" -Outfile "scheduler.zip"
+Invoke-WebRequest -Uri "https://github.com/pashkal/obs-video-scheduler/releases/download/0.1.3/obs-video-scheduler.zip" -Outfile "scheduler.zip"
 Write-Host "Unpacking scheduler..."
 Expand-Archive -DestinationPath "." "scheduler.zip"
 Remove-Item scheduler.zip
 
 Write-Host "Setting up web app..."
 Remove-Item -Recurse apache-tomcat-9.0.33\webapps
-New-Item apache-tomcat-9.0.33\webapps -ItemType directory
-Move-Item -Path ROOT.war -Destination "apache-tomcat-9.0.33\webapps\ROOT.war"
+New-Item apache-tomcat-10.0.2\webapps -ItemType directory
+Move-Item -Path ROOT.war -Destination "apache-tomcat-10.0.2\webapps\ROOT.war"
 
 Write-Host "Setting up schedules dir..."
 New-Item data\schedules -ItemType directory
