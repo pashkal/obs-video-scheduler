@@ -52,7 +52,7 @@ Expand-Archive -DestinationPath "." "scheduler.zip"
 Remove-Item scheduler.zip
 
 Write-Host "Setting up web app..."
-Remove-Item -Recurse apache-tomcat-9.0.33\webapps
+Remove-Item -Recurse apache-tomcat-10.0.2\webapps
 New-Item apache-tomcat-10.0.2\webapps -ItemType directory
 Move-Item -Path ROOT.war -Destination "apache-tomcat-10.0.2\webapps\ROOT.war"
 
