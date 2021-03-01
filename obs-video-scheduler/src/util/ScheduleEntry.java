@@ -6,7 +6,7 @@ import java.util.UUID;
 import javax.json.JsonObject;
 import javax.json.JsonValue;
 
-public abstract class ScheduleEntry {
+public abstract class ScheduleEntry implements Comparable<ScheduleEntry> {
     public String uuid;
     public long start;
     public String itemName;
@@ -27,6 +27,12 @@ public abstract class ScheduleEntry {
         return new SimpleScheduleEntry(o.getString("uuid"),
                 o.getJsonNumber("start_timestamp").longValue(), o.getString("name"));
     }
+    
+    @Override
+    public int compareTo(ScheduleEntry o) {
+        return Long.compare(start, o.start);
+    }
+
 
     @Override
     public abstract String toString();
