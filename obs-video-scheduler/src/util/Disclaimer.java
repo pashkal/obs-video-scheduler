@@ -10,11 +10,7 @@ public class Disclaimer {
     }
 
     public static String getFileName() throws FileNotFoundException, IOException {
-        if (Disclaimer.exists()) {
-            return Config.getDisclaimerFileName();
-        } else {
-            return null;
-        }
+        return Config.getDisclaimerFileName();
     }
 
     public static long getDuration() throws FileNotFoundException, IOException {
@@ -24,7 +20,7 @@ public class Disclaimer {
             return 0;
         }
     }
-    
+
     public static long getTransitionTime() throws FileNotFoundException, IOException {
         if (Disclaimer.exists()) {
             return ((long) Config.getDisclaimerTransitionTime()) * 1000;

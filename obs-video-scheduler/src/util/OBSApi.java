@@ -3,14 +3,12 @@ package util;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.ConnectException;
-import java.util.List;
 
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
-import org.apache.thrift.transport.TTransportException;
 
 import scheduler.ObsThriftServer;
 import scheduler.SourceDimensions;
@@ -45,7 +43,7 @@ public class OBSApi {
 
             if (Disclaimer.exists()) {
                 client.launchVideo(
-                    Config.getOBSVideoDir() + Disclaimer.getFileName(),
+                    Config.getOBSVideoDirPath().resolve(Disclaimer.getFileName()).toString(),
                     Config.getSourceLayer(),
                     Config.getSceneName(),
                     entry.getDisclaimerSourceName(),
@@ -73,7 +71,7 @@ public class OBSApi {
             }
 
             client.launchVideo(
-                Config.getOBSVideoDir() + entry.itemName,
+                Config.getOBSVideoDirPath().resolve(entry.itemName).toString(),
                 videoLayer,
                 Config.getSceneName(),
                 entry.getSourceName(),
@@ -102,19 +100,17 @@ public class OBSApi {
         System.err.println("Stopping " + entry.itemName);
         try {
             if (Disclaimer.exists()) {
-                if (Disclaimer.exists()) {
-                    client.launchVideo(
-                        Config.getOBSVideoDir() + Disclaimer.getFileName(),
-                        Config.getSourceLayer(),
-                        Config.getSceneName(),
-                        entry.getDisclaimerSourceName(),
-                        new SourceDimensions(
-                            Config.getVideoLeftMargin(),
-                            Config.getVideoTopMargin(),
-                            Config.getVideoWidth() * 1.0 / 100,
-                            Config.getVideoHeight() * 1.0 / 100),
-                        true);
-                }
+                client.launchVideo(
+                    Config.getOBSVideoDirPath().resolve(Disclaimer.getFileName()).toString(),
+                    Config.getSourceLayer(),
+                    Config.getSceneName(),
+                    entry.getDisclaimerSourceName(),
+                    new SourceDimensions(
+                        Config.getVideoLeftMargin(),
+                        Config.getVideoTopMargin(),
+                        Config.getVideoWidth() * 1.0 / 100,
+                        Config.getVideoHeight() * 1.0 / 100),
+                    true);
                 Thread.sleep(Disclaimer.getDuration());
             }
 
@@ -139,7 +135,7 @@ public class OBSApi {
         try {
             if (Disclaimer.exists()) {
                 client.launchVideo(
-                    Config.getOBSVideoDir() + Disclaimer.getFileName(),
+                    Config.getOBSVideoDirPath().resolve(Disclaimer.getFileName()).toString(),
                     Config.getSourceLayer(),
                     Config.getSceneName(),
                     prev.getDisclaimerSourceName(),
@@ -151,7 +147,7 @@ public class OBSApi {
                     false);
                 Thread.sleep(Disclaimer.getDuration());
                 client.launchVideo(
-                    Config.getOBSVideoDir() + Disclaimer.getFileName(),
+                    Config.getOBSVideoDirPath().resolve(Disclaimer.getFileName()).toString(),
                     Config.getSourceLayer(),
                     Config.getSceneName(),
                     next.getDisclaimerSourceName(),
@@ -177,7 +173,7 @@ public class OBSApi {
                 clearOnEnd = false;
             }
             client.launchVideo(
-                Config.getOBSVideoDir() + next.itemName,
+                Config.getOBSVideoDirPath().resolve(next.itemName).toString(),
                 videoLayer,
                 Config.getSceneName(),
                 next.getSourceName(),

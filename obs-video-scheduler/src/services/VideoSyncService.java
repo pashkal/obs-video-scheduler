@@ -2,21 +2,19 @@ package services;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.StringTokenizer;
+import java.nio.file.*;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.ServletContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.Config;
 import util.DataProvider;
 import util.Item;
@@ -33,8 +31,7 @@ public class VideoSyncService implements Runnable {
             try {
                 Map<String, Item> oldList = DataProvider.getVideosByName();
 
-                ArrayList<String> allFiles = getAllChildren(new File(Config.getServerVideoDir()));
-                
+                List<String> allFiles = getAllChildren(Config.getServerVideoDirPath());
                 HashSet<String> toAdd = new HashSet<String>();
                 for (String fileName : allFiles) {
                     if (!oldList.containsKey(fileName)) {
@@ -77,52 +74,52 @@ public class VideoSyncService implements Runnable {
             }
         }
     }
-    
-    private ArrayList<String> getAllChildren(File dir) {
-        ArrayList<String> result = new ArrayList<>();
-        listPathsRecursively(result, dir, "");
-        return result;
+
+
+    private static boolean isVideoFile(Path file) {
+        return Files.isRegularFile(file) &&
+                (file.toString().endsWith("mkv") || file.toString().endsWith("mp4")
+                        || file.toString().endsWith("avi") || file.toString().endsWith("mov"));
     }
-    
-    private void listPathsRecursively(ArrayList<String> result, File dir, String relativePath) {
-        File[] children = dir.listFiles();
-        for (File f : children) {
-            if (f.isDirectory()) {
-                continue;
-            }
-            String fileName = f.getName();
-            if (!fileName.endsWith("mkv") && !fileName.endsWith("mp4") && !fileName.endsWith("avi")
-                    && !fileName.endsWith("mov")) {
-                continue;
-            }
-            result.add(relativePath + fileName);              
+
+    private List<String> getAllChildren(Path dir) {
+        try (final Stream<Path> files = Files.walk(dir)) {
+            return files.filter(VideoSyncService::isVideoFile)
+                    .map((p) -> dir.relativize(p).toString())
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            logger.error("Failed to sync list of videos on sever", e);
         }
-        for (File f : children) {
-            if (!f.isDirectory()) {
-                continue;
-            }
-            listPathsRecursively(result, f, relativePath + f.getName() + '/');
-        }
+        return new ArrayList<>();
     }
 
     private long getDuration(String fileName) throws IOException {
-        Process p = Runtime.getRuntime().exec("ffmpeg -i \"" + Config.getServerVideoDir() + fileName + "\"");
-        BufferedReader br = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-        while (true) {
-            String s = br.readLine();
-            // sc.log(s);
-            if (!s.contains("Duration")) {
-                continue;
-            }
-            StringTokenizer st = new StringTokenizer(s, " :,.");
-            String t = st.nextToken();
-            while (!t.equals("Duration")) {
-                t = st.nextToken();
-            }
-            long time = (Integer.parseInt(st.nextToken()) * 3600 + Integer.parseInt(st.nextToken()) * 60
-                    + Integer.parseInt(st.nextToken())) * 1000 + Integer.parseInt(st.nextToken()) * 10;
-            return time;
+        final Path filePath = Config.getServerVideoDirPath().resolve(fileName);
+        Process p = Runtime.getRuntime().exec("ffmpeg -i \"" + filePath + "\"");
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(p.getErrorStream()))) {
+            String line = br.readLine();
+            do {
+                if (!line.contains("Duration")) {
+                    line = br.readLine();
+                    continue;
+                }
+                StringTokenizer st = new StringTokenizer(line, " :,.");
+                String t = st.nextToken();
+                while (!t.equals("Duration")) {
+                    t = st.nextToken();
+                }
+                return ffmpegDurationToLong(st.nextToken(), st.nextToken(), st.nextToken(), st.nextToken());
+            } while (line != null);
+        } finally {
+            p.destroy();
         }
-
+        throw new IllegalArgumentException("Failed to load duration of file " + filePath);
     }
+
+    private long ffmpegDurationToLong(String hours, String minutes, String seconds, String hundredths) {
+        return ((Long.parseLong(hours) * 60 + Long.parseLong(minutes)) * 60
+                + Long.parseLong(seconds)) * 1000 + Long.parseLong(hundredths) * 10;
+    }
+
+    private static Logger logger = LoggerFactory.getLogger(VideoSyncService.class);
 }
